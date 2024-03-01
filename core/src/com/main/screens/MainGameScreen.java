@@ -19,6 +19,7 @@ public class MainGameScreen implements Screen {
     Main game;
 
     public MainGameScreen (Main Game) {
+        game = new Main();
     }
 
     @Override
