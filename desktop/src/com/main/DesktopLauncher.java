@@ -9,6 +9,13 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
+		//config.width = Main.WIDTH;
+		//config.height = Main.HEIGHT;
+		//config.resizable = true;
+		// Don't worry about this for now
+		//config.addIcon("icon_128.png", FileType.Internal); // icon for mac
+		//config.addIcon("icon_32.png", FileType.Internal); // icon for linux
+		//config.addIcon("icon_16.png", FileType.Internal); // icon for windows
 		config.setTitle("Heslington_Hustle");
 		new Lwjgl3Application(new Main(), config);
 	}
