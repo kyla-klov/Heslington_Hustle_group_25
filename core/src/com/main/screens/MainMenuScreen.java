@@ -56,11 +56,20 @@ public class MainMenuScreen implements Screen {
                     touchY >= playButtonY && touchY <= playButtonY + playButton.getHeight()) {
                 game.setScreen(new MainGameScreen(game));
             }
+            else if (touchX >= x && touchX <= x + controlsButton.getWidth() &&
+                    touchY >= controlsButtonY && touchY <= controlsButtonY + controlsButton.getHeight()) {
+                game.setScreen(new MainControlScreen(game));
+            }
+            else if (touchX >= x && touchX <= x + settingsButton.getWidth() &&
+                    touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButton.getHeight()) {
+                // game.setScreen(new MainSettingsScreen(game));
+            }
             else if (touchX >= x && touchX <= x + exitButton.getWidth() &&
                     touchY >= exitButtonY && touchY <= exitButtonY + exitButton.getHeight()) {
                 Gdx.app.exit();
             }
         }
+
 
         game.batch.end();
     }

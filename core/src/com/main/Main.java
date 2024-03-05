@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.main.screens.MainControlScreen;
 import com.main.screens.MainGameScreen;
 import com.main.screens.MainMenuScreen;
 
@@ -21,6 +22,7 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		screenWidth = graphics.getWidth();
 		screenHeight = graphics.getHeight();
+		this.setScreen(new MainControlScreen(this));
 		this.setScreen(new MainMenuScreen(this));
 	}
 

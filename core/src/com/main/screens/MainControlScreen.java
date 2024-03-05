@@ -2,13 +2,19 @@ package com.main.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.main.Main;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainControlScreen implements Screen {
 
+    Main game;
     private Map<String, String> controlMapping = new HashMap<String, String>();
+
+    public MainControlScreen(Main game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
