@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
@@ -11,20 +12,29 @@ import com.main.Main;
 public class MainGameScreen implements Screen {
 
     public static final float speed = 120;
+    public static final int character_width = 16;
+    public static final int character_heigth = 16;
 
-    Texture img;
-    float x = 5;
-    float y = 5;
+    //Animation[]
+
+    //Texture img;
+    float[] positions;
+    float x;
+    float y;
+    int spriteNum;
 
     Main game;
 
     public MainGameScreen (Main Game) {
         game = new Main();
+        y = 15;
+        x = (float) Game.screenWidth /2 - (float) Game.screenHeight /2;
+        //positions = new float[]
     }
 
     @Override
     public void show () {
-        img = new Texture("badlogic.jpg");
+        //img = new Texture("badlogic.jpg");
         game.batch = new SpriteBatch();
     }
 
@@ -46,7 +56,7 @@ public class MainGameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
-        game.batch.draw(img, x, y);
+        //game.batch.draw(img, x, y);
         game.batch.end();
     }
 
@@ -73,6 +83,5 @@ public class MainGameScreen implements Screen {
     @Override
     public void dispose() {
         game.batch.dispose();
-        img.dispose();
     }
 }
