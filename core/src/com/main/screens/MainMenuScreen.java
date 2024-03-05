@@ -1,16 +1,13 @@
 package com.main.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.main.Main;
 
 public class MainMenuScreen implements Screen {
-
-//    private static final int exitButtonWidth = 300;
-//    private static final int exitButtonHeight = 150;
-//    private static final int platButtonWidth = 300;
-//    private static final int playButtonHeight= 150;
 
     Main game;
 
@@ -18,6 +15,7 @@ public class MainMenuScreen implements Screen {
     Texture controlsButton;
     Texture settingsButton;
     Texture exitButton;
+    //Texture menuBackground;
 
     public MainMenuScreen (Main game){
         this.game = game;
@@ -25,30 +23,50 @@ public class MainMenuScreen implements Screen {
         controlsButton = new Texture("menu_buttons/controls_button.png");
         settingsButton = new Texture("menu_buttons/settings_button.png");
         exitButton = new Texture("menu_buttons/exit_button.png");
+        //menuBackground = new Texture(Gdx.files.internal("campus_background.png"));
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
 
-        
+        //game.batch.draw(menuBackground, 0, 0, game.screenWidth, game.screenHeight);
 
         int x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
-        // int y = (game.screenHeight - playButton.getWidth()) / 2;
-        game.batch.draw(playButton, x, (game.screenHeight - (float) playButton.getWidth() / 2));
+        float playButtonY = (game.screenHeight) - (float) playButton.getWidth() /2;
+        float controlsButtonY = (game.screenHeight) - controlsButton.getWidth();
+        double settingsButtonY = (game.screenHeight) - settingsButton.getWidth()*1.5;
+        float exitButtonY = (game.screenHeight) - (exitButton.getWidth()*2);
+
+        game.batch.draw(playButton, x, playButtonY);
+        game.batch.draw(controlsButton, x, controlsButtonY);
+        game.batch.draw(settingsButton, x, (float) settingsButtonY);
+        game.batch.draw(exitButton, x, exitButtonY);
+
+        if (Gdx.input.justTouched()) {
+            int touchX = Gdx.input.getX();
+            int touchY = game.screenHeight - Gdx.input.getY();
+
+            if (touchX >= x && touchX <= x + playButton.getWidth() &&
+                    touchY >= playButtonY && touchY <= playButtonY + playButton.getHeight()) {
+                game.setScreen(new MainGameScreen(game));
+            }
+            else if (touchX >= x && touchX <= x + exitButton.getWidth() &&
+                    touchY >= exitButtonY && touchY <= exitButtonY + exitButton.getHeight()) {
+                Gdx.app.exit();
+            }
+        }
 
         game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override

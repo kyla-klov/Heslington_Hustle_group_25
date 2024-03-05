@@ -19,9 +19,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(displayMode.width - 50, displayMode.height - 50);
 		config.setResizable(true);
 		config.setForegroundFPS(60);
-		//config.width = Main.WIDTH;
-		//config.height = Main.HEIGHT;
-		//config.resizable = true;
+		config.setResizable(true);
 		// Don't worry about this for now
 		//config.addIcon("icon_128.png", FileType.Internal); // icon for Mac
 		//config.addIcon("icon_32.png", FileType.Internal); // icon for linux
