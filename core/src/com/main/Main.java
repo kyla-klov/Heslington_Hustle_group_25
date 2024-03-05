@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.screens.MainGameScreen;
+import com.main.screens.MainMenuScreen;
 
 import static com.badlogic.gdx.Gdx.graphics;
 
@@ -13,16 +14,26 @@ public class Main extends Game {
 	* the frame movement constant so matter the frames that are set
 	*/
 	public SpriteBatch batch;
+	public int screenWidth, screenHeight;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		this.setScreen(new MainGameScreen(this));
+		screenWidth = graphics.getWidth();
+		screenHeight = graphics.getHeight();
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
 	public void render () {
 		super.render();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		screenWidth = width;
+		screenHeight = height;
 	}
 	
 	@Override

@@ -13,8 +13,8 @@ public class MainGameScreen implements Screen {
     public static final float speed = 120;
 
     Texture img;
-    float x;
-    float y;
+    float x = 5;
+    float y = 5;
 
     Main game;
 
@@ -44,7 +44,7 @@ public class MainGameScreen implements Screen {
             x += (speed * Gdx.graphics.getDeltaTime());
         }
 
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
         game.batch.draw(img, x, y);
         game.batch.end();
