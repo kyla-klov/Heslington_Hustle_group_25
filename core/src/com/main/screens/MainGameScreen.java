@@ -11,17 +11,17 @@ import com.main.Main;
 
 public class MainGameScreen implements Screen {
 
-    public static final float speed = 120;
-    public static final int character_width = 16;
-    public static final int character_heigth = 16;
+    public static final float speed = 420; // walking speed per frame
+    public static final int character_width = 24; // this is in reference to the spritesheet
+    public static final int character_heigth = 38;
 
-    //Animation[]
+    Animation[] spriteNums; // this on
 
     //Texture img;
-    float[] positions;
+    float[] positions; // the amount of sprite frames there are in total to animate with
     float x;
     float y;
-    int spriteNum;
+    int spriteNum; // which frame the sprite should be on
 
     Main game;
 
@@ -29,7 +29,7 @@ public class MainGameScreen implements Screen {
         game = new Main();
         y = 15;
         x = (float) Game.screenWidth /2 - (float) Game.screenHeight /2;
-        //positions = new float[]
+        positions = new float[16];
     }
 
     @Override
