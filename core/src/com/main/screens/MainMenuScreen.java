@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+//import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.main.Main;
 
 public class MainMenuScreen implements Screen {
@@ -16,13 +16,26 @@ public class MainMenuScreen implements Screen {
     Texture settingsButton;
     Texture exitButton;
     //Texture menuBackground;
+    int x;
+    float playButtonY;
+    float controlsButtonY;
+    double settingsButtonY;
+    float exitButtonY;
+
 
     public MainMenuScreen (Main game){
 
+        this.game = game;
         playButton = new Texture("menu_buttons/play_button.png");
         controlsButton = new Texture("menu_buttons/controls_button.png");
         settingsButton = new Texture("menu_buttons/settings_button.png");
         exitButton = new Texture("menu_buttons/exit_button.png");
+
+        x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
+        playButtonY = (game.screenHeight) - (float) playButton.getHeight() * 1.25f;
+        controlsButtonY = (game.screenHeight) - controlsButton.getHeight() * 2.5f;
+        settingsButtonY = (game.screenHeight) - settingsButton.getHeight() * 3.75f;
+        exitButtonY = (game.screenHeight) - (exitButton.getHeight() * 5f);
         //menuBackground = new Texture(Gdx.files.internal("campus_background.png"));
     }
 
@@ -36,12 +49,6 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
 
         //game.batch.draw(menuBackground, 0, 0, game.screenWidth, game.screenHeight);
-
-        int x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
-        float playButtonY = (game.screenHeight) - (float) playButton.getWidth() /2;
-        float controlsButtonY = (game.screenHeight) - controlsButton.getWidth();
-        double settingsButtonY = (game.screenHeight) - settingsButton.getWidth()*1.5;
-        float exitButtonY = (game.screenHeight) - (exitButton.getWidth()*2);
 
         game.batch.draw(playButton, x, playButtonY);
         game.batch.draw(controlsButton, x, controlsButtonY);
