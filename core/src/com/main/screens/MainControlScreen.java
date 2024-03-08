@@ -10,7 +10,7 @@ import java.util.Map;
 public class MainControlScreen implements Screen {
 
     Main game;
-    private Map<String, String> controlMapping = new HashMap<String, String>();
+    private final Map<String, String> controlMapping = new HashMap<String, String>();
 
     public MainControlScreen(Main game) {
         this.game = game;

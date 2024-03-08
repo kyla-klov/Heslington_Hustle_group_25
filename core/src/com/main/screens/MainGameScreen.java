@@ -6,22 +6,23 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 
 public class MainGameScreen implements Screen {
 
     public static final float speed = 420; // walking speed per frame
-    public static final int character_width = 24; // this is in reference to the spritesheet
+    public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
+    public static final int character_width = 24; // this is in reference to the sprite sheet
     public static final int character_heigth = 38;
 
-    Animation[] spriteNums; // this on
+    Animation[] spriteNums; // the amount of sprite frames there are in total to animate with
+    int spriteNum; // which frame the sprite should be on
+    float stateTime;
 
-    //Texture img;
-    float[] positions; // the amount of sprite frames there are in total to animate with
     float x;
     float y;
-    int spriteNum; // which frame the sprite should be on
 
     Main game;
 
@@ -29,12 +30,19 @@ public class MainGameScreen implements Screen {
         game = new Main();
         y = 15;
         x = (float) Game.screenWidth /2 - (float) Game.screenHeight /2;
-        positions = new float[16];
+        spriteNum = 2;
+        spriteNums = new Animation[8];
+
+        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(new Texture("character/boy_walk.png"), character_width, character_heigth); // Splits the sprite sheet up by its frames
+
+        TextureRegion[] animationFrames = walkSpriteSheet[0];
+        spriteNums[spriteNum] = new Animation<TextureRegion>(animation_speed, animationFrames);
+
     }
 
     @Override
     public void show () {
-        //img = new Texture("badlogic.jpg");
         game.batch = new SpriteBatch();
     }
 
@@ -54,9 +62,13 @@ public class MainGameScreen implements Screen {
             x += (speed * Gdx.graphics.getDeltaTime());
         }
 
+        stateTime += delta;
+
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
-        //game.batch.draw(img, x, y);
+
+        game.batch.draw((Texture) spriteNums[spriteNum].getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
+
         game.batch.end();
     }
 
