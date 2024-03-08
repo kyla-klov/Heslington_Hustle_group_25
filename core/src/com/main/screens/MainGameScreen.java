@@ -26,10 +26,10 @@ public class MainGameScreen implements Screen {
 
     Main game;
 
-    public MainGameScreen (Main Game) {
-        game = new Main();
+    public MainGameScreen (Main game) {
+        this.game = game;
         y = 15;
-        x = (float) Game.screenWidth /2 - (float) Game.screenHeight /2;
+        x = (float) game.screenWidth /2 - (float) game.screenHeight /2;
         spriteNum = 2;
         spriteNums = new Animation[8];
 
@@ -43,7 +43,6 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void show () {
-        game.batch = new SpriteBatch();
     }
 
     @Override
@@ -67,7 +66,7 @@ public class MainGameScreen implements Screen {
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
 
-        game.batch.draw((Texture) spriteNums[spriteNum].getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
+        game.batch.draw((TextureRegion) spriteNums[spriteNum].getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
 
         game.batch.end();
     }

@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
     //Texture menuBackground;
 
     public MainMenuScreen (Main game){
-
+        this.game = game;
         playButton = new Texture("menu_buttons/play_button.png");
         controlsButton = new Texture("menu_buttons/controls_button.png");
         settingsButton = new Texture("menu_buttons/settings_button.png");
@@ -62,7 +62,7 @@ public class MainMenuScreen implements Screen {
             }
             else if (touchX >= x && touchX <= x + settingsButton.getWidth() &&
                     touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButton.getHeight()) {
-                // game.setScreen(new MainSettingsScreen(game));
+                game.setScreen(new MainSettingsScreen(game));
             }
             else if (touchX >= x && touchX <= x + exitButton.getWidth() &&
                     touchY >= exitButtonY && touchY <= exitButtonY + exitButton.getHeight()) {
