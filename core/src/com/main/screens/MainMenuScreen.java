@@ -16,6 +16,11 @@ public class MainMenuScreen implements Screen {
     Texture settingsButton;
     Texture exitButton;
     //Texture menuBackground;
+    int x;
+    float playButtonY;
+    float controlsButtonY;
+    double settingsButtonY;
+    float exitButtonY;
 
     public MainMenuScreen (Main game){
         this.game = game;
@@ -24,6 +29,12 @@ public class MainMenuScreen implements Screen {
         settingsButton = new Texture("menu_buttons/settings_button.png");
         exitButton = new Texture("menu_buttons/exit_button.png");
         //menuBackground = new Texture(Gdx.files.internal("campus_background.png"));
+
+        x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
+        playButtonY = (game.screenHeight) - (float) playButton.getHeight() * 1.25f;
+        controlsButtonY = (game.screenHeight) - controlsButton.getHeight() * 2.5f;
+        settingsButtonY = (game.screenHeight) - settingsButton.getHeight() * 3.75f;
+        exitButtonY = (game.screenHeight) - (exitButton.getHeight() * 5f);
     }
 
     @Override
@@ -36,12 +47,6 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
 
         //game.batch.draw(menuBackground, 0, 0, game.screenWidth, game.screenHeight);
-
-        int x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
-        float playButtonY = (game.screenHeight) - (float) playButton.getWidth() /2;
-        float controlsButtonY = (game.screenHeight) - controlsButton.getWidth();
-        double settingsButtonY = (game.screenHeight) - settingsButton.getWidth()*1.5;
-        float exitButtonY = (game.screenHeight) - (exitButton.getWidth()*2);
 
         game.batch.draw(playButton, x, playButtonY);
         game.batch.draw(controlsButton, x, controlsButtonY);
@@ -62,7 +67,7 @@ public class MainMenuScreen implements Screen {
             }
             else if (touchX >= x && touchX <= x + settingsButton.getWidth() &&
                     touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButton.getHeight()) {
-                game.setScreen(new MainSettingsScreen(game));
+                //game.setScreen(new MainSettingsScreen(game));
             }
             else if (touchX >= x && touchX <= x + exitButton.getWidth() &&
                     touchY >= exitButtonY && touchY <= exitButtonY + exitButton.getHeight()) {
