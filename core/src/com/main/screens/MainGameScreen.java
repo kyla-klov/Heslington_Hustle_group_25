@@ -43,7 +43,6 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void show () {
-        //game.batch = new SpriteBatch();
     }
 
     @Override
