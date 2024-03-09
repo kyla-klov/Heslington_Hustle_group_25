@@ -20,9 +20,9 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		screenWidth = graphics.getWidth();
 		screenHeight = graphics.getHeight();
+		this.setScreen(new MainSettingsScreen(this));
 		this.setScreen(new MainControlScreen(this));
 		this.setScreen(new MainMenuScreen(this));
-		this.setScreen(new MainSettingsScreen(this));
 	}
 
 	@Override
