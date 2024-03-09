@@ -10,7 +10,7 @@ import com.main.Main;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public class MainSettingsScreen implements Screen {
+public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
 
@@ -29,7 +29,7 @@ public class MainSettingsScreen implements Screen {
 
     @Override
     public void show() {
-        input.setInputProcessor((InputProcessor) this);
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -38,6 +38,21 @@ public class MainSettingsScreen implements Screen {
         game.batch.begin();
         game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.end();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -49,6 +64,31 @@ public class MainSettingsScreen implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
         return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
     }
 
     @Override
