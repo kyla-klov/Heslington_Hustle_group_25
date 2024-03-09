@@ -20,6 +20,7 @@ public class Player extends Entity {
 
     public Player(String spriteSheetPath, Main game) {
         this.game = game;
+        this.speed = 350;
         y = 15;
         x = (float) game.screenWidth /2 - (float) game.screenHeight /2;
 

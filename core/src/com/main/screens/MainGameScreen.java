@@ -32,6 +32,7 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+        player.update(delta); // This line updates player position and animation state.
 
         String counterString;
         counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
