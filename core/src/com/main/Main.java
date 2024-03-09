@@ -1,11 +1,10 @@
 package com.main;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.screens.MainControlScreen;
 import com.main.screens.MainMenuScreen;
+import com.main.screens.MainSettingsScreen;
 
 import static com.badlogic.gdx.Gdx.graphics;
 
@@ -23,6 +22,7 @@ public class Main extends Game {
 		screenHeight = graphics.getHeight();
 		this.setScreen(new MainControlScreen(this));
 		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new MainSettingsScreen(this));
 	}
 
 	@Override

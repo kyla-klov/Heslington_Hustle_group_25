@@ -3,19 +3,16 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static com.badlogic.gdx.Gdx.input;
 
-public class MainControlScreen implements Screen, InputProcessor {
+public class MainSettingsScreen implements Screen {
 
     Main game;
-    private final Map<String, String> controlMapping = new HashMap<String, String>();
 
     private final Texture backButtonTexture;
     private final float backButtonX;
@@ -23,7 +20,7 @@ public class MainControlScreen implements Screen, InputProcessor {
     private final float backButtonWidth = 100;
     private final float backButtonHeight = 50;
 
-    public MainControlScreen(Main game) {
+    public MainSettingsScreen(Main game) {
         this.game = game;
         backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
         backButtonX = 10; // Adjust the position as needed
@@ -32,7 +29,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        input.setInputProcessor(this);
+        input.setInputProcessor((InputProcessor) this);
     }
 
     @Override
@@ -52,48 +49,6 @@ public class MainControlScreen implements Screen, InputProcessor {
             game.setScreen(new MainMenuScreen(game));
         }
         return true;
-    }
-
-    @Override
-    public boolean keyDown(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char c) {
-        return false;
-    }
-
-
-    @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int i, int i1, int i2) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int i, int i1) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        // Implement scrolling behavior if needed
-        return false; // Return false if the event was not handled
     }
 
     @Override
@@ -119,22 +74,5 @@ public class MainControlScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         backButtonTexture.dispose();
-
     }
-
-    public void addControls(){
-        addControl("W", "Up");
-        addControl("A", "Left");
-        addControl("S", "Right");
-        addControl("D", "Down");
-    }
-
-    public void addControl(String key, String action) throws IllegalArgumentException{
-        if (controlMapping.containsKey(key)){
-            throw new IllegalArgumentException("binding already exists");
-        } else {
-            controlMapping.put(key, action);
-        }
-    }
-
 }

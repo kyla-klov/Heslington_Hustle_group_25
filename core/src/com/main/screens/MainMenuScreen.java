@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.main.Main;
 
 public class MainMenuScreen implements Screen {
@@ -67,7 +66,7 @@ public class MainMenuScreen implements Screen {
             }
             else if (touchX >= x && touchX <= x + settingsButton.getWidth() &&
                     touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButton.getHeight()) {
-                //game.setScreen(new MainSettingsScreen(game));
+                game.setScreen(new MainSettingsScreen(game));
             }
             else if (touchX >= x && touchX <= x + exitButton.getWidth() &&
                     touchY >= exitButtonY && touchY <= exitButtonY + exitButton.getHeight()) {
