@@ -92,6 +92,11 @@ public class MainGameScreen implements Screen {
     }
 
     @Override
+    public void counters() {
+
+    }
+
+    @Override
     public void dispose() {
         game.batch.dispose();
     }
