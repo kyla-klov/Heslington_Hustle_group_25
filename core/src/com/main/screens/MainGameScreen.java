@@ -12,12 +12,14 @@ import com.main.Main;
 
 public class MainGameScreen implements Screen {
 
-    public static final float speed = 420; // walking speed per frame
+    public static final float speed = 350; // walking speed per frame
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int character_width = 24; // this is in reference to the sprite sheet
     public static final int character_heigth = 38;
 
-    Animation[] spriteNums; // the amount of sprite frames there are in total to animate with
+    Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
+    Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
+    Animation<TextureRegion> currentAnimation; // the amount of sprite frames there are in total to animate with
     int spriteNum; // which frame the sprite should be on
     float stateTime;
 
@@ -31,14 +33,27 @@ public class MainGameScreen implements Screen {
         y = 15;
         x = (float) game.screenWidth /2 - (float) game.screenHeight /2;
         spriteNum = 2;
-        spriteNums = new Animation[8];
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
-        TextureRegion[][] walkSpriteSheet = TextureRegion.split(new Texture("character/boy_walk.png"), character_width, character_heigth); // Splits the sprite sheet up by its frames
+        Texture idleSheet = new Texture("character/boy_walk.png");
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_heigth); // Splits the sprite sheet up by its frames
 
-        TextureRegion[] animationFrames = walkSpriteSheet[0];
-        spriteNums[spriteNum] = new Animation<TextureRegion>(animation_speed, animationFrames);
+        Texture walkSheet = new Texture("character/boy_walk.png");
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_heigth); // Splits the sprite sheet up by its frames
 
+        walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
+        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
+        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for left
+        walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
+
+        // Assuming the first frame of each animation can serve as the idle frame
+        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0]);
+        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0]);
+        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0]);
+        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0]);
+
+        // Initially set to idle down animation
+        currentAnimation = idleDownAnimation;
     }
 
     @Override
@@ -47,18 +62,34 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        // MOVEMENT WITH DELTA TIME
+        boolean isMoving = false;
+        // checks movement and updates animation, adjusts speed with delta time
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             y += (speed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkUpAnimation;
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             y -= (speed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkDownAnimation;
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             x -= (speed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkLeftAnimation;
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += (speed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkRightAnimation;
+            isMoving = true;
+        }
+
+        if (!isMoving) {
+            if (currentAnimation == walkDownAnimation) currentAnimation = idleDownAnimation;
+            else if (currentAnimation == walkRightAnimation) currentAnimation = idleRightAnimation;
+            else if (currentAnimation == walkLeftAnimation) currentAnimation = idleLeftAnimation;
+            else if (currentAnimation == walkUpAnimation) currentAnimation = idleUpAnimation;
         }
 
         stateTime += delta;
@@ -66,7 +97,7 @@ public class MainGameScreen implements Screen {
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
 
-        game.batch.draw((TextureRegion) spriteNums[spriteNum].getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
+        game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
 
         game.batch.end();
     }
