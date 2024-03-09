@@ -5,12 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 
 public class MainGameScreen implements Screen {
+
+    BitmapFont font;
 
     public static final float speed = 350; // walking speed per frame
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
@@ -33,6 +36,10 @@ public class MainGameScreen implements Screen {
         y = 15;
         x = (float) game.screenWidth /2 - (float) game.screenHeight /2;
         //spriteNum = 2;
+
+
+        font = new BitmapFont();
+
 
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
@@ -62,6 +69,9 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+
+        String counterString;
+        counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
         boolean isMoving = false;
         // checks movement and updates animation, adjusts speed with delta time
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -99,6 +109,9 @@ public class MainGameScreen implements Screen {
 
         game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
 
+
+        font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
+
         game.batch.end();
     }
 
@@ -121,6 +134,8 @@ public class MainGameScreen implements Screen {
     public void hide() {
 
     }
+
+
 
     @Override
     public void dispose() {
