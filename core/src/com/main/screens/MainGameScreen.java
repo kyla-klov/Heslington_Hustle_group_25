@@ -20,7 +20,7 @@ public class MainGameScreen implements Screen {
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
     Animation<TextureRegion> currentAnimation; // the amount of sprite frames there are in total to animate with
-    int spriteNum; // which frame the sprite should be on
+    //int spriteNum; // which frame the sprite should be on
     float stateTime;
 
     float x;
@@ -32,10 +32,11 @@ public class MainGameScreen implements Screen {
         this.game = game;
         y = 15;
         x = (float) game.screenWidth /2 - (float) game.screenHeight /2;
-        spriteNum = 2;
+        //spriteNum = 2;
+
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
-        Texture idleSheet = new Texture("character/boy_walk.png");
+        Texture idleSheet = new Texture("character/boy_idle.png");
         TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_heigth); // Splits the sprite sheet up by its frames
 
         Texture walkSheet = new Texture("character/boy_walk.png");
@@ -46,13 +47,12 @@ public class MainGameScreen implements Screen {
         walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for left
         walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
 
-        // Assuming the first frame of each animation can serve as the idle frame
-        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0]);
-        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0]);
-        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0]);
-        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0]);
 
-        // Initially set to idle down animation
+        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
+        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
+        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
+        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
+
         currentAnimation = idleDownAnimation;
     }
 
