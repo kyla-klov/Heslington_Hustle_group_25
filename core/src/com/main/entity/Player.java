@@ -46,26 +46,36 @@ public class Player extends Entity {
 
     public void update(float delta) {
         boolean isMoving = false;
+        // Determine if the player is moving diagonally
+        boolean isMovingDiagonally = ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) || (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))) && ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)));
+        // Calculate the normalised speed for diagonal movement
+        double normalizedSpeed = isMovingDiagonally ? (speed / Math.sqrt(2)) * 1.07 : speed; // the 1.07 increases the diagonal speed by 7%
+
         // checks movement and updates animation, adjusts speed with delta time
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            y += (speed * Gdx.graphics.getDeltaTime());
+            y += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkUpAnimation;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= (speed * Gdx.graphics.getDeltaTime());
+            y -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkDownAnimation;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            x -= (speed * Gdx.graphics.getDeltaTime());
+            x -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkLeftAnimation;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            x += (speed * Gdx.graphics.getDeltaTime());
+            x += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkRightAnimation;
             isMoving = true;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+            normalizedSpeed *= 2;
+        } else {
+            normalizedSpeed /= 2;
         }
 
         if (!isMoving) {
