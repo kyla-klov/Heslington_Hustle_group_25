@@ -107,8 +107,11 @@ public class MainGameScreen implements Screen {
             else if (currentAnimation == walkUpAnimation) currentAnimation = idleUpAnimation;
         }
 
+        /*
         camera.position.set(x+ (float) character_width /2, y + (float) character_heigth /2, 0);
         camera.update();
+        */
+
 
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -124,8 +127,9 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void resize (int width, int height) {
-        camera.setToOrtho(false, width, height);
-        camera.update();
+        // makes the camera follow the player around
+        //camera.setToOrtho(false, width, height);
+        //camera.update();
 
     }
 
