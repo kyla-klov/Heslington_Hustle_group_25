@@ -15,7 +15,6 @@ import static com.badlogic.gdx.Gdx.input;
 public class MainControlScreen implements Screen, InputProcessor {
 
     Main game;
-    private final Map<String, String> controlMapping = new HashMap<String, String>();
 
     private final Texture backButtonTexture;
     private final float backButtonX;
@@ -28,6 +27,7 @@ public class MainControlScreen implements Screen, InputProcessor {
         backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
         backButtonX = 10; // Adjust the position as needed
         backButtonY = game.screenHeight - backButtonHeight - 10;
+
     }
 
     @Override
@@ -120,21 +120,6 @@ public class MainControlScreen implements Screen, InputProcessor {
     public void dispose() {
         backButtonTexture.dispose();
 
-    }
-
-    public void addControls(){
-        addControl("W", "Up");
-        addControl("A", "Left");
-        addControl("S", "Right");
-        addControl("D", "Down");
-    }
-
-    public void addControl(String key, String action) throws IllegalArgumentException{
-        if (controlMapping.containsKey(key)){
-            throw new IllegalArgumentException("binding already exists");
-        } else {
-            controlMapping.put(key, action);
-        }
     }
 
 }
