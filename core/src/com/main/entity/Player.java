@@ -47,9 +47,19 @@ public class Player extends Entity {
     public void update(float delta) {
         boolean isMoving = false;
         // Determine if the player is moving diagonally
-        boolean isMovingDiagonally = ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) || (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))) && ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) || (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)));
+        boolean isMovingDiagonally = ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) ||
+                        (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))) &&
+                        ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) ||
+                        (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)));
         // Calculate the normalised speed for diagonal movement
-        double normalizedSpeed = isMovingDiagonally ? (speed / Math.sqrt(2)) * 1.07 : speed; // the 1.07 increases the diagonal speed by 7%
+        double normalizedSpeed = speed;
+        if (isMovingDiagonally) {
+            normalizedSpeed = (speed / Math.sqrt(2)) * 1.07; // Adjust speed for diagonal movement
+        }
+        // shift key doubles player speed
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+            normalizedSpeed *= 2; // Increase speed if shift is pressed
+        }
 
         // checks movement and updates animation, adjusts speed with delta time
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -71,11 +81,6 @@ public class Player extends Entity {
             x += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkRightAnimation;
             isMoving = true;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-            normalizedSpeed *= 2;
-        } else {
-            normalizedSpeed /= 2;
         }
 
         if (!isMoving) {
