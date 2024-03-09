@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+
 
 public class MainGameScreen implements Screen {
 
     BitmapFont font;
+    OrthographicCamera camera;
 
     public static final float speed = 350; // walking speed per frame
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
@@ -39,7 +42,9 @@ public class MainGameScreen implements Screen {
 
 
         font = new BitmapFont();
-
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+        camera.update();
 
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
@@ -102,21 +107,25 @@ public class MainGameScreen implements Screen {
             else if (currentAnimation == walkUpAnimation) currentAnimation = idleUpAnimation;
         }
 
+        camera.position.set(x+ (float) character_width /2, y + (float) character_heigth /2, 0);
+        camera.update();
+
+        game.batch.setProjectionMatrix(camera.combined);
+
         stateTime += delta;
 
         ScreenUtils.clear(0, 0, 1, 1);
+
         game.batch.begin();
-
         game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
-
-
         font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
-
         game.batch.end();
     }
 
     @Override
     public void resize (int width, int height) {
+        camera.setToOrtho(false, width, height);
+        camera.update();
 
     }
 
