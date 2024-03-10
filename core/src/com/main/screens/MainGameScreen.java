@@ -20,6 +20,19 @@ public class MainGameScreen implements Screen {
     float menuButtonX;
     float menuButtonWidth;
     float menuButtonHeight;
+
+    Texture energyBar;
+    float energyBarY;
+    float energyBarX;
+    float energyBarWidth;
+    float energyBarHeight;
+    int energyCounter = 10;
+
+    Texture hit;
+    float hitWidth;
+    float hitHeight;
+    float hitX;
+    float hitY;
     OrthographicCamera camera;
 
     Main game;
@@ -31,11 +44,24 @@ public class MainGameScreen implements Screen {
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
 
+
+        hit = new Texture("energy/hit.png");
+        hitWidth = 100;
+        hitHeight = 100;
+        hitX = (float) game.screenWidth /2;
+        hitY = (float) game.screenHeight /2;
+
         menuButtonWidth = 64;
         menuButtonHeight = 64;
         menuButtonX = 10;
         menuButtonY = (game.screenHeight) - menuButtonHeight - 10;
 
+        energyBarWidth = 200;
+        energyBarHeight = 64;
+        energyBarX = 30 + menuButtonWidth;
+        energyBarY = game.screenHeight - 10 - energyBarHeight;
+
+        energyBar = setEnergyBar();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
@@ -63,6 +89,13 @@ public class MainGameScreen implements Screen {
         camera.update();
         */
 
+        if (player.collidesWith(hit, hitX, hitY)) {
+            energyCounter--;
+            player.setPos(10,10);
+            energyBar = setEnergyBar();
+
+        }
+
         game.batch.setProjectionMatrix(camera.combined);
 
         ScreenUtils.clear(0, 0, 1, 1);
@@ -72,6 +105,9 @@ public class MainGameScreen implements Screen {
         gameMap.render();
 
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
+        game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
+        game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
+
         if (Gdx.input.justTouched()) {
             int touchX = Gdx.input.getX();
             int touchY = game.screenHeight - Gdx.input.getY();
@@ -81,12 +117,22 @@ public class MainGameScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
 
             }
+
         }
         // Draw the player with the current frame of animation
-        game.batch.draw(player.getCurrentFrame(), player.x, player.y, Player.character_width, Player.character_heigth);
+        game.batch.draw(player.getCurrentFrame(), player.x, player.y, Player.character_width, Player.character_height);
 
         font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
         game.batch.end();
+    }
+
+    public Texture setEnergyBar() {
+        if (energyCounter > 0) {
+            System.out.println("energy/energy_" + energyCounter + ".png");
+            return new Texture("energy/energy_" + energyCounter + ".png");
+        } else {
+            return new Texture("energy/energy_0.png");
+        }
     }
 
     @Override

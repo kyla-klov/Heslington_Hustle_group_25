@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.main.Main;
 
 
@@ -13,7 +14,7 @@ public class Player extends Entity {
 
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int character_width = 24;// this is in reference to the sprite sheet
-    public static final int character_heigth = 38;
+    public static final int character_height = 38;
 
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
@@ -26,10 +27,10 @@ public class Player extends Entity {
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
         Texture idleSheet = new Texture("character/boy_idle.png");
-        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_heigth); // Splits the sprite sheet up by its frames
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
 
         Texture walkSheet = new Texture("character/boy_walk.png");
-        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_heigth); // Splits the sprite sheet up by its frames
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
 
         walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
         walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
@@ -94,9 +95,20 @@ public class Player extends Entity {
 
         game.batch.begin();
 
-        game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), x, y, character_width, character_heigth);
+        game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), x, y, character_width, character_height);
 
         game.batch.end();
+    }
+
+    public boolean collidesWith(Texture thing, float thingX, float thingY) {
+        Rectangle playerBounds = new Rectangle(x, y, character_width, character_height);
+        Rectangle objectBounds = new Rectangle(thingX, thingY, thing.getWidth(), thing.getHeight()); // Adjust this according to your hit object's position and size
+        return playerBounds.overlaps(objectBounds);
+    }
+
+    public void setPos(float newX, float newY) {
+        x = newX;
+        y = newY;
     }
 
     // Getter for the current frame based on the state time
