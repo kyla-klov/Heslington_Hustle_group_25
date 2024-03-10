@@ -79,6 +79,23 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float soundLabelHeight = 50;
 
+    private final Texture soundDownButton;
+
+    private final float soundDownButtonX;
+
+    private final float soundDownButtonY;
+
+    private final float soundDownButtonWidth = 75;
+
+    private final float soundDownButtonHeight = 75;
+
+    private final Texture soundBar;
+
+    private final float soundBarX;
+    private final float soundBarY;
+    private final float soundBarWidth = 250;
+    private final float soundBarHeight = 50;
+
     /*
     private final Texture soundDownButtonTexture;
 
@@ -108,9 +125,11 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         musicBar = new Texture("assets/settings_gui/bar_75.png");
         soundUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
         soundLabel = new Texture("assets/settings_gui/sound_label.png");
+        soundDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
+        soundBar = new Texture("assets/settings_gui/bar_25.png");
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
-        backButtonY = (float) game.screenHeight / 6;
+        backButtonY = (float) game.screenHeight / 6 - 25;
         settingsLabelX = (game.screenWidth - settingsLabelWidth) / 2;
         settingsLabelY =  game.screenHeight - (settingsLabelHeight * 2);
         musicUpButtonX = (game.screenWidth - musicUpButtonWidth) / 2 + 200;
@@ -122,9 +141,13 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         musicBarX = (game.screenWidth - musicBarWidth) / 2;
         musicBarY = game.screenHeight - musicBarHeight - 375;
         soundUpButtonX = (game.screenWidth - soundUpButtonWidth) / 2 + 200;
-        soundUpButtonY = game.screenHeight - soundUpButtonHeight - 500;
+        soundUpButtonY = game.screenHeight - soundUpButtonHeight - 530;
         soundLabelX = (game.screenWidth - soundLabelWidth) / 2 + 175;
         soundLabelY = game.screenHeight - soundLabelHeight - 350;
+        soundDownButtonX = (game.screenWidth - soundDownButtonWidth) / 2 - 200;
+        soundDownButtonY = game.screenHeight - soundDownButtonHeight - 530;
+        soundBarX = (game.screenWidth - soundBarWidth) / 2;
+        soundBarY = game.screenHeight - soundBarHeight - 555;
 
         /*
         musicDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
@@ -175,6 +198,8 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         game.batch.draw(musicBar, musicBarX, musicBarY, musicBarWidth, musicBarHeight);
         game.batch.draw(soundUpButton, soundUpButtonX, soundUpButtonY, soundUpButtonWidth, soundUpButtonHeight);
         game.batch.draw(soundLabel, soundLabelX, soundLabelY, soundLabelWidth, soundLabelHeight);
+        game.batch.draw(soundDownButton, soundDownButtonX, soundDownButtonY, soundDownButtonWidth, soundDownButtonHeight);
+        game.batch.draw(soundBar, soundBarX, soundBarY, soundBarWidth, soundBarHeight);
         game.batch.end();
     }
 
