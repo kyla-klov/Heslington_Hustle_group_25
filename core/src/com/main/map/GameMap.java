@@ -3,31 +3,34 @@ package com.main.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class GameMap {
-    private final TiledMap tiledMap;
+    private final TiledMap gameMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
 
+    private TiledMapTileLayer collisionLayer;
+    public static final String tree_layer = "Trees";
+
     public GameMap() {
-        // Load the TMX map
-        tiledMap = new TmxMapLoader().load("map/MainMap.tmx");
+        // Load the .tmx with the MainMap for game
+        gameMap = new TmxMapLoader().load("map/MainMap.tmx");
 
-        // Initialize the map renderer
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        // Render the MainMap
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(gameMap);
 
-        // Initialize your camera (assuming you have one set up)
-        // This is just an example. Adjust the viewport size as necessary.
+        // Collisions
+        collisionLayer = (TiledMapTileLayer) gameMap.getLayers().get(tree_layer);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
     }
 
     public void render() {
-        // Clear the screen or set a background color if desired
-
         // Update the camera and set the tiledMapRenderer's view based on that camera
         camera.update();
         tiledMapRenderer.setView(camera);
@@ -42,8 +45,7 @@ public class GameMap {
     }
 
     public void dispose() {
-        // Don't forget to dispose of the map and renderer when done
-        tiledMap.dispose();
+        gameMap.dispose();
         tiledMapRenderer.dispose();
     }
 }
