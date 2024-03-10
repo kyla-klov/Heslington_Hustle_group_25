@@ -27,7 +27,6 @@ public class MainControlScreen implements Screen, InputProcessor {
         backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
         backButtonX = 10; // Adjust the position as needed
         backButtonY = game.screenHeight - backButtonHeight - 10;
-
     }
 
     @Override

@@ -95,21 +95,16 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private final float soundBarY;
     private final float soundBarWidth = 250;
     private final float soundBarHeight = 50;
-
-    /*
-    private final Texture soundDownButtonTexture;
-
-    private final float soundDownButtonLabelX;
-    private final float soundDownButtonY;
-    private final Texture pickBoyButtonTexture;
-
-    private final float pickBoyButtonX;
-    private final float pickBoyButtonY;
-    private final Texture pickGirlButtonTexture;
-
-    private final float pickGirlButtonX;
-    private final float pickGirlButtonY;
-    */
+    private final Texture boyButton;
+    private final float boyButtonX;
+    private final float boyButtonY;
+    private final float boyButtonWidth = 150;
+    private final float boyButtonHeight = 150;
+    private final Texture girlButton;
+    private final float girlButtonX;
+    private final float girlButtonY;
+    private final float girlButtonWidth = 150;
+    private final float girlButtonHeight = 150;
 
 
     public MainSettingsScreen(Main game) {
@@ -127,9 +122,11 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         soundLabel = new Texture("assets/settings_gui/sound_label.png");
         soundDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
         soundBar = new Texture("assets/settings_gui/bar_25.png");
+        boyButton = new Texture("assets/settings_gui/boy_button.png");
+        girlButton = new Texture("assets/settings_gui/girl_button.png");
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
-        backButtonY = (float) game.screenHeight / 6 - 25;
+        backButtonY = (float) game.screenHeight / 6 - 100;
         settingsLabelX = (game.screenWidth - settingsLabelWidth) / 2;
         settingsLabelY =  game.screenHeight - (settingsLabelHeight * 2);
         musicUpButtonX = (game.screenWidth - musicUpButtonWidth) / 2 + 200;
@@ -142,12 +139,16 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         musicBarY = game.screenHeight - musicBarHeight - 375;
         soundUpButtonX = (game.screenWidth - soundUpButtonWidth) / 2 + 200;
         soundUpButtonY = game.screenHeight - soundUpButtonHeight - 530;
-        soundLabelX = (game.screenWidth - soundLabelWidth) / 2 + 175;
-        soundLabelY = game.screenHeight - soundLabelHeight - 350;
+        soundLabelX = (game.screenWidth - soundLabelWidth) / 2;
+        soundLabelY = game.screenHeight - soundLabelHeight - 470;
         soundDownButtonX = (game.screenWidth - soundDownButtonWidth) / 2 - 200;
         soundDownButtonY = game.screenHeight - soundDownButtonHeight - 530;
         soundBarX = (game.screenWidth - soundBarWidth) / 2;
         soundBarY = game.screenHeight - soundBarHeight - 555;
+        boyButtonX = (game.screenWidth - boyButtonWidth) / 2 - 100;
+        boyButtonY = game.screenHeight - boyButtonHeight - 650;
+        girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + 100;
+        girlButtonY = game.screenHeight - boyButtonHeight - 650;
 
         /*
         musicDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
@@ -200,6 +201,8 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         game.batch.draw(soundLabel, soundLabelX, soundLabelY, soundLabelWidth, soundLabelHeight);
         game.batch.draw(soundDownButton, soundDownButtonX, soundDownButtonY, soundDownButtonWidth, soundDownButtonHeight);
         game.batch.draw(soundBar, soundBarX, soundBarY, soundBarWidth, soundBarHeight);
+        game.batch.draw(boyButton, boyButtonX, boyButtonY, boyButtonWidth, boyButtonHeight);
+        game.batch.draw(girlButton, girlButtonX, girlButtonY, girlButtonWidth, girlButtonHeight);
         game.batch.end();
     }
 
