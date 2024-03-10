@@ -14,13 +14,13 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
     private final int y;
-    private final Texture backButtonTexture;
+    private final Texture backButton;
     private final float backButtonX;
     private final float backButtonY;
-    private final float backButtonWidth = 100;
-    private final float backButtonHeight = 50;
+    private final float backButtonWidth = 200;
+    private final float backButtonHeight = 100;
 
-    private final Texture settingsLabelTexture;
+    private final Texture settingsLabel;
 
     private final float settingsLabelX;
     private final float settingsLabelY;
@@ -66,47 +66,57 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     public MainSettingsScreen(Main game) {
         this.game = game;
-        backButtonTexture = new Texture("assets/settings_gui/back_button.png");
-        backButtonX = 10; // Adjust the position as needed
-        backButtonY = game.screenHeight - backButtonHeight - 10;
+        /*
+        group them maybe but up to you.
+         */
+        backButton = new Texture("assets/settings_gui/back_button.png");
+        settingsLabel = new Texture("assets/settings_gui/settings_label.png");
+
+        backButtonX = (game.screenWidth - backButtonWidth) /2;
+        //backButtonY = game.screenHeight - backButtonHeight - 10;
+        backButtonY = (float) game.screenHeight / 6;
 
         y = game.screenHeight/2 + 100;
 
-        settingsLabelTexture = new Texture("assets/settings_gui/settings_label.png");
-        settingsLabelX = (float) (game.screenWidth - settingsLabelTexture.getWidth()) /2; // Adjust the position as needed
-        settingsLabelY = y;
+        settingsLabelX = (game.screenWidth - settingsLabelWidth) /2;
+        //settingsLabelY = y;
+        settingsLabelY =  game.screenHeight - (settingsLabelHeight * 2);
+
+        /*
+        Matt don't name then like "musicUpButtonTexture", the 'Texture' looks a bit like chatgpt.
+         */
 
         /*
         musicUpButtonTexture = new Texture("assets/settings_gui/arrow_right_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         musicDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         soundUpButtonTexture = new Texture("assets/settings_gui/arrow_right_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         soundDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         pickBoyButtonTexture = new Texture("assets/settings_gui/boy_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         pickGirlButtonTexture = new Texture("assets/settings_gui/girl_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         musicLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
 
         soundLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
         */
 
@@ -121,8 +131,8 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
-        game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
-        game.batch.draw(settingsLabelTexture, settingsLabelX, settingsLabelY, settingsLabelWidth, settingsLabelHeight);
+        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+        game.batch.draw(settingsLabel, settingsLabelX, settingsLabelY, settingsLabelWidth, settingsLabelHeight);
         game.batch.end();
     }
 
@@ -199,6 +209,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        backButtonTexture.dispose();
+        backButton.dispose();
     }
 }
