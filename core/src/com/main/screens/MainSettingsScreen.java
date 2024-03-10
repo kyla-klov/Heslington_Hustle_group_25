@@ -153,35 +153,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + 100;
         girlButtonY = game.screenHeight - boyButtonHeight - 650;
 
-        /*
-        musicDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundUpButtonTexture = new Texture("assets/settings_gui/arrow_right_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        pickBoyButtonTexture = new Texture("assets/settings_gui/boy_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        pickGirlButtonTexture = new Texture("assets/settings_gui/girl_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        musicLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-        */
 
     }
 

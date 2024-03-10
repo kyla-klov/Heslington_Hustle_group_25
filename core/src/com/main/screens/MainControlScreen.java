@@ -25,7 +25,7 @@ public class MainControlScreen implements Screen, InputProcessor {
     public MainControlScreen(Main game) {
         this.game = game;
         backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
-        backButtonX = 10; // Adjust the position as needed
+        backButtonX = 10;
         backButtonY = game.screenHeight - backButtonHeight - 10;
     }
 
