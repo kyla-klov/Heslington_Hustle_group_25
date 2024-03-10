@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.entity.Player;
+import com.main.map.GameMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MainGameScreen implements Screen {
     Player player;
     BitmapFont font;
+    GameMap gameMap;
 
     Texture menuButton;
     float menuButtonY;
@@ -35,10 +37,11 @@ public class MainGameScreen implements Screen {
         menuButtonY = (game.screenHeight) - menuButtonHeight - 10;
 
 
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         camera.update();
+
+        gameMap = new GameMap();
 
     }
 
@@ -50,6 +53,7 @@ public class MainGameScreen implements Screen {
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
+        //gameMap.update(delta); //for future map animations
 
         String counterString;
         counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
@@ -64,6 +68,8 @@ public class MainGameScreen implements Screen {
         ScreenUtils.clear(0, 0, 1, 1);
 
         game.batch.begin();
+
+        gameMap.render();
 
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         if (Gdx.input.justTouched()) {
