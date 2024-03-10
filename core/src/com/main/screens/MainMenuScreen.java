@@ -14,6 +14,8 @@ public class MainMenuScreen implements Screen {
     Texture controlsButton;
     Texture settingsButton;
     Texture exitButton;
+
+
     //Texture menuBackground;
     int x;
     float playButtonY;
@@ -21,8 +23,10 @@ public class MainMenuScreen implements Screen {
     double settingsButtonY;
     float exitButtonY;
 
-    public MainMenuScreen (Main game){
+    public MainMenuScreen (Main game) {
+
         this.game = game;
+
         playButton = new Texture("menu_buttons/play_button.png");
         controlsButton = new Texture("menu_buttons/controls_button.png");
         settingsButton = new Texture("menu_buttons/settings_button.png");
@@ -30,10 +34,11 @@ public class MainMenuScreen implements Screen {
         //menuBackground = new Texture(Gdx.files.internal("campus_background.png"));
 
         x = (game.screenWidth - playButton.getWidth()) / 2; //this is to make sure the buttons are centered
-        playButtonY = (game.screenHeight) - (float) playButton.getHeight() * 1.25f;
         controlsButtonY = (game.screenHeight) - controlsButton.getHeight() * 2.5f;
         settingsButtonY = (game.screenHeight) - settingsButton.getHeight() * 3.75f;
         exitButtonY = (game.screenHeight) - (exitButton.getHeight() * 5f);
+        playButtonY = (game.screenHeight) - (float) playButton.getHeight() * 1.25f;
+
     }
 
     @Override
