@@ -13,6 +13,9 @@ import static com.badlogic.gdx.Gdx.input;
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
+    int musicLevel = 4;
+    int soundLevel = 4;
+    String gender = "boy";
     private final Texture backButton;
     private final float backButtonX;
     private final float backButtonY;
@@ -53,7 +56,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private final float musicLabelWidth = 200;
     private final float musicLabelHeight = 50;
 
-    private final Texture musicBar;
+    private Texture musicBar;
 
     private final float musicBarX;
     private final float musicBarY;
@@ -89,18 +92,18 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float soundDownButtonHeight = 75;
 
-    private final Texture soundBar;
+    private Texture soundBar;
 
     private final float soundBarX;
     private final float soundBarY;
     private final float soundBarWidth = 250;
     private final float soundBarHeight = 50;
-    private final Texture boyButton;
+    private Texture boyButton;
     private final float boyButtonX;
     private final float boyButtonY;
     private final float boyButtonWidth = 150;
     private final float boyButtonHeight = 150;
-    private final Texture girlButton;
+    private Texture girlButton;
     private final float girlButtonX;
     private final float girlButtonY;
     private final float girlButtonWidth = 150;
@@ -117,12 +120,12 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         musicUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
         musicDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
         musicLabel = new Texture("assets/settings_gui/music_label.png");
-        musicBar = new Texture("assets/settings_gui/bar_75.png");
+        musicBar = new Texture("assets/settings_gui/bar_100.png");
         soundUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
         soundLabel = new Texture("assets/settings_gui/sound_label.png");
         soundDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
-        soundBar = new Texture("assets/settings_gui/bar_25.png");
-        boyButton = new Texture("assets/settings_gui/boy_button.png");
+        soundBar = new Texture("assets/settings_gui/bar_100.png");
+        boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
         girlButton = new Texture("assets/settings_gui/girl_button.png");
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
@@ -203,6 +206,10 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         game.batch.draw(soundBar, soundBarX, soundBarY, soundBarWidth, soundBarHeight);
         game.batch.draw(boyButton, boyButtonX, boyButtonY, boyButtonWidth, boyButtonHeight);
         game.batch.draw(girlButton, girlButtonX, girlButtonY, girlButtonWidth, girlButtonHeight);
+
+
+
+
         game.batch.end();
     }
 
@@ -228,7 +235,48 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
             game.setScreen(new MainMenuScreen(game));
+        } else if (worldX >= musicUpButtonX && worldX <= musicUpButtonX + musicUpButtonWidth &&
+                worldY >= musicUpButtonY && worldY <= musicUpButtonY + musicUpButtonHeight) {
+
+            if (musicLevel <= 3){
+                musicLevel++;
+                musicBar = new Texture("assets/settings_gui/bar_" + 25 * musicLevel +".png");
+            }
+        } else if (worldX >= musicDownButtonX && worldX <= musicDownButtonX + musicDownButtonWidth &&
+                worldY >= musicDownButtonY && worldY <= musicDownButtonY + musicDownButtonHeight){
+
+            if (musicLevel >= 1){
+                musicLevel--;
+                musicBar = new Texture("assets/settings_gui/bar_" + 25 * musicLevel +".png");
+            }
+        } else if (worldX >= soundUpButtonX && worldX <= soundUpButtonX + soundUpButtonWidth &&
+                worldY >= soundUpButtonY && worldY <= soundUpButtonY + soundUpButtonHeight) {
+
+            if (soundLevel <= 3){
+                soundLevel++;
+                soundBar = new Texture("assets/settings_gui/bar_" + 25 * soundLevel +".png");
+            }
+        } else if (worldX >= soundDownButtonX && worldX <= soundDownButtonX + soundDownButtonWidth &&
+                worldY >= soundDownButtonY && worldY <= soundDownButtonY + soundDownButtonHeight){
+
+            if (soundLevel >= 1){
+                soundLevel--;
+                soundBar = new Texture("assets/settings_gui/bar_" + 25 * soundLevel +".png");
+            }
+        } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
+                worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
+            gender = "boy";
+            boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
+            girlButton = new Texture("assets/settings_gui/girl_button.png");
+        } else if (worldX >= girlButtonX && worldX <= girlButtonX + girlButtonWidth &&
+                worldY >= girlButtonY && worldY <= girlButtonY + girlButtonHeight){
+            gender = "girl";
+            girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
+            boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
+
+
+
         return true;
     }
 
