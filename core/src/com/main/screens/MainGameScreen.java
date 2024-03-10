@@ -48,8 +48,8 @@ public class MainGameScreen implements Screen {
         hit = new Texture("energy/hit.png");
         hitWidth = 100;
         hitHeight = 100;
-        hitX = (float) game.screenWidth /2;
-        hitY = (float) game.screenHeight /2;
+        hitX = (float) game.screenWidth / 2;
+        hitY = (float) game.screenHeight / 2;
 
         menuButtonWidth = 64;
         menuButtonHeight = 64;
@@ -84,14 +84,10 @@ public class MainGameScreen implements Screen {
         String counterString;
         counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
 
-        /*
-        camera.position.set(x+ (float) character_width /2, y + (float) character_heigth /2, 0);
-        camera.update();
-        */
 
         if (player.collidesWith(hit, hitX, hitY)) {
             energyCounter--;
-            player.setPos(10,10);
+            player.setPos(10, 10);
             energyBar = setEnergyBar();
 
         }
@@ -112,8 +108,7 @@ public class MainGameScreen implements Screen {
             int touchX = Gdx.input.getX();
             int touchY = game.screenHeight - Gdx.input.getY();
 
-            if (touchX >= menuButtonX && touchX <= menuButtonX + menuButton.getWidth()
-                    && touchY >= menuButtonY && touchY <= menuButtonY + menuButton.getHeight()) {
+            if (touchX >= menuButtonX && touchX <= menuButtonX + menuButton.getWidth() && touchY >= menuButtonY && touchY <= menuButtonY + menuButton.getHeight()) {
                 game.setScreen(new MainMenuScreen(game));
 
             }
