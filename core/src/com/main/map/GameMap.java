@@ -28,9 +28,6 @@ public class GameMap extends TiledMap {
         this.camera = camera;
     }
 
-    public TiledMapTileLayer getCollisionLayer(){
-        return collisionLayer;
-    }
 
     public void render() {
         // Update the camera and set the tiledMapRenderer's view based on that camera
