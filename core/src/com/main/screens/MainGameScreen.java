@@ -101,18 +101,16 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         game.batch.begin();
 
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
+        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.character_width, Player.character_height);
         gameMap.render();
+
         game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
-
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
-
-        // Draw the player with the current frame of animation
-        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.character_width, Player.character_height);
-
         font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
+
         game.batch.end();
     }
 

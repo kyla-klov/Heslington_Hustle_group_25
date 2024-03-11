@@ -167,11 +167,11 @@ public class Player extends Entity {
 
         camera.update();
 
-        game.batch.begin();
+        //game.batch.begin();
 
-        game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);
+       // game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);
 
-        game.batch.end();
+        //game.batch.end();
     }
 
     public boolean collidesWith(Texture thing, float thingX, float thingY) {
