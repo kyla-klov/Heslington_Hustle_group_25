@@ -12,16 +12,23 @@ import com.badlogic.gdx.math.Vector2;
 import com.main.map.GameMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
+import com.main.screens.MainSettingsScreen;
 
 
 public class Player extends Entity {
     Main game;
     GameMap gameMap;
+    //private MainSettingsScreen settingsScreen;
 
     OrthographicCamera camera;
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int character_width = 24;// this is in reference to the sprite sheet
     public static final int character_height = 38;
+
+    String boyIdleSpriteSheet = "character/boy_idle.png";
+    String boyWalkSpriteSheet = "character/boy_idle.png";
+    String girlIdleSpriteSheet = "character/boy_idle.png";
+    String girlWalkSpriteSheet = "character/boy_idle.png";
 
     private float startX;
     private float startY;
@@ -36,17 +43,30 @@ public class Player extends Entity {
         this.gameMap = gameMap;
         this.collisionLayer = gameMap.getCollisionLayer();
         this.camera = camera;
+        //this.settingsScreen = settingsScreen;
+
         this.speed = 350;
         startX = (float) game.screenWidth /2 - (float) game.screenHeight /2;
         startY = 300;
         worldX = startX;
         worldY = startY;
 
+//        Texture idleSheet;
+//        Texture walkSheet;
+//
+//        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
+//        if (this.settingsScreen.getGender()) {
+//            idleSheet = new Texture("character/boy_idle.png");
+//            walkSheet = new Texture("character/boy_walk.png");
+//        } else {
+//            idleSheet = new Texture("character/girl_idle.png");
+//            walkSheet = new Texture("character/girl_walk.png");
+//        }
+
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
         Texture idleSheet = new Texture("character/boy_idle.png");
-        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
-
         Texture walkSheet = new Texture("character/boy_walk.png");
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
         TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
 
         walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
@@ -193,4 +213,5 @@ public class Player extends Entity {
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, true);
     }
+
 }

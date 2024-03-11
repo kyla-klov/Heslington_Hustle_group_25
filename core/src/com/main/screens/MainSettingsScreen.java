@@ -9,8 +9,6 @@ import com.main.Main;
 import com.main.utils.ScreenType;
 
 
-import static com.badlogic.gdx.Gdx.input;
-
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
@@ -27,7 +25,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float settingsLabelX;
     private final float settingsLabelY;
-
     private final float settingsLabelWidth = 500;
     private final float settingsLabelHeight = 130;
 
@@ -35,9 +32,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicUpButtonX;
     private final float musicUpButtonY;
-
     private final float musicUpButtonWidth = 75;
-
     private final float musicUpButtonHeight = 75;
 
 
@@ -45,7 +40,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicDownButtonX;
     private final float musicDownButtonY;
-
     private final float musicDownButtonWidth = 75;
     private final float musicDownButtonHeight = 75;
 
@@ -53,7 +47,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicLabelX;
     private final float musicLabelY;
-
     private final float musicLabelWidth = 200;
     private final float musicLabelHeight = 50;
 
@@ -68,29 +61,21 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float soundUpButtonX;
     private final float soundUpButtonY;
-
     private final float soundUpButtonWidth = 75;
-
     private final float soundUpButtonHeight = 75;
-
 
     private final Texture soundLabel;
 
     private final float soundLabelX;
     private final float soundLabelY;
-
     private final float soundLabelWidth = 200;
-
     private final float soundLabelHeight = 50;
 
     private final Texture soundDownButton;
 
     private final float soundDownButtonX;
-
     private final float soundDownButtonY;
-
     private final float soundDownButtonWidth = 75;
-
     private final float soundDownButtonHeight = 75;
 
     private Texture soundBar;
@@ -99,12 +84,16 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private final float soundBarY;
     private final float soundBarWidth = 250;
     private final float soundBarHeight = 50;
+
     private Texture boyButton;
+
     private final float boyButtonX;
     private final float boyButtonY;
     private final float boyButtonWidth = 150;
     private final float boyButtonHeight = 150;
+
     private Texture girlButton;
+
     private final float girlButtonX;
     private final float girlButtonY;
     private final float girlButtonWidth = 150;
@@ -250,6 +239,10 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
 
         return true;
+    }
+
+    public boolean getGender() {
+        return gender;
     }
 
     @Override
