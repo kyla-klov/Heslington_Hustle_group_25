@@ -173,7 +173,10 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-
+        playButton.dispose();
+        controlsButton.dispose();
+        settingsButton.dispose();
+        exitButton.dispose();
     }
 
     @Override
