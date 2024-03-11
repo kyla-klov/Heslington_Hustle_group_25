@@ -9,11 +9,12 @@ import com.main.Main;
 import com.main.entity.Player;
 import com.main.map.GameMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class MainGameScreen implements Screen {
     Player player;
     BitmapFont font;
-    GameMap gameMap;
+    private GameMap gameMap;
 
     Texture menuButton;
     float menuButtonY;
@@ -34,11 +35,13 @@ public class MainGameScreen implements Screen {
     float hitX;
     float hitY;
     OrthographicCamera camera;
+    OrthogonalTiledMapRenderer renderer;
 
     Main game;
 
     public MainGameScreen(Main game) {
         this.game = game;
+        this.gameMap = new GameMap();
 
         font = new BitmapFont();
 
@@ -63,23 +66,25 @@ public class MainGameScreen implements Screen {
 
         energyBar = setEnergyBar();
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, game.screenWidth, game.screenHeight);
-        camera.update();
-
         gameMap = new GameMap();
 
     }
 
     @Override
     public void show() {
-        player = new Player("character/boy_walk.png", game);
+        player = new Player("character/boy_walk.png", game, gameMap);
+        camera = new OrthographicCamera();
+        renderer = new OrthogonalTiledMapRenderer(gameMap);
+        gameMap.render();
     }
 
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
-        //gameMap.update(delta); //for future map animations
+        //gameMap.update(delta); //for future map animations perhaps
+
+        renderer.setView(camera);
+        renderer.render();
 
         String counterString;
         counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
@@ -115,7 +120,7 @@ public class MainGameScreen implements Screen {
 
         }
         // Draw the player with the current frame of animation
-        game.batch.draw(player.getCurrentFrame(), player.x, player.y, Player.character_width, Player.character_height);
+        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.character_width, Player.character_height);
 
         font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
         game.batch.end();
@@ -131,8 +136,10 @@ public class MainGameScreen implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {
-
+    public void resize(int width, int height) {
+        camera.viewportWidth = width;
+        camera.viewportHeight = height;
+        camera.update();
     }
 
     @Override

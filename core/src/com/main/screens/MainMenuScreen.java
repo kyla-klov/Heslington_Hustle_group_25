@@ -127,7 +127,10 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void hide() {
-
+        playButton.dispose();
+        controlsButton.dispose();
+        settingsButton.dispose();
+        exitButton.dispose();
     }
 
     @Override

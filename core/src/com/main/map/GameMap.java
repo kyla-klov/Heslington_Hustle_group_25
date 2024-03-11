@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-public class GameMap {
+public class GameMap extends TiledMap {
     private final TiledMap gameMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
@@ -42,6 +42,10 @@ public class GameMap {
     public void update(float delta) {
         // Update game logic here (e.g., player movement, camera control)
         // Make sure to update the camera if its position or zoom changes
+    }
+
+    public TiledMapTileLayer getCollisionLayer() {
+        return collisionLayer;
     }
 
     public void dispose() {
