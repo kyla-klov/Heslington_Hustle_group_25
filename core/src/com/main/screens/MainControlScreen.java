@@ -3,12 +3,9 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.badlogic.gdx.Gdx.input;
 

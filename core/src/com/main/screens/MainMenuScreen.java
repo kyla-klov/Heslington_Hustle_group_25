@@ -2,11 +2,15 @@ package com.main.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
+import com.badlogic.gdx.InputProcessor;
+import com.main.utils.ScreenType;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen implements Screen, InputProcessor {
 
     Main game;
 
@@ -70,6 +74,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -84,31 +90,71 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(controlsButton, x, controlsButtonY, controlsButtonWidth, controlsButtonHeight);
         game.batch.draw(settingsButton, x, (float) settingsButtonY, settingsButtonWidth, settingsButtonHeight);
         game.batch.draw(exitButton, x, exitButtonY, exitButtonWidth, exitButtonHeight);
+        game.batch.end();
+    }
 
-        if (Gdx.input.justTouched()) {
-            int touchX = Gdx.input.getX();
-            int touchY = game.screenHeight - Gdx.input.getY();
+    @Override
+    public boolean keyDown(int i) {
+        return false;
+    }
 
-            if (touchX >= x && touchX <= x + playButtonWidth &&
-                    touchY >= playButtonY && touchY <= playButtonY + playButtonHeight) {
-                game.setScreen(new MainGameScreen(game));
-            }
-            else if (touchX >= x && touchX <= x + controlsButtonWidth &&
-                    touchY >= controlsButtonY && touchY <= controlsButtonY + controlsButtonHeight) {
-                game.setScreen(new MainControlScreen(game));
-            }
-            else if (touchX >= x && touchX <= x + settingsButtonWidth &&
-                    touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButtonHeight) {
-                game.setScreen(new MainSettingsScreen(game));
-            }
-            else if (touchX >= x && touchX <= x + exitButtonWidth &&
-                    touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {
-                Gdx.app.exit();
-            }
+    @Override
+    public boolean keyUp(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        return false;
+    }
+
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        float touchX = screenX * game.defWidth / (float) game.screenWidth;
+        float touchY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
+
+        if (touchX >= x && touchX <= x + playButtonWidth &&
+                touchY >= playButtonY && touchY <= playButtonY + playButtonHeight) {
+            game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+        }
+        else if (touchX >= x && touchX <= x + controlsButtonWidth &&
+                touchY >= controlsButtonY && touchY <= controlsButtonY + controlsButtonHeight) {
+            game.screenManager.setScreen(ScreenType.CONTROLS);
+        }
+        else if (touchX >= x && touchX <= x + settingsButtonWidth &&
+                touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButtonHeight) {
+            game.screenManager.setScreen(ScreenType.SETTINGS);
+        }
+        else if (touchX >= x && touchX <= x + exitButtonWidth &&
+                touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {
+            Gdx.app.exit();
         }
 
+        return true;
+    }
 
-        game.batch.end();
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        return false;
     }
 
     @Override

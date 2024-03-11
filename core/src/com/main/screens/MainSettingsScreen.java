@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
+import com.main.utils.ScreenType;
 
 
 import static com.badlogic.gdx.Gdx.input;
@@ -15,7 +16,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     Main game;
     int musicLevel = 4;
     int soundLevel = 4;
-    String gender = "boy";
+    boolean gender = true;
     private final Texture backButton;
     private final float backButtonX;
     private final float backButtonY;
@@ -200,12 +201,12 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.screenWidth / (float) Gdx.graphics.getWidth();
-        float worldY = game.screenHeight - screenY * game.screenHeight / (float) Gdx.graphics.getHeight();
+        float worldX = screenX * game.defWidth / (float) game.screenWidth;
+        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
-            game.setScreen(new MainMenuScreen(game));
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
         } else if (worldX >= musicUpButtonX && worldX <= musicUpButtonX + musicUpButtonWidth &&
                 worldY >= musicUpButtonY && worldY <= musicUpButtonY + musicUpButtonHeight) {
 
@@ -236,12 +237,12 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
                 worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
-            gender = "boy";
+            gender = true;
             boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
             girlButton = new Texture("assets/settings_gui/girl_button.png");
         } else if (worldX >= girlButtonX && worldX <= girlButtonX + girlButtonWidth &&
                 worldY >= girlButtonY && worldY <= girlButtonY + girlButtonHeight){
-            gender = "girl";
+            gender = false;
             girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }

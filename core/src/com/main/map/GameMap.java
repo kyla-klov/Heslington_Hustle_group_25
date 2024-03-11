@@ -15,7 +15,7 @@ public class GameMap {
     private TiledMapTileLayer collisionLayer;
     public static final String tree_layer = "Trees";
 
-    public GameMap() {
+    public GameMap(OrthographicCamera camera) {
         // Load the .tmx with the MainMap for game
         gameMap = new TmxMapLoader().load("map/MainMap.tmx");
 
@@ -25,9 +25,11 @@ public class GameMap {
         // Collisions
         collisionLayer = (TiledMapTileLayer) gameMap.getLayers().get(tree_layer);
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
+        this.camera = camera;
+    }
+
+    public TiledMapTileLayer getCollisionLayer(){
+        return collisionLayer;
     }
 
     public void render() {
