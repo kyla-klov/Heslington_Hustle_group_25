@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.main.map.GameMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
@@ -14,11 +16,15 @@ import com.main.Main;
 
 public class Player extends Entity {
     Main game;
+    GameMap gameMap;
 
     OrthographicCamera camera;
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int character_width = 24;// this is in reference to the sprite sheet
     public static final int character_height = 38;
+
+    private float startX;
+    private float startY;
 
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
@@ -27,11 +33,14 @@ public class Player extends Entity {
 
     public Player(Main game, GameMap gameMap, OrthographicCamera camera) {
         this.game = game;
+        this.gameMap = gameMap;
         this.collisionLayer = gameMap.getCollisionLayer();
         this.camera = camera;
         this.speed = 350;
-        worldY = 15;
-        worldX = (float) game.screenWidth /2 - (float) game.screenHeight /2;
+        startX = (float) game.screenWidth /2 - (float) game.screenHeight /2;
+        startY = 300;
+        worldX = startX;
+        worldY = startY;
 
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
         Texture idleSheet = new Texture("character/boy_idle.png");
@@ -125,7 +134,37 @@ public class Player extends Entity {
 
         stateTime += delta;
 
-        camera.position.set(worldX, worldY, 0);
+        if (worldX + character_width > gameMap.getWidth()){
+            worldX = gameMap.getWidth() - character_width;
+        }
+        else if (worldX < 0){
+            worldX = 0;
+        }
+        if (worldY + character_height > gameMap.getHeight()){
+            worldY = gameMap.getHeight() - character_height;
+        }
+        else if (worldY < 0){
+            worldY = 0;
+        }
+
+        float camX = worldX + character_width/2f;
+        float camY = worldY + character_height/2f;
+
+        camera.position.set(camX, camY, 0);
+
+        if (camX + camera.viewportWidth/2f > gameMap.getWidth()) {
+            camera.position.set(gameMap.getWidth() - camera.viewportWidth/2f, camera.position.y, 0);
+        }
+        else if (camX - camera.viewportWidth/2f < 0){
+            camera.position.set(camera.viewportWidth/2f, camera.position.y, 0);
+        }
+        if (camY + camera.viewportHeight/2f > gameMap.getHeight()) {
+            camera.position.set(camera.position.x, gameMap.getHeight() - camera.viewportHeight/2f, 0);
+        }
+        else if (camY - camera.viewportHeight/2f < 0){
+            camera.position.set(camera.position.x, camera.viewportHeight/2f, 0);
+        }
+
         camera.update();
 
         game.batch.begin();
@@ -144,6 +183,10 @@ public class Player extends Entity {
     public void setPos(float newX, float newY) {
         worldX = newX;
         worldY = newY;
+    }
+
+    public Vector2 getStartPos(){
+        return new Vector2(startX, startY);
     }
 
     // Getter for the current frame based on the state time

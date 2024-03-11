@@ -91,7 +91,7 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         if (player.collidesWith(hit, hitX, hitY)) {
             energyCounter--;
-            player.setPos(10, 10);
+            player.setPos(player.getStartPos().x, player.getStartPos().y);
             energyBar = setEnergyBar();
 
         }
