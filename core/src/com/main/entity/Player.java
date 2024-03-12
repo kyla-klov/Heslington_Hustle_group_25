@@ -51,21 +51,18 @@ public class Player extends Entity {
         worldX = startX;
         worldY = startY;
 
-//        Texture idleSheet;
-//        Texture walkSheet;
-//
-//        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
-//        if (this.settingsScreen.getGender()) {
-//            idleSheet = new Texture("character/boy_idle.png");
-//            walkSheet = new Texture("character/boy_walk.png");
-//        } else {
-//            idleSheet = new Texture("character/girl_idle.png");
-//            walkSheet = new Texture("character/girl_walk.png");
-//        }
+        Texture idleSheet;
+        Texture walkSheet;
 
-        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender
-        Texture idleSheet = new Texture("character/boy_idle.png");
-        Texture walkSheet = new Texture("character/boy_walk.png");
+        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
+        if (game.gameData.getGender()) {
+            idleSheet = new Texture("character/boy_idle.png");
+            walkSheet = new Texture("character/boy_walk.png");
+        } else {
+            idleSheet = new Texture("character/girl_idle.png");
+            walkSheet = new Texture("character/girl_walk.png");
+        }
+
         TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
         TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
 

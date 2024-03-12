@@ -12,9 +12,9 @@ import com.main.utils.ScreenType;
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
-    int musicLevel = 4;
-    int soundLevel = 4;
-    boolean gender = true;
+    int musicLevel;
+    int soundLevel;
+    boolean gender;
     private final Texture backButton;
     private final float backButtonX;
     private final float backButtonY;
@@ -149,6 +149,9 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+        gender = game.gameData.getGender();
+        musicLevel = game.gameData.getMusicLevel();
+        soundLevel = game.gameData.getSoundLevel();
     }
 
     @Override
@@ -236,7 +239,9 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
 
-
+        game.gameData.setMusicLevel(musicLevel);
+        game.gameData.setSoundLevel(soundLevel);
+        game.gameData.setGender(gender);
 
         return true;
     }
