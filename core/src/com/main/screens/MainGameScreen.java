@@ -47,7 +47,6 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
 
-
         hit = new Texture("energy/hit.png");
         hitWidth = 100;
         hitHeight = 100;
@@ -71,13 +70,14 @@ public class MainGameScreen implements Screen, InputProcessor {
         camera.update();
 
         gameMap = new GameMap(camera);
+        player = new Player(game, gameMap, camera);
 
     }
 
     @Override
     public void show() {
-        player = new Player(game, gameMap, camera);
         Gdx.input.setInputProcessor(this);
+        player.updateGender();
     }
 
     @Override
@@ -92,6 +92,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         if (player.collidesWith(hit, hitX, hitY)) {
             energyCounter--;
             player.setPos(player.getStartPos().x, player.getStartPos().y);
+            energyBar.dispose();
             energyBar = setEnergyBar();
 
         }

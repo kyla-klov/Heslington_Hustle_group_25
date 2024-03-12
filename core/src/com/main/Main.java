@@ -26,17 +26,15 @@ public class Main extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		gameData = new GameData();
 		screenWidth = graphics.getWidth();
 		screenHeight = graphics.getHeight();
 		defWidth = graphics.getWidth();
 		defHeight = graphics.getHeight();
+		gameData.setPlayerPosY(screenWidth /2 - screenHeight /2);
 		screenManager = new ScreenManager(this);
-		screenManager.addScreen(ScreenType.MAIN_MENU, new MainMenuScreen(this));
-		screenManager.addScreen(ScreenType.GAME_SCREEN, new MainGameScreen(this));
-		screenManager.addScreen(ScreenType.SETTINGS, new MainSettingsScreen(this));
-		screenManager.addScreen(ScreenType.CONTROLS, new MainControlScreen(this));
+		screenManager.keepInMemory(ScreenType.GAME_SCREEN);
 		screenManager.setScreen(ScreenType.MAIN_MENU);
-		gameData = new GameData();
 	}
 
 	@Override
