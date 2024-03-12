@@ -45,7 +45,7 @@ public class Player extends Entity {
         this.camera = camera;
         //this.settingsScreen = settingsScreen;
 
-        this.speed = 350;
+        this.speed = 200;
         startX = (float) game.screenWidth /2 - (float) game.screenHeight /2;
         startY = 300;
         worldX = startX;
