@@ -5,6 +5,9 @@ public class GameData {
     private int musicLevel = 4;
     private int soundLevel = 4;
 
+    private float playerPosX = 300; //For future use
+    private float playerPosY = 300; //For future use
+
     public boolean getGender(){
         return gender;
     }
@@ -29,7 +32,23 @@ public class GameData {
 
     public void setSoundLevel(int soundLevel) {
         if (soundLevel >= 0 && soundLevel <= 4) {
-            this.soundLevel = musicLevel;
+            this.soundLevel = soundLevel;
         }
+    }
+
+    public float getPlayerPosX(){
+        return playerPosX;
+    }
+
+    public void setPlayerPosX(float x){
+        playerPosX = x;
+    }
+
+    public float getPlayerPosY(){
+        return playerPosY;
+    }
+
+    public void setPlayerPosY(float y){
+        playerPosY = y;
     }
 }
