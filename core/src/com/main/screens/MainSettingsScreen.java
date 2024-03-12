@@ -6,16 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
+import com.main.utils.ScreenType;
 
-
-import static com.badlogic.gdx.Gdx.input;
 
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
-    int musicLevel = 4;
-    int soundLevel = 4;
-    String gender = "boy";
+    int musicLevel;
+    int soundLevel;
+    boolean gender;
     private final Texture backButton;
     private final float backButtonX;
     private final float backButtonY;
@@ -26,7 +25,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float settingsLabelX;
     private final float settingsLabelY;
-
     private final float settingsLabelWidth = 500;
     private final float settingsLabelHeight = 130;
 
@@ -34,9 +32,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicUpButtonX;
     private final float musicUpButtonY;
-
     private final float musicUpButtonWidth = 75;
-
     private final float musicUpButtonHeight = 75;
 
 
@@ -44,7 +40,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicDownButtonX;
     private final float musicDownButtonY;
-
     private final float musicDownButtonWidth = 75;
     private final float musicDownButtonHeight = 75;
 
@@ -52,7 +47,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float musicLabelX;
     private final float musicLabelY;
-
     private final float musicLabelWidth = 200;
     private final float musicLabelHeight = 50;
 
@@ -67,29 +61,21 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     private final float soundUpButtonX;
     private final float soundUpButtonY;
-
     private final float soundUpButtonWidth = 75;
-
     private final float soundUpButtonHeight = 75;
-
 
     private final Texture soundLabel;
 
     private final float soundLabelX;
     private final float soundLabelY;
-
     private final float soundLabelWidth = 200;
-
     private final float soundLabelHeight = 50;
 
     private final Texture soundDownButton;
 
     private final float soundDownButtonX;
-
     private final float soundDownButtonY;
-
     private final float soundDownButtonWidth = 75;
-
     private final float soundDownButtonHeight = 75;
 
     private Texture soundBar;
@@ -98,12 +84,16 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private final float soundBarY;
     private final float soundBarWidth = 250;
     private final float soundBarHeight = 50;
+
     private Texture boyButton;
+
     private final float boyButtonX;
     private final float boyButtonY;
     private final float boyButtonWidth = 150;
     private final float boyButtonHeight = 150;
+
     private Texture girlButton;
+
     private final float girlButtonX;
     private final float girlButtonY;
     private final float girlButtonWidth = 150;
@@ -153,46 +143,20 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + 100;
         girlButtonY = game.screenHeight - boyButtonHeight - 650;
 
-        /*
-        musicDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundUpButtonTexture = new Texture("assets/settings_gui/arrow_right_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundDownButtonTexture = new Texture("assets/settings_gui/arrow_left_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        pickBoyButtonTexture = new Texture("assets/settings_gui/boy_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        pickGirlButtonTexture = new Texture("assets/settings_gui/girl_button.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        musicLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-
-        soundLabelTexture = new Texture("assets/settings_gui/sound_label.png");
-        backButtonX = 10;
-        backButtonY = game.screenHeight - backButtonHeight - 10;
-        */
 
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+        gender = game.gameData.getGender();
+        musicLevel = game.gameData.getMusicLevel();
+        soundLevel = game.gameData.getSoundLevel();
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 1, 1);
+        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
         game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(settingsLabel, settingsLabelX, settingsLabelY, settingsLabelWidth, settingsLabelHeight);
@@ -229,12 +193,12 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.screenWidth / (float) Gdx.graphics.getWidth();
-        float worldY = game.screenHeight - screenY * game.screenHeight / (float) Gdx.graphics.getHeight();
+        float worldX = screenX * game.defWidth / (float) game.screenWidth;
+        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
-            game.setScreen(new MainMenuScreen(game));
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
         } else if (worldX >= musicUpButtonX && worldX <= musicUpButtonX + musicUpButtonWidth &&
                 worldY >= musicUpButtonY && worldY <= musicUpButtonY + musicUpButtonHeight) {
 
@@ -265,19 +229,25 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
                 worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
-            gender = "boy";
+            gender = true;
             boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
             girlButton = new Texture("assets/settings_gui/girl_button.png");
         } else if (worldX >= girlButtonX && worldX <= girlButtonX + girlButtonWidth &&
                 worldY >= girlButtonY && worldY <= girlButtonY + girlButtonHeight){
-            gender = "girl";
+            gender = false;
             girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
 
-
+        game.gameData.setMusicLevel(musicLevel);
+        game.gameData.setSoundLevel(soundLevel);
+        game.gameData.setGender(gender);
 
         return true;
+    }
+
+    public boolean getGender() {
+        return gender;
     }
 
     @Override

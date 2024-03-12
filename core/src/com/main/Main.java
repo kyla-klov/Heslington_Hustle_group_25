@@ -1,28 +1,57 @@
 package com.main;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.main.screens.MainControlScreen;
+import com.main.screens.MainGameScreen;
 import com.main.screens.MainMenuScreen;
 import com.main.screens.MainSettingsScreen;
 
 import static com.badlogic.gdx.Gdx.graphics;
+
+import com.main.utils.GameData;
+import com.main.utils.ScreenManager;
+import com.main.utils.ScreenType;
 
 public class Main extends Game {
 	/* this is for movement speed so that it can use delta time to keep
 	* the frame movement constant so matter the frames that are set
 	*/
 	public SpriteBatch batch;
+	public GameData gameData;
+	public ScreenManager screenManager;
 	public int screenWidth, screenHeight;
+	public int defWidth, defHeight;
+	public Skin skin;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		screenWidth = graphics.getWidth();
 		screenHeight = graphics.getHeight();
-		this.setScreen(new MainSettingsScreen(this));
-		this.setScreen(new MainControlScreen(this));
-		this.setScreen(new MainMenuScreen(this));
+		defWidth = graphics.getWidth();
+		defHeight = graphics.getHeight();
+
+		// Fonts for writing in game
+		skin = new Skin();
+		BitmapFont font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+		skin.add("default-font", font, BitmapFont.class);
+		Label.LabelStyle labelStyle = new Label.LabelStyle();
+		labelStyle.font = font;
+		skin.add("Peaberry", labelStyle, Label.LabelStyle.class);
+
+		screenManager = new ScreenManager(this);
+		screenManager.addScreen(ScreenType.MAIN_MENU, new MainMenuScreen(this));
+		screenManager.addScreen(ScreenType.GAME_SCREEN, new MainGameScreen(this));
+		screenManager.addScreen(ScreenType.SETTINGS, new MainSettingsScreen(this));
+		screenManager.addScreen(ScreenType.CONTROLS, new MainControlScreen(this));
+		screenManager.setScreen(ScreenType.MAIN_MENU);
+		gameData = new GameData();
 	}
 
 	@Override

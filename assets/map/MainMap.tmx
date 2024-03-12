@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="18" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="1">
  <tileset firstgid="1" name="grass" tilewidth="16" tileheight="16" tilecount="77" columns="11">
   <image source="Grass.png" width="176" height="112"/>
  </tileset>
@@ -1398,6 +1398,9 @@
 </data>
  </layer>
  <layer id="5" name="Trees" width="120" height="120">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
   <data encoding="csv">
 232,235,236,232,233,234,232,235,236,232,233,234,232,233,234,232,235,236,232,233,234,232,233,234,232,235,236,232,232,232,232,260,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,260,260,259,259,260,232,232,232,232,232,235,236,232,232,232,232,235,236,232,232,232,232,232,232,235,236,232,232,232,232,232,232,260,260,
 241,244,245,241,242,243,241,244,245,241,242,243,241,242,243,241,244,245,241,242,243,241,242,243,241,244,245,241,241,241,241,260,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,260,260,260,260,260,241,241,241,241,241,244,245,241,241,241,241,244,245,241,241,241,241,241,241,244,245,241,241,241,241,241,241,260,260,
