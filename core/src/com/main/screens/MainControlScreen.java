@@ -22,11 +22,34 @@ public class MainControlScreen implements Screen, InputProcessor {
     private final float backButtonWidth = 100;
     private final float backButtonHeight = 50;
 
+    private final Texture controlLabel;
+
+    private final float controlLabelX;
+    private final float controlLabelY;
+    private final float controlLabelWidth = 500;
+    private final float controlLabelHeight = 130;
+
+    private final Texture wLabel;
+    private final float wLabelX;
+    private final float wLabelY;
+    private final float wLabelWidth = 150;
+    private final float wLabelHeight = 150;
+
+
     public MainControlScreen(Main game) {
         this.game = game;
         backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
+        controlLabel = new Texture("assets/controls_gui/controls_label.png");
+        wLabel = new Texture("assets/controls_gui/w_button.png");
+
+
+
         backButtonX = 10; // Adjust the position as needed
         backButtonY = game.screenHeight - backButtonHeight - 10;
+        controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
+        controlLabelY = game.screenHeight - (controlLabelHeight * 2);
+        wLabelX = (game.screenWidth - wLabelWidth) / 2 - 200;
+        wLabelY = game.screenHeight - wLabelHeight - 350;
     }
 
     @Override
@@ -39,6 +62,8 @@ public class MainControlScreen implements Screen, InputProcessor {
         ScreenUtils.clear(0, 0, 1, 1);
         game.batch.begin();
         game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+        game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
+        game.batch.draw(wLabel, wLabelX, wLabelY, wLabelWidth, wLabelHeight);
         game.batch.end();
     }
 
