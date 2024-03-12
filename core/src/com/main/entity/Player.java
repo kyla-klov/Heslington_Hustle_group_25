@@ -18,8 +18,7 @@ import com.main.screens.MainSettingsScreen;
 public class Player extends Entity {
     Main game;
     GameMap gameMap;
-    //private MainSettingsScreen settingsScreen;
-
+    char dir;
     OrthographicCamera camera;
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int character_width = 24;// this is in reference to the sprite sheet
@@ -32,6 +31,9 @@ public class Player extends Entity {
 
     private float startX;
     private float startY;
+
+    Texture idleSheet;
+    Texture walkSheet;
 
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
@@ -51,32 +53,9 @@ public class Player extends Entity {
         worldX = startX;
         worldY = startY;
 
-        Texture idleSheet;
-        Texture walkSheet;
-
         // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
-        if (game.gameData.getGender()) {
-            idleSheet = new Texture("character/boy_idle.png");
-            walkSheet = new Texture("character/boy_walk.png");
-        } else {
-            idleSheet = new Texture("character/girl_idle.png");
-            walkSheet = new Texture("character/girl_walk.png");
-        }
-
-        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
-        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
-
-        walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
-        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
-        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for left
-        walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
-
-        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
-        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
-        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
-        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
-
-        currentAnimation = idleDownAnimation;
+        dir = 'D';
+        updateGender();
     }
 
     public void update(float delta) {
@@ -102,6 +81,7 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             worldY += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkUpAnimation;
+            dir = 'U';
             isMoving = true;
             // top left tile
 
@@ -113,6 +93,7 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             worldY -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkDownAnimation;
+            dir = 'D';
             isMoving = true;
             // bottom left tile
 
@@ -123,6 +104,7 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             worldX -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkLeftAnimation;
+            dir = 'L';
             isMoving = true;
             // top left tile
             //collisionX = collisionLayer.getCell(worldX,worldY);
@@ -134,6 +116,7 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             worldX += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkRightAnimation;
+            dir = 'R';
             isMoving = true;
             // top right tile
 
@@ -206,9 +189,53 @@ public class Player extends Entity {
         return new Vector2(startX, startY);
     }
 
+    public void updateGender(){
+        if (idleSheet != null) {idleSheet.dispose();}
+        if (walkSheet != null) {walkSheet.dispose();}
+        if (game.gameData.getGender()) {
+            idleSheet = new Texture("character/boy_idle.png");
+            walkSheet = new Texture("character/boy_walk.png");
+        } else {
+            idleSheet = new Texture("character/girl_idle.png");
+            walkSheet = new Texture("character/girl_walk.png");
+        }
+
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
+
+        walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
+        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
+        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for left
+        walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
+
+        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
+        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
+        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
+        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
+
+        switch (dir){
+            case 'D':
+                currentAnimation = idleDownAnimation;
+                break;
+            case 'L':
+                currentAnimation = idleLeftAnimation;
+                break;
+            case 'R':
+                currentAnimation = idleRightAnimation;
+                break;
+            case 'U':
+                currentAnimation = idleUpAnimation;
+                break;
+        }
+    }
+
     // Getter for the current frame based on the state time
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, true);
     }
 
+    public void dispose(){
+        idleSheet.dispose();
+        walkSheet.dispose();
+    }
 }

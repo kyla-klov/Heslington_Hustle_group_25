@@ -181,5 +181,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
         controlsButton.dispose();
         settingsButton.dispose();
         exitButton.dispose();
+        heslingtonHustleLable.dispose();
     }
 }

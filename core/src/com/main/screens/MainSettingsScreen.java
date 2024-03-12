@@ -102,6 +102,11 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     public MainSettingsScreen(Main game) {
         this.game = game;
+        gender = game.gameData.getGender();
+        musicLevel = game.gameData.getMusicLevel();
+        soundLevel = game.gameData.getSoundLevel();
+
+        Gdx.input.setInputProcessor(this);
         /*
         group them maybe but up to you.
          */
@@ -110,13 +115,19 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         musicUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
         musicDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
         musicLabel = new Texture("assets/settings_gui/music_label.png");
-        musicBar = new Texture("assets/settings_gui/bar_100.png");
+        musicBar = new Texture("assets/settings_gui/bar_" + 25 * musicLevel +".png");
         soundUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
         soundLabel = new Texture("assets/settings_gui/sound_label.png");
         soundDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
-        soundBar = new Texture("assets/settings_gui/bar_100.png");
-        boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
-        girlButton = new Texture("assets/settings_gui/girl_button.png");
+        soundBar = new Texture("assets/settings_gui/bar_" + 25 * soundLevel +".png");
+        if (gender) {
+            boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
+            girlButton = new Texture("assets/settings_gui/girl_button.png");
+        }
+        else {
+            girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
+            boyButton = new Texture("assets/settings_gui/boy_button.png");
+        }
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
         backButtonY = (float) game.screenHeight / 6 - 100;
@@ -149,9 +160,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
-        gender = game.gameData.getGender();
-        musicLevel = game.gameData.getMusicLevel();
-        soundLevel = game.gameData.getSoundLevel();
     }
 
     @Override
@@ -246,10 +254,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         return true;
     }
 
-    public boolean getGender() {
-        return gender;
-    }
-
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
@@ -298,5 +302,16 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         backButton.dispose();
+        settingsLabel.dispose();
+        musicUpButton.dispose();
+        musicDownButton.dispose();
+        musicLabel.dispose();
+        musicBar.dispose();
+        soundUpButton.dispose();
+        soundLabel.dispose();
+        soundDownButton.dispose();
+        soundBar.dispose();
+        boyButton.dispose();
+        girlButton.dispose();
     }
 }
