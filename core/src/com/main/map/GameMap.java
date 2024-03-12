@@ -7,6 +7,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class GameMap extends TiledMap {
     private int width;
@@ -14,6 +16,8 @@ public class GameMap extends TiledMap {
     private final TiledMap gameMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
+    AnimatedTiledMapTile animatedTiledMapTile;
+    StaticTiledMapTile staticTiledMapTile;
 
     private TiledMapTileLayer collisionLayer;
     public static final String tree_layer = "Trees";
