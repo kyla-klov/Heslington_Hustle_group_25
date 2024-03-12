@@ -153,7 +153,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 1, 1);
+        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
         game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(settingsLabel, settingsLabelX, settingsLabelY, settingsLabelWidth, settingsLabelHeight);
