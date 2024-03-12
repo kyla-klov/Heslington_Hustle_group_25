@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.main.Main;
+import com.main.utils.ScreenType;
 
 import static com.badlogic.gdx.Gdx.input;
 
@@ -17,7 +18,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     private final Texture backButtonTexture;
     private final float backButtonX, backButtonY, backButtonWidth = 100, backButtonHeight = 50;
-    private final Stage stage; // LibGdx container for labels with Peaberry font
+    //private final Stage stage; // LibGdx container for labels with Peaberry font
 
     private final Texture controlLabel;
 
@@ -50,18 +51,19 @@ public class MainControlScreen implements Screen, InputProcessor {
         wLabelY = game.screenHeight - wLabelHeight - 350;
 
 
-
+        /*
         stage = new Stage();
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.skin.getFont("default-font"), null);
         // Label for displaying text
         Label testLabel = new Label("test", labelStyle);
         testLabel.setPosition(game.screenWidth / 2f - testLabel.getWidth() / 2, game.screenHeight / 2f - testLabel.getHeight() / 2);
         stage.addActor(testLabel);
+         */
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -71,10 +73,9 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(wLabel, wLabelX, wLabelY, wLabelWidth, wLabelHeight);
+        //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        //stage.draw();
         game.batch.end();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -83,7 +84,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
-            game.setScreen(new MainMenuScreen(game));
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         return true;
     }
@@ -152,8 +153,8 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        backButtonTexture.dispose();
-        stage.dispose();
+        //backButtonTexture.dispose();
+        //stage.dispose();
     }
 
 }
