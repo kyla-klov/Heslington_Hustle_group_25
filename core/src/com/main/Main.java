@@ -51,6 +51,7 @@ public class Main extends Game {
 		screenManager.addScreen(ScreenType.SETTINGS, new MainSettingsScreen(this));
 		screenManager.addScreen(ScreenType.CONTROLS, new MainControlScreen(this));
 		screenManager.setScreen(ScreenType.MAIN_MENU);
+		gameData = new GameData();
 	}
 
 	@Override
