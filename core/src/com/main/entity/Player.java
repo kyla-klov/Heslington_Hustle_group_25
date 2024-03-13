@@ -6,31 +6,33 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.main.map.GameMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
-import com.main.screens.MainSettingsScreen;
 
 
 public class Player extends Entity {
     Main game;
     GameMap gameMap;
-    char dir;
+    TiledMapTileLayer collisionLayer;
     OrthographicCamera camera;
+    int tileSize = 16;
+
+    char dir;
+
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
-    public static final int character_width = 24;// this is in reference to the sprite sheet
-    public static final int character_height = 38;
+    public static final int spriteX = 24;// this is in reference to the sprite sheet
+    public static final int spriteY = 38;
 
     String boyIdleSpriteSheet = "character/boy_idle.png";
     String boyWalkSpriteSheet = "character/boy_idle.png";
     String girlIdleSpriteSheet = "character/boy_idle.png";
     String girlWalkSpriteSheet = "character/boy_idle.png";
 
-    private float startX;
-    private float startY;
+    public float startX;
+    public float startY;
 
     Texture idleSheet;
     Texture walkSheet;
@@ -38,12 +40,10 @@ public class Player extends Entity {
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
 
-    private final TiledMapTileLayer collisionLayer;
-
     public Player(Main game, GameMap gameMap, OrthographicCamera camera) {
         this.game = game;
         this.gameMap = gameMap;
-        this.collisionLayer = gameMap.getCollisionLayer();
+        this.collisionLayer = (TiledMapTileLayer)gameMap.getLayers().get("Trees");
         this.camera = camera;
         //this.settingsScreen = settingsScreen;
 
@@ -53,7 +53,6 @@ public class Player extends Entity {
         worldX = startX;
         worldY = startY;
 
-        // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
         dir = 'D';
         updateGender();
     }
@@ -61,6 +60,12 @@ public class Player extends Entity {
     public void update(float delta) {
         boolean isMoving = false;
         boolean collisionX = false, collisionY = false;
+        // Store the original position
+        float originalX = worldX;
+        float originalY = worldY;
+        int tileX = (int) (worldX / tileSize);
+        int tileY = (int) (worldY / tileSize);
+        TiledMapTileLayer.Cell cell = null;
 
         // Determine if the player is moving diagonally
         boolean isMovingDiagonally = ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) ||
@@ -78,53 +83,148 @@ public class Player extends Entity {
         }
 
         // checks movement and updates animation, adjusts speed with delta time
+        /*
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             worldY += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkUpAnimation;
             dir = 'U';
             isMoving = true;
-            // top left tile
-
-
-            // top middle tile
-
-            // top right tile
+            // check collision top left tile
+            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY + tileY) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
+            // check collision top middle tile
+            cell = collisionLayer.getCell( (int) ((worldX + tileX) / 2) / tileX, (int) (worldY + tileY) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
+            // check collision top right tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY + tileY) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             worldY -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkDownAnimation;
             dir = 'D';
             isMoving = true;
-            // bottom left tile
-
-            // bottom middle tile
-
-            // bottom right tile
+            // check collision bottom left tile
+            cell = collisionLayer.getCell( (int) worldX / tileX, (int) worldY / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
+            // check collision bottom middle tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / 2, (int) worldY / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
+            // check collision bottom right tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) worldY / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionY = true;
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             worldX -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkLeftAnimation;
             dir = 'L';
             isMoving = true;
-            // top left tile
-            //collisionX = collisionLayer.getCell(worldX,worldY);
+            // check collision top left tile
+            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY + tileY) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
+            // check collision middle left tile
+            cell = collisionLayer.getCell((int) worldX / tileX, (int) ((worldY + tileY) / 2) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
+            // check collision bottom left tile
+            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY / tileY));
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
 
-            // middle left tile
-
-            // bottom left tile
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             worldX += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkRightAnimation;
             dir = 'R';
             isMoving = true;
-            // top right tile
-
-            // middle right tile
-
-            // bottom right tile
+            // check collision top right tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY + tileY) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
+            // check collision middle right tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) ((worldY + tileY) / 2) / tileY);
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
+            // check collision bottom right tile
+            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY / tileY));
+            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
+                collisionX = true;
+            }
+        }
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+            float potentialY = worldY + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            if (!isCollision(worldX, potentialY + tileY) &&
+                    !isCollision(worldX + tileX, potentialY + tileY)) {
+                worldY = potentialY;
+                currentAnimation = walkUpAnimation;
+                dir = 'U';
+                isMoving = true;
+                collisionY = false; // Indicate no collision has occurred
+            } else {
+                collisionY = true; // Indicate a collision has occurred
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+            float potentialY = worldY - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            if (!isCollision(worldX, potentialY) &&
+                    !isCollision(worldX + tileX, potentialY)) {
+                worldY = potentialY;
+                currentAnimation = walkDownAnimation;
+                dir = 'D';
+                isMoving = true;
+                collisionY = false; // Indicate no collision has occurred
+            } else {
+                collisionY = true; // Indicate a collision has occurred
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            float potentialX = worldX - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            if (!isCollision(potentialX, worldY) &&
+                    !isCollision(potentialX, worldY + tileY)) {
+                worldX = potentialX;
+                currentAnimation = walkLeftAnimation;
+                dir = 'L';
+                isMoving = true;
+                collisionX = false; // Indicate no collision has occurred
+            } else {
+                collisionX = true; // Indicate a collision has occurred
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+            float potentialX = worldX + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            if (!isCollision(potentialX + tileX, worldY) &&
+                    !isCollision(potentialX + tileX, worldY + tileY)) {
+                worldX = potentialX;
+                currentAnimation = walkRightAnimation;
+                dir = 'R';
+                isMoving = true;
+                collisionX = false; // Indicate no collision has occurred
+            } else {
+                collisionX = true; // Indicate a collision has occurred
+            }
         }
 
+
+        // this will switch sprite sheet to idle sprite sheet when player is not moving
         if (!isMoving) {
             if (currentAnimation == walkDownAnimation) currentAnimation = idleDownAnimation;
             else if (currentAnimation == walkRightAnimation) currentAnimation = idleRightAnimation;
@@ -132,23 +232,33 @@ public class Player extends Entity {
             else if (currentAnimation == walkUpAnimation) currentAnimation = idleUpAnimation;
         }
 
+        // reacting to collisions
+        if(collisionX) {
+            setX(originalX);
+            speed = 0;
+        }
+        if(collisionY) {
+            setY(originalY);
+            speed = 0;
+        }
+
         stateTime += delta;
 
-        if (worldX + character_width > gameMap.getWidth()){
-            worldX = gameMap.getWidth() - character_width;
+        if (worldX + spriteX > gameMap.getWidth()){
+            worldX = gameMap.getWidth() - spriteX;
         }
         else if (worldX < 0){
             worldX = 0;
         }
-        if (worldY + character_height > gameMap.getHeight()){
-            worldY = gameMap.getHeight() - character_height;
+        if (worldY + spriteY > gameMap.getHeight()){
+            worldY = gameMap.getHeight() - spriteY;
         }
         else if (worldY < 0){
             worldY = 0;
         }
 
-        float camX = worldX + character_width/2f;
-        float camY = worldY + character_height/2f;
+        float camX = worldX + spriteY /2f;
+        float camY = worldY + spriteY /2f;
 
         camera.position.set(camX, camY, 0);
 
@@ -167,16 +277,16 @@ public class Player extends Entity {
 
         camera.update();
 
-        //game.batch.begin();
+        // game.batch.begin();
 
-       // game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);
+        // game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);
 
-        //game.batch.end();
+        // game.batch.end();
     }
 
     public boolean collidesWith(Texture thing, float thingX, float thingY) {
-        Rectangle playerBounds = new Rectangle(worldX, worldY, character_width, character_height);
-        Rectangle objectBounds = new Rectangle(thingX, thingY, thing.getWidth(), thing.getHeight()); // Adjust this according to your hit object's position and size
+        Rectangle playerBounds = new Rectangle(worldX, worldY, spriteX, spriteY);
+        Rectangle objectBounds = new Rectangle(thingX, thingY, thing.getWidth(), thing.getHeight());
         return playerBounds.overlaps(objectBounds);
     }
 
@@ -189,6 +299,14 @@ public class Player extends Entity {
         return new Vector2(startX, startY);
     }
 
+    // collision detection method that checks if the tile is not empty and a collision tile
+    private boolean isCollision(float x, float y) {
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / tileSize), (int) (y / tileSize));
+        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked");
+    }
+
+
+    // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
     public void updateGender(){
         if (idleSheet != null) {idleSheet.dispose();}
         if (walkSheet != null) {walkSheet.dispose();}
@@ -200,8 +318,8 @@ public class Player extends Entity {
             walkSheet = new Texture("character/girl_walk.png");
         }
 
-        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, character_width, character_height); // Splits the sprite sheet up by its frames
-        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, character_width, character_height); // Splits the sprite sheet up by its frames
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
 
         walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
         walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
@@ -233,6 +351,7 @@ public class Player extends Entity {
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, true);
     }
+
 
     public void dispose(){
         idleSheet.dispose();

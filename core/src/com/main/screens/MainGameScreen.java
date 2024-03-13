@@ -70,6 +70,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         camera.update();
 
         gameMap = new GameMap(camera);
+        //player = new Player(game, gameMap, camera);
+
         player = new Player(game, gameMap, camera);
 
     }
@@ -78,6 +80,8 @@ public class MainGameScreen implements Screen, InputProcessor {
     public void show() {
         Gdx.input.setInputProcessor(this);
         player.updateGender();
+        // setting play position to liking
+        player.setPos( gameMap.getCollisionLayer().getTileWidth() * 68, gameMap.getCollisionLayer().getTileHeight() * 62);
     }
 
     @Override
@@ -102,9 +106,11 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         game.batch.begin();
 
+        // render camera
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
-        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.character_width, Player.character_height);
+        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
+        // render map
         gameMap.render();
 
         game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));

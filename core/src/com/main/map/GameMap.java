@@ -8,7 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.main.entity.Player;
 
 public class GameMap extends TiledMap {
     private int width;
@@ -16,8 +16,10 @@ public class GameMap extends TiledMap {
     private final TiledMap gameMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
-    AnimatedTiledMapTile animatedTiledMapTile;
-    StaticTiledMapTile staticTiledMapTile;
+    // maybe for map animations
+    // AnimatedTiledMapTile animatedTiledMapTile;
+
+    private Player player;
 
     private TiledMapTileLayer collisionLayer;
     public static final String tree_layer = "Trees";
@@ -38,7 +40,6 @@ public class GameMap extends TiledMap {
         this.camera = camera;
     }
 
-
     public void render() {
         // Update the camera and set the tiledMapRenderer's view based on that camera
         camera.update();
@@ -49,8 +50,7 @@ public class GameMap extends TiledMap {
     }
 
     public void update(float delta) {
-        // Update game logic here (e.g., player movement, camera control)
-        // Make sure to update the camera if its position or zoom changes
+        // Update map logic here (e.g. map animations)
     }
 
     public TiledMapTileLayer getCollisionLayer() {
