@@ -284,11 +284,14 @@ public class Player extends Entity {
         // game.batch.end();
     }
 
+    /*
     public boolean collidesWith(Texture thing, float thingX, float thingY) {
         Rectangle playerBounds = new Rectangle(worldX, worldY, spriteX, spriteY);
         Rectangle objectBounds = new Rectangle(thingX, thingY, thing.getWidth(), thing.getHeight());
         return playerBounds.overlaps(objectBounds);
     }
+
+     */
 
     public void setPos(float newX, float newY) {
         worldX = newX;
