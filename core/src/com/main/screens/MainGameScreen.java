@@ -92,7 +92,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         String counterString;
         counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
 
-
+        /*
         if (player.collidesWith(hit, hitX, hitY)) {
             energyCounter--;
             player.setPos(player.getStartPos().x, player.getStartPos().y);
@@ -100,6 +100,8 @@ public class MainGameScreen implements Screen, InputProcessor {
             energyBar = setEnergyBar();
 
         }
+
+         */
 
 
         ScreenUtils.clear(0, 0, 1, 1);
