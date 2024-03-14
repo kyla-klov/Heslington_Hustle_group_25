@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.main.map.GameMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
+import com.main.utils.CollisionHandler;
 
 
 public class Player extends Entity {
@@ -18,6 +19,7 @@ public class Player extends Entity {
     GameMap gameMap;
     TiledMapTileLayer collisionLayer;
     OrthographicCamera camera;
+    CollisionHandler collisionHandler;
     int tileSize = 16;
 
     char dir;
@@ -43,13 +45,15 @@ public class Player extends Entity {
     public Player(Main game, GameMap gameMap, OrthographicCamera camera) {
         this.game = game;
         this.gameMap = gameMap;
-        this.collisionLayer = (TiledMapTileLayer)gameMap.getLayers().get("Trees");
+        this.collisionLayer = (TiledMapTileLayer)gameMap.getMap().getLayers().get("Trees");
         this.camera = camera;
+        this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, spriteX, spriteY * 0.5f, 0.7f, 0.7f);
+        this.collisionHandler.addCollisionLayers("Trees", "lilipads");
         //this.settingsScreen = settingsScreen;
 
         this.speed = 200;
         startX = (float) game.screenWidth /2 - (float) game.screenHeight /2;
-        startY = 300;
+        startY = 500;
         worldX = startX;
         worldY = startY;
 
@@ -170,57 +174,32 @@ public class Player extends Entity {
             }
         }
          */
+        float targX = worldX;
+        float targY = worldY;
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            float potentialY = worldY + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            if (!isCollision(worldX, potentialY + tileY) &&
-                    !isCollision(worldX + tileX, potentialY + tileY)) {
-                worldY = potentialY;
-                currentAnimation = walkUpAnimation;
-                dir = 'U';
-                isMoving = true;
-                collisionY = false; // Indicate no collision has occurred
-            } else {
-                collisionY = true; // Indicate a collision has occurred
-            }
+            targY = worldY + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkUpAnimation;
+            dir = 'U';
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            float potentialY = worldY - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            if (!isCollision(worldX, potentialY) &&
-                    !isCollision(worldX + tileX, potentialY)) {
-                worldY = potentialY;
-                currentAnimation = walkDownAnimation;
-                dir = 'D';
-                isMoving = true;
-                collisionY = false; // Indicate no collision has occurred
-            } else {
-                collisionY = true; // Indicate a collision has occurred
-            }
+            targY = worldY - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkDownAnimation;
+            dir = 'D';
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            float potentialX = worldX - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            if (!isCollision(potentialX, worldY) &&
-                    !isCollision(potentialX, worldY + tileY)) {
-                worldX = potentialX;
-                currentAnimation = walkLeftAnimation;
-                dir = 'L';
-                isMoving = true;
-                collisionX = false; // Indicate no collision has occurred
-            } else {
-                collisionX = true; // Indicate a collision has occurred
-            }
+            targX = worldX - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkLeftAnimation;
+            dir = 'L';
+            isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            float potentialX = worldX + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            if (!isCollision(potentialX + tileX, worldY) &&
-                    !isCollision(potentialX + tileX, worldY + tileY)) {
-                worldX = potentialX;
-                currentAnimation = walkRightAnimation;
-                dir = 'R';
-                isMoving = true;
-                collisionX = false; // Indicate no collision has occurred
-            } else {
-                collisionX = true; // Indicate a collision has occurred
-            }
+            targX = worldX + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
+            currentAnimation = walkRightAnimation;
+            dir = 'R';
+            isMoving = true;
         }
 
 
@@ -232,14 +211,14 @@ public class Player extends Entity {
             else if (currentAnimation == walkUpAnimation) currentAnimation = idleUpAnimation;
         }
 
-        // reacting to collisions
-        if(collisionX) {
-            setX(originalX);
-            speed = 0;
+        Vector2 newPos = collisionHandler.adjustPos(worldX, worldY, targX, targY);
+        if (newPos != null){
+            worldX = newPos.x;
+            worldY = newPos.y;
         }
-        if(collisionY) {
-            setY(originalY);
-            speed = 0;
+        else{
+            worldX = targX;
+            worldY = targY;
         }
 
         stateTime += delta;
@@ -276,7 +255,6 @@ public class Player extends Entity {
         }
 
         camera.update();
-
         // game.batch.begin();
 
         // game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);

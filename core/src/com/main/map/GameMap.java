@@ -65,6 +65,10 @@ public class GameMap extends TiledMap {
         return height;
     }
 
+    public TiledMap getMap(){
+        return gameMap;
+    }
+
     public void dispose() {
         gameMap.dispose();
         tiledMapRenderer.dispose();
