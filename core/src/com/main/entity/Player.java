@@ -202,6 +202,18 @@ public class Player extends Entity {
             isMoving = true;
         }
 
+        if (targX + spriteX > gameMap.getWidth()){
+            targX = gameMap.getWidth() - spriteX;
+        }
+        else if (targX < 0){
+            targX = 0;
+        }
+        if (targY + spriteY > gameMap.getHeight()){
+            targY = gameMap.getHeight() - spriteY;
+        }
+        else if (targY < 0){
+            targY = 0;
+        }
 
         // this will switch sprite sheet to idle sprite sheet when player is not moving
         if (!isMoving) {
@@ -222,19 +234,6 @@ public class Player extends Entity {
         }
 
         stateTime += delta;
-
-        if (worldX + spriteX > gameMap.getWidth()){
-            worldX = gameMap.getWidth() - spriteX;
-        }
-        else if (worldX < 0){
-            worldX = 0;
-        }
-        if (worldY + spriteY > gameMap.getHeight()){
-            worldY = gameMap.getHeight() - spriteY;
-        }
-        else if (worldY < 0){
-            worldY = 0;
-        }
 
         float camX = worldX + spriteY /2f;
         float camY = worldY + spriteY /2f;
