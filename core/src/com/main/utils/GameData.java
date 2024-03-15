@@ -1,12 +1,17 @@
 package com.main.utils;
 
+import com.main.sound.GameMusic;
+
 public class GameData {
     private boolean gender = true;
-    private int musicLevel = 4;
-    private int soundLevel = 4;
-
     private float playerPosX = 300; //For future use
     private float playerPosY = 300; //For future use
+
+    GameMusic music;
+
+    public GameData(){
+        this.music = new GameMusic();
+    }
 
     public boolean getGender(){
         return gender;
@@ -16,24 +21,20 @@ public class GameData {
         this.gender = gender;
     }
 
-    public int getMusicLevel(){
-        return musicLevel;
-    }
-
-    public void setMusicLevel(int musicLevel) {
-        if (musicLevel >= 0 && musicLevel <= 4) {
-            this.musicLevel = musicLevel;
-        }
-    }
-
     public int getSoundLevel(){
-        return soundLevel;
+        return music.getSoundLevel();
     }
 
-    public void setSoundLevel(int soundLevel) {
-        if (soundLevel >= 0 && soundLevel <= 4) {
-            this.soundLevel = soundLevel;
-        }
+    public int getMusicLevel(){
+        return music.getMusicLevel();
+    }
+
+    public void incrementMusicLevel() {
+        music.incrementVolume();
+    }
+
+    public void decrementMusicLevel(){
+        music.decrementVolume();
     }
 
     public float getPlayerPosX(){

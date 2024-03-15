@@ -12,11 +12,13 @@ import com.main.screens.MainGameScreen;
 import com.main.screens.MainMenuScreen;
 import com.main.screens.MainSettingsScreen;
 
+
 import static com.badlogic.gdx.Gdx.graphics;
 
 import com.main.utils.GameData;
 import com.main.utils.ScreenManager;
 import com.main.utils.ScreenType;
+import com.main.sound.GameMusic;
 
 public class Main extends Game {
 	/* this is for movement speed so that it can use delta time to keep
