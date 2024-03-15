@@ -17,7 +17,7 @@ public class GameMap extends TiledMap {
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
     // maybe for map animations
-    // AnimatedTiledMapTile animatedTiledMapTile;
+//    AnimatedTiledMapTile animatedTiledMapTile;
 
     private Player player;
 

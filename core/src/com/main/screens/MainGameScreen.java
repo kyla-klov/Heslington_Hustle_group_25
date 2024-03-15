@@ -100,9 +100,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             energyBar = setEnergyBar();
 
         }
-
          */
-
 
         ScreenUtils.clear(0, 0, 1, 1);
 
