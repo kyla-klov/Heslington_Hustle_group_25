@@ -220,14 +220,14 @@ public class MainSettingsScreen implements Screen, InputProcessor {
                 worldY >= soundUpButtonY && worldY <= soundUpButtonY + soundUpButtonHeight) {
 
             if (game.gameData.getSoundLevel() <= 3){
-                game.gameData.incrementMusicLevel();
+                //game.gameData.incrementMusicLevel();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getSoundLevel() +".png");
             }
         } else if (worldX >= soundDownButtonX && worldX <= soundDownButtonX + soundDownButtonWidth &&
                 worldY >= soundDownButtonY && worldY <= soundDownButtonY + soundDownButtonHeight){
 
             if (game.gameData.getSoundLevel() >= 1){
-                game.gameData.decrementMusicLevel();
+                //game.gameData.decrementMusicLevel();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 *game.gameData.getSoundLevel()+".png");
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
