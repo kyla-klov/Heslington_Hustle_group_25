@@ -18,8 +18,6 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     private final Texture backButtonTexture;
     private final float backButtonX, backButtonY, backButtonWidth = 100, backButtonHeight = 50;
-    //private final Stage stage; // LibGdx container for labels with Peaberry font
-
     private final Texture controlLabel;
 
     private final float controlLabelX;
@@ -30,25 +28,89 @@ public class MainControlScreen implements Screen, InputProcessor {
     private final Texture wLabel;
     private final float wLabelX;
     private final float wLabelY;
-    private final float wLabelWidth = 150;
-    private final float wLabelHeight = 150;
+    private final float wLabelWidth = 100;
+    private final float wLabelHeight = 100;
+    private final Texture aLabel;
+    private final float aLabelX;
+    private final float aLabelY;
+    private final float aLabelWidth = 100;
+    private final float aLabelHeight = 100;
+
+    private final Texture sLabel;
+    private final float sLabelX;
+    private final float sLabelY;
+    private final float sLabelWidth = 100;
+    private final float sLabelHeight = 100;
+
+    private final Texture dLabel;
+    private final float dLabelX;
+    private final float dLabelY;
+    private final float dLabelWidth = 100;
+    private final float dLabelHeight = 100;
+
+    private final Texture arrowUpLabel;
+    private final float arrowUpLabelX;
+    private final float arrowUpLabelY;
+    private final float arrowUpWidth = 100;
+    private final float arrowUpHeight = 100;
+
+    private final Texture arrowLeftLabel;
+    private final float arrowLeftLabelX;
+    private final float arrowLeftLabelY;
+    private final float arrowLeftLabelWidth = 100;
+    private final float arrowLeftLabelHeight = 100;
+
+    private final Texture arrowDownLabel;
+    private final float arrowDownLabelX;
+    private final float arrowDownLabelY;
+    private final float arrowDownLabelWidth = 100;
+    private final float arrowDownLabelHeight = 100;
+
+    private final Texture arrowRightLabel;
+    private final float arrowRightLabelX;
+    private final float arrowRightLabelY;
+    private final float arrowRightLabelWidth = 100;
+    private final float arrowRightLabelHeight = 100;
+
 
 
     public MainControlScreen(Main game) {
         this.game = game;
-        backButtonTexture = new Texture("assets/menu_buttons/back_button.png");
+        backButtonTexture = new Texture("assets/settings_gui/back_button.png");
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
         wLabel = new Texture("assets/controls_gui/w_button.png");
+        aLabel = new Texture("assets/controls_gui/a_button.png");
+        sLabel = new Texture("assets/controls_gui/s_button.png");
+        dLabel = new Texture("assets/controls_gui/d_button.png");
+        arrowUpLabel = new Texture("assets/controls_gui/arrow_up_button.png");
+        arrowLeftLabel = new Texture("assets/controls_gui/arrow_left_button.png");
+        arrowDownLabel = new Texture("assets/controls_gui/arrow_down_button.png");
+        arrowRightLabel = new Texture("assets/controls_gui/arrow_right_button.png");
 
-
-
-        backButtonX = 10; // Adjust the position as needed
-        backButtonY = game.screenHeight - backButtonHeight - 10;
+        backButtonX = (game.screenWidth - backButtonWidth) /2;
+        backButtonY = (float) game.screenHeight / 6 - 100;
         controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
         controlLabelY = game.screenHeight - (controlLabelHeight * 2);
-        wLabelX = (game.screenWidth - wLabelWidth) / 2 - 200;
-        wLabelY = game.screenHeight - wLabelHeight - 350;
+        wLabelX = (game.screenWidth - wLabelWidth) / 2 - 100;
+        wLabelY = game.screenHeight - wLabelHeight - 285;
+        aLabelX = (game.screenWidth - aLabelWidth) / 2 - 100;
+        aLabelY = game.screenHeight - aLabelHeight - 435;
+        sLabelX = (game.screenWidth - sLabelWidth) / 2 - 100;
+        sLabelY = game.screenHeight - sLabelHeight - 585;
+        dLabelX = (game.screenWidth - dLabelWidth) / 2 - 100;
+        dLabelY = game.screenHeight - dLabelHeight - 735;
+        arrowUpLabelX = (game.screenWidth - arrowUpWidth) / 2 + 100;
+        arrowUpLabelY = game.screenHeight - arrowUpHeight - 285;
+        arrowLeftLabelX = (game.screenWidth - arrowLeftLabelWidth) / 2 + 100;
+        arrowLeftLabelY = game.screenHeight - arrowLeftLabelHeight - 435;
+        arrowDownLabelX = (game.screenWidth - arrowDownLabelWidth) / 2 + 100;
+        arrowDownLabelY = game.screenHeight - arrowDownLabelHeight - 585;
+        arrowRightLabelX = (game.screenWidth - arrowRightLabelWidth) / 2 + 100;
+        arrowRightLabelY = game.screenHeight - arrowRightLabelHeight - 735;
+
+
+
 
 
         /*
@@ -73,6 +135,13 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(wLabel, wLabelX, wLabelY, wLabelWidth, wLabelHeight);
+        game.batch.draw(aLabel, aLabelX, aLabelY, aLabelWidth, aLabelHeight);
+        game.batch.draw(sLabel, sLabelX, sLabelY, sLabelWidth, sLabelHeight);
+        game.batch.draw(dLabel, dLabelX, dLabelY, dLabelWidth, dLabelHeight);
+        game.batch.draw(arrowUpLabel, arrowUpLabelX, arrowUpLabelY, arrowUpWidth, arrowUpHeight);
+        game.batch.draw(arrowLeftLabel, arrowLeftLabelX, arrowLeftLabelY, arrowLeftLabelWidth, arrowLeftLabelHeight);
+        game.batch.draw(arrowDownLabel, arrowDownLabelX, arrowDownLabelY, arrowDownLabelWidth, arrowDownLabelHeight);
+        game.batch.draw(arrowRightLabel, arrowRightLabelX, arrowRightLabelY, arrowRightLabelWidth, arrowRightLabelHeight);
         //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         //stage.draw();
         game.batch.end();
