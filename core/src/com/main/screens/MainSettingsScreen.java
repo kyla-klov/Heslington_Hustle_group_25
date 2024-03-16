@@ -174,10 +174,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         game.batch.draw(soundBar, soundBarX, soundBarY, soundBarWidth, soundBarHeight);
         game.batch.draw(boyButton, boyButtonX, boyButtonY, boyButtonWidth, boyButtonHeight);
         game.batch.draw(girlButton, girlButtonX, girlButtonY, girlButtonWidth, girlButtonHeight);
-
-
-
-
         game.batch.end();
     }
 
