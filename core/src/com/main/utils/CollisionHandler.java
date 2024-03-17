@@ -9,13 +9,10 @@ import java.util.ArrayList;
 
 public class CollisionHandler {
     private final TiledMap tiledMap;
-    private final int tileWidth;
-    private final int tileHeight;
+    private final int tileWidth, tileHeight;
 
-    private final float objWidth;
-    private final float objHeight;
-    private final float offSetX;
-    private final float offSetY;
+    private final float objWidth, objHeight;
+    private final float offSetX, offSetY;
     private final ArrayList<TiledMapTileLayer> collisionLayers;
 
     public CollisionHandler(TiledMap tiledMap, int tileWidth, int tileHeight, float objWidth, float objHeight, float scaleX, float scaleY){

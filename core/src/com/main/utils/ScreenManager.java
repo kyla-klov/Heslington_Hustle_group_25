@@ -16,7 +16,6 @@ public class ScreenManager {
     private Screen curScreen;
     private ScreenType curScreenType;
 
-
     public ScreenManager(Main game){
         this.game = game;
         this.screensInMemory = new HashMap<>();

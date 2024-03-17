@@ -36,7 +36,7 @@ public class MainControlScreen implements Screen, InputProcessor {
     public MainControlScreen(Main game) {
         this.game = game;
         Gdx.input.setInputProcessor(this);
-        
+
         backButton = new Texture("assets/settings_gui/back_button.png");
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
