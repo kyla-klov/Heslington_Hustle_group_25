@@ -13,14 +13,17 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
 import com.main.utils.CollisionHandler;
 
-
+/**
+ * The Player class represents the character in the game, handling movement, collision,
+ * and animations.
+ */
 public class Player extends Entity {
     Main game;
     GameMap gameMap;
     OrthographicCamera camera;
     CollisionHandler collisionHandler;
 
-    char dir;
+    char dir; // Current direction of the player
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int spriteX = 24;// this is in reference to the sprite sheet
     public static final int spriteY = 38;
@@ -33,6 +36,13 @@ public class Player extends Entity {
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
 
+    /**
+     * Constructs a new Player instance.
+     *
+     * @param game The main game object.
+     * @param gameMap The game map for collision detection and boundaries.
+     * @param camera The camera to follow the player.
+     */
     public Player(Main game, GameMap gameMap, OrthographicCamera camera) {
         this.game = game;
         this.gameMap = gameMap;
@@ -53,6 +63,11 @@ public class Player extends Entity {
         updateGender();
     }
 
+    /**
+     * Updates the player's position, animations, and handles collision.
+     *
+     * @param delta Time since last frame in seconds.
+     */
     public void update(float delta) {
         boolean isMoving = false;
 
@@ -155,17 +170,32 @@ public class Player extends Entity {
 
     }
 
+    /**
+     * Sets the player's position to the specified coordinates.
+     *
+     * @param newX The new X coordinate.
+     * @param newY The new Y coordinate.
+     */
     public void setPos(float newX, float newY) {
         worldX = newX;
         worldY = newY;
     }
 
+    /**
+     * Returns the player's starting position as a Vector2.
+     *
+     * @return The starting position of the player.
+     */
     public Vector2 getStartPos(){
         return new Vector2(startX, startY);
     }
 
 
-    // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
+    /**
+     * Updates the player's gender by changing the TextureRegions' internal path using
+     * the player's choice in the settings menu.
+     * Then updates corresponding textures and animations.
+     */
     public void updateGender(){
         if (idleSheet != null) {idleSheet.dispose();}
         if (walkSheet != null) {walkSheet.dispose();}
@@ -206,7 +236,11 @@ public class Player extends Entity {
         }
     }
 
-    // Getter for the current frame based on the state time
+    /**
+     * Gets the current animation frame for the player based on the state time.
+     *
+     * @return The current TextureRegion of the player's animation.
+     */
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, true);
     }

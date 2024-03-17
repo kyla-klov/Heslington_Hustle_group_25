@@ -8,22 +8,32 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.utils.ScreenType;
 
-
+/**
+ * Represents the settings screen in the game, allowing players to adjust game settings like music and sound levels,
+ * and the character's gender.
+ */
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
     boolean gender;
     private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
     private Texture musicBar, soundBar, boyButton, girlButton;
+    // X and Y coordinates for each button and label
     private final float backButtonX, settingsLabelX, musicUpButtonX, musicDownButtonX, musicLabelX, musicBarX, soundUpButtonX, soundLabelX, soundDownButtonX,
             soundBarX, boyButtonX, girlButtonX;
+    // Y coordinates for each button and label
     private final float backButtonY, settingsLabelY, musicUpButtonY, musicDownButtonY, musicLabelY, musicBarY, soundUpButtonY, soundLabelY, soundDownButtonY,
             soundBarY, boyButtonY, girlButtonY;
+    // Button and label dimensions
     private final float backButtonWidth = 200, settingsLabelWidth = 500, musicUpButtonWidth = 75, musicDownButtonWidth = 75, musicLabelWidth = 200, musicBarWidth = 250,
             soundUpButtonWidth = 75, soundLabelWidth = 200, soundDownButtonWidth = 75, soundBarWidth = 250, boyButtonWidth = 150, girlButtonWidth = 150;
     private final float backButtonHeight = 100, settingsLabelHeight = 130, musicUpButtonHeight = 75, musicDownButtonHeight = 75, musicLabelHeight = 50, musicBarHeight = 50,
             soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
+    /**
+     * Constructs the settings screen with references to main game object and initializes UI components.
+     * @param game The main game object for accessing global properties and methods.
+     */
     public MainSettingsScreen(Main game) {
         this.game = game;
         gender = game.gameData.getGender();
@@ -114,6 +124,15 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         return false;
     }
 
+    /**
+     * Handles touch input for interactive elements on the screen.
+     * @param screenX The x-coordinate of the touch.
+     * @param screenY The y-coordinate of the touch.
+     * @param pointer The pointer for the event.
+     * @param button The button that was touched.
+     * @return true if the input was processed.
+     */
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         float worldX = screenX * game.defWidth / (float) game.screenWidth;
         float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;

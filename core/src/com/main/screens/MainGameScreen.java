@@ -25,9 +25,9 @@ public class MainGameScreen implements Screen, InputProcessor {
     float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
     int energyCounter = 10;
 
+    Texture counterBackground;
     int dayNum = 1;
-    int recActivity;
-    int studyHours;
+    int recActivity, studyHours;
 
 //    Texture hit;
 //    float hitWidth;
@@ -46,6 +46,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
+        counterBackground = new Texture("conter_background.png");
 
 //        hit = new Texture("energy/hit.png");
 //        hitWidth = 100;
@@ -55,13 +56,8 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         menuButtonWidth = 64;
         menuButtonHeight = 64;
-        menuButtonX = 10;
-        menuButtonY = (game.screenHeight) - menuButtonHeight - 10;
-
         energyBarWidth = 200;
         energyBarHeight = 64;
-        energyBarX = 30 + menuButtonWidth;
-        energyBarY = game.screenHeight - 10 - energyBarHeight;
 
         energyBar = setEnergyBar();
 
@@ -94,6 +90,12 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
          */
 
+        // x and y coordinated assigned in render method so that the screen width and height will constantly update
+        menuButtonX = 10;
+        menuButtonY = game.screenHeight - menuButtonHeight - 10;
+        energyBarX = 30 + menuButtonWidth;
+        energyBarY = game.screenHeight - energyBarHeight - 10;
+
         ScreenUtils.clear(0, 0, 1, 1);
 
         game.batch.begin();
@@ -104,11 +106,11 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
         // render map
         gameMap.render();
-
         game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
-        font.draw(game.batch, counterString, game.screenWidth - 300, game.screenHeight - 10);
+        game.batch.draw(counterBackground, game.screenWidth - 370, game.screenHeight - 130, 370, 120);
+        font.draw(game.batch, counterString, game.screenWidth - 320, game.screenHeight - 20);
 
         game.batch.end();
     }
@@ -122,6 +124,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         float touchX = screenX * game.defWidth / (float) game.screenWidth;
         float touchY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
