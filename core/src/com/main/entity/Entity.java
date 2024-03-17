@@ -10,5 +10,4 @@ public class Entity extends Sprite {
     public Animation<TextureRegion> currentAnimation;
     public float stateTime; // Tracks animation time
 
-    // Constructor, getters, setters, and other common methods can be added here
 }

@@ -13,40 +13,42 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
 import com.main.utils.CollisionHandler;
 
-
+/**
+ * The Player class represents the character in the game, handling movement, collision,
+ * and animations.
+ */
 public class Player extends Entity {
     Main game;
     GameMap gameMap;
-    TiledMapTileLayer collisionLayer;
     OrthographicCamera camera;
     CollisionHandler collisionHandler;
-    int tileSize = 16;
 
-    char dir;
-
+    char dir; // Current direction of the player
     public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
     public static final int spriteX = 24;// this is in reference to the sprite sheet
     public static final int spriteY = 38;
+    int tileSize;
 
-    String boyIdleSpriteSheet = "character/boy_idle.png";
-    String boyWalkSpriteSheet = "character/boy_idle.png";
-    String girlIdleSpriteSheet = "character/boy_idle.png";
-    String girlWalkSpriteSheet = "character/boy_idle.png";
+    public float startX, startY;
 
-    public float startX;
-    public float startY;
-
-    Texture idleSheet;
-    Texture walkSheet;
+    Texture idleSheet, walkSheet;
 
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
 
+    /**
+     * Constructs a new Player instance.
+     *
+     * @param game The main game object.
+     * @param gameMap The game map for collision detection and boundaries.
+     * @param camera The camera to follow the player.
+     */
     public Player(Main game, GameMap gameMap, OrthographicCamera camera) {
         this.game = game;
         this.gameMap = gameMap;
-        this.collisionLayer = (TiledMapTileLayer)gameMap.getMap().getLayers().get("Trees");
         this.camera = camera;
+
+        tileSize = gameMap.getTileSize();
         this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, spriteX, spriteY * 0.5f, 0.7f, 0.7f);
         this.collisionHandler.addCollisionLayers("Trees", "wall_1", "wall_2", "wall_3", "roof_1", "roof_2", "roof_3", "other", "lilipads");
         //this.settingsScreen = settingsScreen;
@@ -61,15 +63,13 @@ public class Player extends Entity {
         updateGender();
     }
 
+    /**
+     * Updates the player's position, animations, and handles collision.
+     *
+     * @param delta Time since last frame in seconds.
+     */
     public void update(float delta) {
         boolean isMoving = false;
-        boolean collisionX = false, collisionY = false;
-        // Store the original position
-        float originalX = worldX;
-        float originalY = worldY;
-        int tileX = (int) (worldX / tileSize);
-        int tileY = (int) (worldY / tileSize);
-        TiledMapTileLayer.Cell cell = null;
 
         // Determine if the player is moving diagonally
         boolean isMovingDiagonally = ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) ||
@@ -86,97 +86,10 @@ public class Player extends Entity {
             normalizedSpeed *= 2; // Increase speed if shift is pressed
         }
 
-        // checks movement and updates animation, adjusts speed with delta time
-        /*
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            worldY += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            currentAnimation = walkUpAnimation;
-            dir = 'U';
-            isMoving = true;
-            // check collision top left tile
-            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY + tileY) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-            // check collision top middle tile
-            cell = collisionLayer.getCell( (int) ((worldX + tileX) / 2) / tileX, (int) (worldY + tileY) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-            // check collision top right tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY + tileY) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            worldY -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            currentAnimation = walkDownAnimation;
-            dir = 'D';
-            isMoving = true;
-            // check collision bottom left tile
-            cell = collisionLayer.getCell( (int) worldX / tileX, (int) worldY / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-            // check collision bottom middle tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / 2, (int) worldY / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-            // check collision bottom right tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) worldY / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionY = true;
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            worldX -= (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            currentAnimation = walkLeftAnimation;
-            dir = 'L';
-            isMoving = true;
-            // check collision top left tile
-            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY + tileY) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-            // check collision middle left tile
-            cell = collisionLayer.getCell((int) worldX / tileX, (int) ((worldY + tileY) / 2) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-            // check collision bottom left tile
-            cell = collisionLayer.getCell( (int) worldX / tileX, (int) (worldY / tileY));
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            worldX += (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
-            currentAnimation = walkRightAnimation;
-            dir = 'R';
-            isMoving = true;
-            // check collision top right tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY + tileY) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-            // check collision middle right tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) ((worldY + tileY) / 2) / tileY);
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-            // check collision bottom right tile
-            cell = collisionLayer.getCell( (int) (worldX + tileX) / tileX, (int) (worldY / tileY));
-            if(cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked")) {
-                collisionX = true;
-            }
-        }
-         */
         float targX = worldX;
         float targY = worldY;
 
+        // checks movement and updates animation, adjusts speed with delta time
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             targY = worldY + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkUpAnimation;
@@ -239,7 +152,7 @@ public class Player extends Entity {
         float camY = worldY + spriteY /2f;
 
         camera.position.set(camX, camY, 0);
-
+        // this will make sure the camera follows the player
         if (camX + camera.viewportWidth/2f > gameMap.getWidth()) {
             camera.position.set(gameMap.getWidth() - camera.viewportWidth/2f, camera.position.y, 0);
         }
@@ -254,39 +167,35 @@ public class Player extends Entity {
         }
 
         camera.update();
-        // game.batch.begin();
 
-        // game.batch.draw(currentAnimation.getKeyFrame(stateTime, true), worldX, worldY, character_width, character_height);
-
-        // game.batch.end();
     }
 
-    /*
-    public boolean collidesWith(Texture thing, float thingX, float thingY) {
-        Rectangle playerBounds = new Rectangle(worldX, worldY, spriteX, spriteY);
-        Rectangle objectBounds = new Rectangle(thingX, thingY, thing.getWidth(), thing.getHeight());
-        return playerBounds.overlaps(objectBounds);
-    }
-
+    /**
+     * Sets the player's position to the specified coordinates.
+     *
+     * @param newX The new X coordinate.
+     * @param newY The new Y coordinate.
      */
-
     public void setPos(float newX, float newY) {
         worldX = newX;
         worldY = newY;
     }
 
+    /**
+     * Returns the player's starting position as a Vector2.
+     *
+     * @return The starting position of the player.
+     */
     public Vector2 getStartPos(){
         return new Vector2(startX, startY);
     }
 
-    // collision detection method that checks if the tile is not empty and a collision tile
-    private boolean isCollision(float x, float y) {
-        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / tileSize), (int) (y / tileSize));
-        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked");
-    }
 
-
-    // here the TextureRegions' internal path can be changed with a variable for when the player chooses the gender in the settings menu
+    /**
+     * Updates the player's gender by changing the TextureRegions' internal path using
+     * the player's choice in the settings menu.
+     * Then updates corresponding textures and animations.
+     */
     public void updateGender(){
         if (idleSheet != null) {idleSheet.dispose();}
         if (walkSheet != null) {walkSheet.dispose();}
@@ -302,8 +211,8 @@ public class Player extends Entity {
         TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
 
         walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
-        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for right
-        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for left
+        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for left
+        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for right
         walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
 
         idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
@@ -327,7 +236,11 @@ public class Player extends Entity {
         }
     }
 
-    // Getter for the current frame based on the state time
+    /**
+     * Gets the current animation frame for the player based on the state time.
+     *
+     * @return The current TextureRegion of the player's animation.
+     */
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(stateTime, true);
     }

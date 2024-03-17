@@ -4,33 +4,30 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.main.screens.MainControlScreen;
-import com.main.screens.MainGameScreen;
-import com.main.screens.MainMenuScreen;
-import com.main.screens.MainSettingsScreen;
-
-
 import static com.badlogic.gdx.Gdx.graphics;
-
 import com.main.utils.GameData;
 import com.main.utils.ScreenManager;
 import com.main.utils.ScreenType;
 import com.main.sound.GameMusic;
 
+/**
+ * The main class for the game, extending the LibGDX Game class.
+ * It initializes and manages the game's resources, screens, and settings.
+ */
 public class Main extends Game {
-	/* this is for movement speed so that it can use delta time to keep
-	* the frame movement constant so matter the frames that are set
-	*/
-	public SpriteBatch batch;
-	public GameData gameData;
-	public ScreenManager screenManager;
-	public int screenWidth, screenHeight;
-	public int defWidth, defHeight;
-	public Skin skin;
+	public SpriteBatch batch; // Used for drawing textures and sprites in batches
+	public GameData gameData; // Manages the game's data, such as settings and player information
+	public ScreenManager screenManager; // Manages the game's screens, allowing for easy transitions
+	public int screenWidth, screenHeight; // The current width and height of the screen
+	public int defWidth, defHeight; // Default screen width and height, used for UI scaling
+	public Skin skin; // Used for storing UI elements' styles and skins
 
+	/**
+	 * Called when the game is first created.
+	 * Initializes the game's main components and sets the main menu as the initial screen.
+	 */
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -49,23 +46,36 @@ public class Main extends Game {
 		labelStyle.font = font;
 		skin.add("Peaberry", labelStyle, Label.LabelStyle.class);
 
+		// Initialize and set up the screen manager
 		screenManager = new ScreenManager(this);
 		screenManager.keepInMemory(ScreenType.GAME_SCREEN);
 		screenManager.setScreen(ScreenType.MAIN_MENU);
 	}
 
+	/**
+	 * Called each frame, responsible for rendering the game.
+	 */
 	@Override
 	public void render () {
 		super.render();
 	}
 
+	/**
+	 * Called when the application is resized.
+	 * @param width The new width of the application.
+	 * @param height The new height of the application.
+	 */
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		screenWidth = width;
 		screenHeight = height;
 	}
-	
+
+	/**
+	 * Called when the game is closing.
+	 * Disposes of resources to avoid memory leaks.
+	 */
 	@Override
 	public void dispose () {
 	}

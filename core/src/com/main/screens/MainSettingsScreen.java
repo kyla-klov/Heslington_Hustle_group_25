@@ -8,104 +8,38 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.utils.ScreenType;
 
-
+/**
+ * Represents the settings screen in the game, allowing players to adjust game settings like music and sound levels,
+ * and the character's gender.
+ */
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
     boolean gender;
-    private final Texture backButton;
-    private final float backButtonX;
-    private final float backButtonY;
-    private final float backButtonWidth = 200;
-    private final float backButtonHeight = 100;
+    private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
+    private Texture musicBar, soundBar, boyButton, girlButton;
+    // X and Y coordinates for each button and label
+    private final float backButtonX, settingsLabelX, musicUpButtonX, musicDownButtonX, musicLabelX, musicBarX, soundUpButtonX, soundLabelX, soundDownButtonX,
+            soundBarX, boyButtonX, girlButtonX;
+    // Y coordinates for each button and label
+    private final float backButtonY, settingsLabelY, musicUpButtonY, musicDownButtonY, musicLabelY, musicBarY, soundUpButtonY, soundLabelY, soundDownButtonY,
+            soundBarY, boyButtonY, girlButtonY;
+    // Button and label dimensions
+    private final float backButtonWidth = 200, settingsLabelWidth = 500, musicUpButtonWidth = 75, musicDownButtonWidth = 75, musicLabelWidth = 200, musicBarWidth = 250,
+            soundUpButtonWidth = 75, soundLabelWidth = 200, soundDownButtonWidth = 75, soundBarWidth = 250, boyButtonWidth = 150, girlButtonWidth = 150;
+    private final float backButtonHeight = 100, settingsLabelHeight = 130, musicUpButtonHeight = 75, musicDownButtonHeight = 75, musicLabelHeight = 50, musicBarHeight = 50,
+            soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
-    private final Texture settingsLabel;
-
-    private final float settingsLabelX;
-    private final float settingsLabelY;
-    private final float settingsLabelWidth = 500;
-    private final float settingsLabelHeight = 130;
-
-    private final Texture musicUpButton;
-
-    private final float musicUpButtonX;
-    private final float musicUpButtonY;
-    private final float musicUpButtonWidth = 75;
-    private final float musicUpButtonHeight = 75;
-
-
-    private final Texture musicDownButton;
-
-    private final float musicDownButtonX;
-    private final float musicDownButtonY;
-    private final float musicDownButtonWidth = 75;
-    private final float musicDownButtonHeight = 75;
-
-    private final Texture musicLabel;
-
-    private final float musicLabelX;
-    private final float musicLabelY;
-    private final float musicLabelWidth = 200;
-    private final float musicLabelHeight = 50;
-
-    private Texture musicBar;
-
-    private final float musicBarX;
-    private final float musicBarY;
-    private final float musicBarWidth = 250;
-    private final float musicBarHeight = 50;
-
-    private final Texture soundUpButton;
-
-    private final float soundUpButtonX;
-    private final float soundUpButtonY;
-    private final float soundUpButtonWidth = 75;
-    private final float soundUpButtonHeight = 75;
-
-    private final Texture soundLabel;
-
-    private final float soundLabelX;
-    private final float soundLabelY;
-    private final float soundLabelWidth = 200;
-    private final float soundLabelHeight = 50;
-
-    private final Texture soundDownButton;
-
-    private final float soundDownButtonX;
-    private final float soundDownButtonY;
-    private final float soundDownButtonWidth = 75;
-    private final float soundDownButtonHeight = 75;
-
-    private Texture soundBar;
-
-    private final float soundBarX;
-    private final float soundBarY;
-    private final float soundBarWidth = 250;
-    private final float soundBarHeight = 50;
-
-    private Texture boyButton;
-
-    private final float boyButtonX;
-    private final float boyButtonY;
-    private final float boyButtonWidth = 150;
-    private final float boyButtonHeight = 150;
-
-    private Texture girlButton;
-
-    private final float girlButtonX;
-    private final float girlButtonY;
-    private final float girlButtonWidth = 150;
-    private final float girlButtonHeight = 150;
-
-
+    /**
+     * Constructs the settings screen with references to main game object and initializes UI components.
+     * @param game The main game object for accessing global properties and methods.
+     */
     public MainSettingsScreen(Main game) {
         this.game = game;
         gender = game.gameData.getGender();
 
         Gdx.input.setInputProcessor(this);
-        /*
-        group them maybe but up to you.
-         */
+
         backButton = new Texture("assets/settings_gui/back_button.png");
         settingsLabel = new Texture("assets/settings_gui/settings_label.png");
         musicUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
@@ -149,8 +83,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         boyButtonY = game.screenHeight - boyButtonHeight - 650;
         girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + 100;
         girlButtonY = game.screenHeight - boyButtonHeight - 650;
-
-
     }
 
     @Override
@@ -192,6 +124,15 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         return false;
     }
 
+    /**
+     * Handles touch input for interactive elements on the screen.
+     * @param screenX The x-coordinate of the touch.
+     * @param screenY The y-coordinate of the touch.
+     * @param pointer The pointer for the event.
+     * @param button The button that was touched.
+     * @return true if the input was processed.
+     */
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         float worldX = screenX * game.defWidth / (float) game.screenWidth;
         float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;

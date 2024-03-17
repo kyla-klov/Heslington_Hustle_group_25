@@ -80,7 +80,7 @@ public class MainControlScreen implements Screen, InputProcessor {
         backButtonTexture = new Texture("assets/settings_gui/back_button.png");
 
         Gdx.input.setInputProcessor(this);
-        
+
         backButton = new Texture("assets/settings_gui/back_button.png");
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");

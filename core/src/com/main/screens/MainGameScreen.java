@@ -19,60 +19,50 @@ public class MainGameScreen implements Screen, InputProcessor {
     GameMap gameMap;
 
     Texture menuButton;
-    float menuButtonY;
-    float menuButtonX;
-    float menuButtonWidth;
-    float menuButtonHeight;
+    float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
 
     Texture energyBar;
-    float energyBarY;
-    float energyBarX;
-    float energyBarWidth;
-    float energyBarHeight;
+    float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
     int energyCounter = 10;
 
-    Texture hit;
-    float hitWidth;
-    float hitHeight;
-    float hitX;
-    float hitY;
+    Texture counterBackground;
+    int dayNum = 1;
+    int recActivity, studyHours;
+
+//    Texture hit;
+//    float hitWidth;
+//    float hitHeight;
+//    float hitX;
+//    float hitY;
     OrthographicCamera camera;
 
     Main game;
 
     public MainGameScreen(Main game) {
         this.game = game;
-
-        font = new BitmapFont();
+        camera = new OrthographicCamera();
+        gameMap = new GameMap(camera);
+        player = new Player(game, gameMap, camera);
+        font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
+        counterBackground = new Texture("conter_background.png");
 
-        hit = new Texture("energy/hit.png");
-        hitWidth = 100;
-        hitHeight = 100;
-        hitX = (float) game.screenWidth / 2;
-        hitY = (float) game.screenHeight / 2;
+//        hit = new Texture("energy/hit.png");
+//        hitWidth = 100;
+//        hitHeight = 100;
+//        hitX = (float) game.screenWidth / 2;
+//        hitY = (float) game.screenHeight / 2;
 
         menuButtonWidth = 64;
         menuButtonHeight = 64;
-        menuButtonX = 10;
-        menuButtonY = (game.screenHeight) - menuButtonHeight - 10;
-
         energyBarWidth = 200;
         energyBarHeight = 64;
-        energyBarX = 30 + menuButtonWidth;
-        energyBarY = game.screenHeight - 10 - energyBarHeight;
 
         energyBar = setEnergyBar();
 
-        camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth/3f, game.screenHeight/3f);
         camera.update();
-
-        gameMap = new GameMap(camera);
-        //player = new Player(game, gameMap, camera);
-
-        player = new Player(game, gameMap, camera);
 
     }
 
@@ -81,16 +71,15 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         player.updateGender();
         // setting play position to liking
-        player.setPos( gameMap.getCollisionLayer().getTileWidth() * 68, gameMap.getCollisionLayer().getTileHeight() * 62);
+        player.setPos( gameMap.getTileSize() * 68, gameMap.getTileSize() * 62);
     }
 
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
-        //gameMap.update(delta); //for future map animations
 
         String counterString;
-        counterString = "Sleeping: x \nEating: y\nRecreation: z\nStudying: s";
+        counterString = "Day: "+ dayNum + "\nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours;
 
         /*
         if (player.collidesWith(hit, hitX, hitY)) {
@@ -98,9 +87,14 @@ public class MainGameScreen implements Screen, InputProcessor {
             player.setPos(player.getStartPos().x, player.getStartPos().y);
             energyBar.dispose();
             energyBar = setEnergyBar();
-
         }
          */
+
+        // x and y coordinated assigned in render method so that the screen width and height will constantly update
+        menuButtonX = 10;
+        menuButtonY = game.screenHeight - menuButtonHeight - 10;
+        energyBarX = 30 + menuButtonWidth;
+        energyBarY = game.screenHeight - energyBarHeight - 10;
 
         ScreenUtils.clear(0, 0, 1, 1);
 
@@ -108,15 +102,15 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         // render camera
         game.batch.setProjectionMatrix(camera.combined);
-        game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
+//        game.batch.draw(hit, hitX, hitY, hitWidth, hitHeight);
         game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
         // render map
         gameMap.render();
-
         game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
-        font.draw(game.batch, counterString, game.screenWidth - 100, game.screenHeight - 20);
+        game.batch.draw(counterBackground, game.screenWidth - 370, game.screenHeight - 130, 370, 120);
+        font.draw(game.batch, counterString, game.screenWidth - 320, game.screenHeight - 20);
 
         game.batch.end();
     }
@@ -130,6 +124,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         float touchX = screenX * game.defWidth / (float) game.screenWidth;
         float touchY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
