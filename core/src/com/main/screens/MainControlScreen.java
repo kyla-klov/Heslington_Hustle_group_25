@@ -18,6 +18,8 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     private final Texture backButtonTexture;
     private final float backButtonX, backButtonY, backButtonWidth = 100, backButtonHeight = 50;
+    private final Texture backButton;
+
     private final Texture controlLabel;
 
     private final float controlLabelX;
@@ -73,10 +75,13 @@ public class MainControlScreen implements Screen, InputProcessor {
     private final float arrowRightLabelHeight = 100;
 
 
-
     public MainControlScreen(Main game) {
         this.game = game;
         backButtonTexture = new Texture("assets/settings_gui/back_button.png");
+
+        Gdx.input.setInputProcessor(this);
+        
+        backButton = new Texture("assets/settings_gui/back_button.png");
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
         wLabel = new Texture("assets/controls_gui/w_button.png");
@@ -87,6 +92,7 @@ public class MainControlScreen implements Screen, InputProcessor {
         arrowLeftLabel = new Texture("assets/controls_gui/arrow_left_button.png");
         arrowDownLabel = new Texture("assets/controls_gui/arrow_down_button.png");
         arrowRightLabel = new Texture("assets/controls_gui/arrow_right_button.png");
+
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
         backButtonY = (float) game.screenHeight / 6 - 100;
@@ -112,7 +118,6 @@ public class MainControlScreen implements Screen, InputProcessor {
 
 
 
-
         /*
         stage = new Stage();
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.skin.getFont("default-font"), null);
@@ -132,7 +137,7 @@ public class MainControlScreen implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
-        game.batch.draw(backButtonTexture, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(wLabel, wLabelX, wLabelY, wLabelWidth, wLabelHeight);
         game.batch.draw(aLabel, aLabelX, aLabelY, aLabelWidth, aLabelHeight);
@@ -148,8 +153,8 @@ public class MainControlScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.screenWidth / (float) Gdx.graphics.getWidth();
-        float worldY = game.screenHeight - screenY * game.screenHeight / (float) Gdx.graphics.getHeight();
+        float worldX = screenX * game.defWidth / (float) game.screenWidth;
+        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {

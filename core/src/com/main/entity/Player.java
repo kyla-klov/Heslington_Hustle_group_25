@@ -48,7 +48,7 @@ public class Player extends Entity {
         this.collisionLayer = (TiledMapTileLayer)gameMap.getMap().getLayers().get("Trees");
         this.camera = camera;
         this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, spriteX, spriteY * 0.5f, 0.7f, 0.7f);
-        this.collisionHandler.addCollisionLayers("Trees");
+        this.collisionHandler.addCollisionLayers("Trees", "wall_1", "wall_2", "wall_3", "roof_1", "roof_2", "roof_3", "other", "lilipads");
         //this.settingsScreen = settingsScreen;
 
         this.speed = 200;
