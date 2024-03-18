@@ -240,6 +240,9 @@ public class CollisionHandler {
         if (newPos != null){
             newPos.x -= offSetX; newPos.y -= offSetY;
         }
+        else {
+            newPos = new Vector2(targX - offSetX, targY - offSetY);
+        }
         return newPos;
     }
 }

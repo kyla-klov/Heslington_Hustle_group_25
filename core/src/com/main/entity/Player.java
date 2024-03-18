@@ -138,14 +138,9 @@ public class Player extends Entity {
         }
 
         Vector2 newPos = collisionHandler.adjustPos(worldX, worldY, targX, targY);
-        if (newPos != null){
-            worldX = newPos.x;
-            worldY = newPos.y;
-        }
-        else{
-            worldX = targX;
-            worldY = targY;
-        }
+        worldX = newPos.x;
+        worldY = newPos.y;
+
 
         stateTime += delta;
 
