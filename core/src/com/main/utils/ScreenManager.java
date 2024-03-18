@@ -1,7 +1,6 @@
 package com.main.utils;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.main.Main;
 import com.main.screens.MainControlScreen;
 import com.main.screens.MainGameScreen;
@@ -17,12 +16,6 @@ public class ScreenManager {
     private Screen curScreen;
     private ScreenType curScreenType;
 
-<<<<<<< Updated upstream
-=======
-    private Music music;
-
-
->>>>>>> Stashed changes
     public ScreenManager(Main game){
         this.game = game;
         this.screensInMemory = new HashMap<>();
@@ -33,11 +26,11 @@ public class ScreenManager {
             screensInMemory.put(screenType, curScreen);
         }
         else{
-            screensInMemory.put(screenType, createScreen(screenType, music));
+            screensInMemory.put(screenType, createScreen(screenType));
         }
     }
 
-    public void setScreen(ScreenType screenType, Music music){
+    public void setScreen(ScreenType screenType){
         if (curScreen != null && !screensInMemory.containsKey(curScreenType)){
             curScreen.dispose();
         }
@@ -45,30 +38,26 @@ public class ScreenManager {
             curScreen = screensInMemory.get(screenType);
         }
         else {
-            curScreen = createScreen(screenType, music);
+            curScreen = createScreen(screenType);
         }
         curScreenType = screenType;
         game.setScreen(curScreen);
     }
 
-<<<<<<< Updated upstream
     public void resize(int width, int height){
         curScreen.resize(width, height);
     }
 
     private Screen createScreen(ScreenType type) {
-=======
-    private Screen createScreen(ScreenType type, Music music) {
->>>>>>> Stashed changes
         switch (type){
             case MAIN_MENU:
-                return new MainMenuScreen(game, music);
+                return new MainMenuScreen(game);
             case GAME_SCREEN:
-                return new MainGameScreen(game, music);
+                return new MainGameScreen(game);
             case SETTINGS:
-                return new MainSettingsScreen(game, music);
+                return new MainSettingsScreen(game);
             case CONTROLS:
-                return new MainControlScreen(game, music);
+                return new MainControlScreen(game);
         }
         return null;
     }

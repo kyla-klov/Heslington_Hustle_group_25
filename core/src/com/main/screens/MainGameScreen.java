@@ -3,7 +3,6 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
@@ -20,10 +19,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     BitmapFont font;
     BitmapFont font2;
     GameMap gameMap;
-<<<<<<< Updated upstream
-=======
-    Music music;
->>>>>>> Stashed changes
+
     Texture menuButton;
     float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
     float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
@@ -38,9 +34,6 @@ public class MainGameScreen implements Screen, InputProcessor {
     Texture counterBackground;
     int dayNum = 1;
     int recActivity, studyHours;
-    private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
-    private int currentHour = 10; // Game starts at 10:00 am.
-    private final int hoursInDay = 16; // Player sleeps for 8 hours
 
     final float zoom = 3f;
 
@@ -48,23 +41,17 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     Main game;
 
-    public MainGameScreen(Main game, Music music) {
+    public MainGameScreen(Main game) {
         this.game = game;
-<<<<<<< Updated upstream
         camera = new OrthographicCamera();
         gameMap = new GameMap(camera);
         player = new Player(game, gameMap, camera);
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         font2 = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         popupMenuType = "";
-=======
-        this.music = music;
-
-        font = new BitmapFont();
->>>>>>> Stashed changes
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
-        counterBackground = new Texture("counter_background.png");
+        counterBackground = new Texture("conter_background.png");
         popupMenu = new Texture("popup_menu.png");
 
         calculateDimensions();
@@ -123,47 +110,22 @@ public class MainGameScreen implements Screen, InputProcessor {
     }
 
     private void drawUIElements(){
-        String counterString = String.format("Recreation Activities done: %d\nStudy hours: %d", recActivity, studyHours);
+        String counterString = "Day: "+ dayNum + "\nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours;
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
         game.batch.draw(counterBackground, counterBackgroundX, counterBackgroundY, counterBackgroundWidth, counterBackgroundHeight);
-        font.draw(game.batch, counterString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 40 * game.scaleFactorY);
+        font.draw(game.batch, counterString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
         game.batch.end();
     }
 
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
-        updateGameTime(delta); // Update the game clock
         ScreenUtils.clear(0, 0, 1, 1);
         drawWorldElements();
         drawUIElements();
-        drawGameTime(); // Draw current time
-    }
-
-    private void updateGameTime(float delta) {
-        float gameDayLengthInSeconds = 60f;
-        float secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
-        timeElapsed += delta;
-
-        int hoursPassed = (int)(timeElapsed / secondsPerGameHour);
-        currentHour = 10 + hoursPassed;
-
-        // Ensure the hour cycles through the active hours correctly (10 AM to 2 AM)
-        if (currentHour >= 26) { // If it reaches 2 AM, reset to 10 AM the next day
-            currentHour = 10 + (currentHour - 26);
-            dayNum++;
-            timeElapsed -= gameDayLengthInSeconds;
-        }
-    }
-
-    private void drawGameTime() {
-        String timeString = String.format("Day: %d Time: %02d:00", dayNum, currentHour);
-        game.batch.begin();
-        font.draw(game.batch, timeString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
-        game.batch.end();
     }
 
     public Texture setEnergyBar() {
@@ -181,7 +143,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         Vector3 gym_menu = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
 
         if (touchX >= menuButtonX && touchX <= menuButtonX + menuButtonWidth && touchY >= menuButtonY && touchY <= menuButtonY + menuButtonHeight) {
-            game.screenManager.setScreen(ScreenType.MAIN_MENU, game.music);
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         else if (popupMenuType.equals("gym") && touchX >= gym_menu.x && touchX <= gym_menu.x + popupMenuWidth * zoom && touchY >= gym_menu.y && touchY <= gym_menu.y + popupMenuHeight * zoom) {
             System.out.println("Hello World");

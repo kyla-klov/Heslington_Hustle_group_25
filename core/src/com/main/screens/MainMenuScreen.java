@@ -8,9 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.badlogic.gdx.InputProcessor;
 import com.main.utils.ScreenType;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 
 /**
  * The MainMenuScreen class represents the main menu screen for the game.
@@ -20,45 +17,15 @@ import com.badlogic.gdx.audio.Sound;
 public class MainMenuScreen implements Screen, InputProcessor {
 
     Main game;
-<<<<<<< Updated upstream
 
     Texture heslingtonHustleLabel, playButton, controlsButton, settingsButton, exitButton;
 
     int heslingtonHustleLabelHeight, playButtonHeight, controlsButtonHeight, settingsButtonHeight, exitButtonHeight;
     int heslingtonHustleLabelWidth, playButtonWidth, controlsButtonWidth, settingsButtonWidth, exitButtonWidth;
-=======
-    Music music;
-    Texture heslingtonHustleLable;
-    Texture playButton;
-    Texture controlsButton;
-    Texture settingsButton;
-    Texture exitButton;
-    int heslingtonHustleLableHeight;
-    int heslingtonHustleLableWidth;
-    int playButtonHeight;
-    int playButtonWidth;
-    int controlsButtonHeight;
-    int controlsButtonWidth;
-    int settingsButtonHeight;
-    int settingsButtonWidth;
-    int exitButtonHeight;
-    int exitButtonWidth;
->>>>>>> Stashed changes
 
     int x;
-<<<<<<< Updated upstream
     float heslingtonHustleLabelX;
     float heslingtonHustleLabelY, playButtonY, controlsButtonY, settingsButtonY, exitButtonY;
-=======
-    float heslingtonHustleLableX;
-    float heslingtonHustleLableY;
-    float playButtonY;
-    float controlsButtonY;
-    double settingsButtonY;
-    float exitButtonY;
-
-    public MainMenuScreen (Main game, Music music) {
->>>>>>> Stashed changes
 
     /**
      * Constructs a MainMenuScreen with the specified game instance.
@@ -68,7 +35,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
      */
     public MainMenuScreen(Main game) {
         this.game = game;
-        this.music = music;
 
         loadTextures();
         calculateDimensions();
@@ -102,7 +68,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
         exitButtonWidth = (int) (exitButton.getWidth() * 11 * game.scaleFactorX);
     }
 
-<<<<<<< Updated upstream
     /**
      * Calculates the positions of buttons to be drawn on the screen.
      */
@@ -114,10 +79,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
         controlsButtonY = game.screenHeight - controlsButtonHeight * 3.75f;
         settingsButtonY = game.screenHeight - settingsButtonHeight * 5f;
         exitButtonY = game.screenHeight - exitButtonHeight * 6.25f;
-=======
-        game.music = Gdx.audio.newMusic(Gdx.files.internal("assets/music_loop/Ludum Dare 30 - 01.ogg"));
-        game.music.play();
->>>>>>> Stashed changes
     }
 
     @Override
@@ -160,7 +121,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
         if (touchX >= x && touchX <= x + playButtonWidth &&
                 touchY >= playButtonY && touchY <= playButtonY + playButtonHeight) {
-<<<<<<< Updated upstream
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.GAME_SCREEN);
         }
@@ -175,17 +135,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.SETTINGS);
 
-=======
-            game.screenManager.setScreen(ScreenType.GAME_SCREEN, game.music);
-        }
-        else if (touchX >= x && touchX <= x + controlsButtonWidth &&
-                touchY >= controlsButtonY && touchY <= controlsButtonY + controlsButtonHeight) {
-            game.screenManager.setScreen(ScreenType.CONTROLS, game.music);
-        }
-        else if (touchX >= x && touchX <= x + settingsButtonWidth &&
-                touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButtonHeight) {
-            game.screenManager.setScreen(ScreenType.SETTINGS, game.music);
->>>>>>> Stashed changes
         }
         else if (touchX >= x && touchX <= x + exitButtonWidth &&
                 touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {

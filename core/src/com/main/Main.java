@@ -2,7 +2,6 @@ package com.main;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -29,15 +28,10 @@ public class Main extends Game {
 	public float scaleFactorX;
 	public float scaleFactorY;
 
-<<<<<<< Updated upstream
 	/**
 	 * Called when the game is first created.
 	 * Initializes the game's main components and sets the main menu as the initial screen.
 	 */
-=======
-	public Music music;
-
->>>>>>> Stashed changes
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -64,7 +58,7 @@ public class Main extends Game {
 		// Initialize and set up the screen manager
 		screenManager = new ScreenManager(this);
 		screenManager.keepInMemory(ScreenType.GAME_SCREEN);
-		screenManager.setScreen(ScreenType.MAIN_MENU, music);
+		screenManager.setScreen(ScreenType.MAIN_MENU);
 	}
 
 	/**

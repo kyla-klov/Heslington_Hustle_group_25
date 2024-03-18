@@ -2,7 +2,6 @@ package com.main.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -16,12 +15,6 @@ import com.main.utils.ScreenType;
 public class MainSettingsScreen implements Screen, InputProcessor {
 
     Main game;
-<<<<<<< Updated upstream
-=======
-    int musicLevel;
-    int soundLevel;
-    Music music;
->>>>>>> Stashed changes
     boolean gender;
     private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
     private Texture musicBar, soundBar, boyButton, girlButton;
@@ -37,17 +30,12 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private float backButtonHeight = 100, settingsLabelHeight = 130, musicUpButtonHeight = 75, musicDownButtonHeight = 75, musicLabelHeight = 50, musicBarHeight = 50,
             soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
-<<<<<<< Updated upstream
     /**
      * Constructs the settings screen with references to main game object and initializes UI components.
      * @param game The main game object for accessing global properties and methods.
      */
     public MainSettingsScreen(Main game) {
-=======
-    public MainSettingsScreen(Main game, Music music) {
->>>>>>> Stashed changes
         this.game = game;
-        this.music = music;
         gender = game.gameData.getGender();
 
         Gdx.input.setInputProcessor(this);
@@ -186,62 +174,33 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
-            game.screenManager.setScreen(ScreenType.MAIN_MENU, game.music);
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
         } else if (worldX >= musicUpButtonX && worldX <= musicUpButtonX + musicUpButtonWidth &&
                 worldY >= musicUpButtonY && worldY <= musicUpButtonY + musicUpButtonHeight) {
-<<<<<<< Updated upstream
             if (game.gameData.getMusicLevel() <= 3){
                 game.gameData.incrementMusicLevel();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
-=======
-
-            if (musicLevel <= 3){
-                musicLevel++;
-                musicBar = new Texture("assets/settings_gui/bar_" + 25 * musicLevel +".png");
-                game.music.setVolume((float) musicLevel*25/100);
->>>>>>> Stashed changes
             }
         } else if (worldX >= musicDownButtonX && worldX <= musicDownButtonX + musicDownButtonWidth &&
                 worldY >= musicDownButtonY && worldY <= musicDownButtonY + musicDownButtonHeight){
 
-<<<<<<< Updated upstream
             if (game.gameData.getMusicLevel() >= 1){
                 game.gameData.decrementMusicLevel();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
-=======
-            if (musicLevel >= 1){
-                musicLevel--;
-                musicBar = new Texture("assets/settings_gui/bar_" + 25 * musicLevel +".png");
-                game.music.setVolume((float) musicLevel*25/100);
->>>>>>> Stashed changes
             }
         } else if (worldX >= soundUpButtonX && worldX <= soundUpButtonX + soundUpButtonWidth &&
                 worldY >= soundUpButtonY && worldY <= soundUpButtonY + soundUpButtonHeight) {
 
-<<<<<<< Updated upstream
             if (game.gameData.getSoundLevel() <= 3){
                 //game.gameData.incrementMusicLevel();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getSoundLevel() +".png");
-=======
-            if (soundLevel <= 3){
-                soundLevel++;
-                soundBar = new Texture("assets/settings_gui/bar_" + 25 * soundLevel +".png");
-                game.music.setVolume((float) musicLevel*25/100);
->>>>>>> Stashed changes
             }
         } else if (worldX >= soundDownButtonX && worldX <= soundDownButtonX + soundDownButtonWidth &&
                 worldY >= soundDownButtonY && worldY <= soundDownButtonY + soundDownButtonHeight){
 
-<<<<<<< Updated upstream
             if (game.gameData.getSoundLevel() >= 1){
                 //game.gameData.decrementMusicLevel();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 *game.gameData.getSoundLevel()+".png");
-=======
-            if (soundLevel >= 1){
-                soundLevel--;
-                soundBar = new Texture("assets/settings_gui/bar_" + 25 * soundLevel +".png");
-                game.music.setVolume((float) (soundLevel * 25) /100);
->>>>>>> Stashed changes
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
                 worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
@@ -254,10 +213,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
         game.gameData.setGender(gender);
 
         return true;
@@ -323,6 +279,5 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         soundBar.dispose();
         boyButton.dispose();
         girlButton.dispose();
-        music.dispose();
     }
 }
