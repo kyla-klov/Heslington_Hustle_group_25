@@ -43,6 +43,9 @@ public class ScreenManager {
 
     public void resize(int width, int height){
         curScreen.resize(width, height);
+        for (Screen screen : screensInMemory.values()){
+            screen.resize(width, height);
+        }
     }
 
     private Screen createScreen(ScreenType type) {

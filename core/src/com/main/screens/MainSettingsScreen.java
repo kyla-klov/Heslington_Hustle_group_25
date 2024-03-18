@@ -37,8 +37,6 @@ public class MainSettingsScreen implements Screen, InputProcessor {
         this.game = game;
         gender = game.gameData.getGender();
 
-        Gdx.input.setInputProcessor(this);
-
         backButton = new Texture("assets/settings_gui/back_button.png");
         settingsLabel = new Texture("assets/settings_gui/settings_label.png");
         musicUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
@@ -180,6 +178,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             if (game.gameData.getMusicLevel() <= 3){
                 game.gameData.incrementMusicLevel();
                 game.gameData.upSoundActivate();
+                if (musicBar!=null) musicBar.dispose();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
             }
         } else if (worldX >= musicDownButtonX && worldX <= musicDownButtonX + musicDownButtonWidth &&
@@ -188,6 +187,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             if (game.gameData.getMusicLevel() >= 1){
                 game.gameData.decrementMusicLevel();
                 game.gameData.downSoundActivate();
+                if (musicBar!=null) musicBar.dispose();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
             }
         } else if (worldX >= soundUpButtonX && worldX <= soundUpButtonX + soundUpButtonWidth &&
@@ -196,6 +196,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             if (game.gameData.getSoundLevel() <= 3){
                 game.gameData.incrementSoundLevel();
                 game.gameData.upSoundActivate();
+                if (soundBar!=null) soundBar.dispose();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getSoundLevel() +".png");
             }
         } else if (worldX >= soundDownButtonX && worldX <= soundDownButtonX + soundDownButtonWidth &&
@@ -204,18 +205,23 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             if (game.gameData.getSoundLevel() >= 1){
                 game.gameData.decrementSoundLevel();
                 game.gameData.downSoundActivate();
+                if (soundBar!=null) soundBar.dispose();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 *game.gameData.getSoundLevel()+".png");
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
                 worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
             gender = true;
             game.gameData.buttonClickedSoundActivate();
+            if (boyButton!=null) boyButton.dispose();
+            if (girlButton!=null) girlButton.dispose();
             boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
             girlButton = new Texture("assets/settings_gui/girl_button.png");
         } else if (worldX >= girlButtonX && worldX <= girlButtonX + girlButtonWidth &&
                 worldY >= girlButtonY && worldY <= girlButtonY + girlButtonHeight){
             gender = false;
             game.gameData.buttonClickedSoundActivate();
+            if (boyButton!=null) boyButton.dispose();
+            if (girlButton!=null) girlButton.dispose();
             girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }

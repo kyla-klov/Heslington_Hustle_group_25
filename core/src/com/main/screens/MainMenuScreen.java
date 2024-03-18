@@ -115,9 +115,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
         return false;
     }
 
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float touchX = screenX;
-        float touchY = game.screenHeight - screenY;
+    public boolean touchDown(int touchX, int touchY, int pointer, int button) {
+        touchY = game.screenHeight - touchY;
 
         if (touchX >= x && touchX <= x + playButtonWidth &&
                 touchY >= playButtonY && touchY <= playButtonY + playButtonHeight) {
