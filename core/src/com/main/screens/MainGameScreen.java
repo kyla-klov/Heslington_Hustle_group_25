@@ -26,6 +26,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     int energyCounter = 10;
 
     Texture counterBackground;
+    private float time = 0;
     int dayNum = 1;
     int recActivity, studyHours;
 
@@ -77,6 +78,18 @@ public class MainGameScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
+        time += delta;
+
+        // Check if a minute has passed and increment the day
+        if (time >= 60) {
+            time -= 60; // Reset the timer for the next day
+            dayNum++; // Move to the next day
+
+            // Reset the day count after 7 days
+            if (dayNum > 7) {
+                dayNum = 1;
+            }
+        }
 
         String counterString;
         counterString = "Day: "+ dayNum + "\nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours;
@@ -90,7 +103,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
          */
 
-        // x and y coordinated assigned in render method so that the screen width and height will constantly update
+        // x and y coordinates assigned in render method so that the screen width and height will constantly update
+        // this is so coordinates update when screen size changes
         menuButtonX = 10;
         menuButtonY = game.screenHeight - menuButtonHeight - 10;
         energyBarX = 30 + menuButtonWidth;
