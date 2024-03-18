@@ -143,6 +143,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         float touchX = screenX * game.defWidth / (float) game.screenWidth;
         float touchY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
         if (touchX >= menuButtonX && touchX <= menuButtonX + menuButtonWidth && touchY >= menuButtonY && touchY <= menuButtonY + menuButtonHeight) {
+            game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         return true;
