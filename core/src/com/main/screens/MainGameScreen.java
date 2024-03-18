@@ -34,6 +34,9 @@ public class MainGameScreen implements Screen, InputProcessor {
     Texture counterBackground;
     int dayNum = 1;
     int recActivity, studyHours;
+    private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
+    private int currentHour = 10; // Game starts at 10:00 am.
+    private final int hoursInDay = 16; // Player sleeps for 8 hours
 
     final float zoom = 3f;
 
@@ -110,22 +113,49 @@ public class MainGameScreen implements Screen, InputProcessor {
     }
 
     private void drawUIElements(){
-        String counterString = "Day: "+ dayNum + "\nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours;
+        String counterString = String.format("Recreation Activities done: " + recActivity + "\nStudy hours: " + studyHours, dayNum, timeElapsed );
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
         game.batch.draw(counterBackground, counterBackgroundX, counterBackgroundY, counterBackgroundWidth, counterBackgroundHeight);
-        font.draw(game.batch, counterString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
+        font.draw(game.batch, counterString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 40 * game.scaleFactorY);
         game.batch.end();
     }
 
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
+        updateGameTime(delta); // Update the game clock
         ScreenUtils.clear(0, 0, 1, 1);
         drawWorldElements();
         drawUIElements();
+        drawGameTime(); // Draw current time
+    }
+
+    private void updateGameTime(float delta) {
+        float gameDayLengthInSeconds = 60f;
+        float secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
+        timeElapsed += delta;
+
+        // Calculate the current hour in game time
+        int hoursPassed = (int)(timeElapsed / secondsPerGameHour);
+        currentHour = 10 + hoursPassed; // Starts at 10:00 AM
+
+        // Ensure the hour cycles through the active hours correctly (10 AM to 2 AM)
+        if (currentHour >= 26) { // If it reaches 2 AM, reset to 10 AM the next day
+            currentHour = 10 + (currentHour - 26);
+            dayNum++;
+            timeElapsed -= gameDayLengthInSeconds;
+        }
+    }
+
+    private void drawGameTime() {
+        // Adjust the format if you want to display minutes or seconds
+        String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour);
+        game.batch.begin();
+        font.draw(game.batch, timeString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
+        game.batch.end();
     }
 
     public Texture setEnergyBar() {
