@@ -143,6 +143,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         Vector3 gym_menu = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
 
         if (touchX >= menuButtonX && touchX <= menuButtonX + menuButtonWidth && touchY >= menuButtonY && touchY <= menuButtonY + menuButtonHeight) {
+            game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         else if (popupMenuType.equals("gym") && touchX >= gym_menu.x && touchX <= gym_menu.x + popupMenuWidth * zoom && touchY >= gym_menu.y && touchY <= gym_menu.y + popupMenuHeight * zoom) {

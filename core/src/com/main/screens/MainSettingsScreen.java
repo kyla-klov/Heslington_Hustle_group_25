@@ -174,11 +174,13 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
+            game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         } else if (worldX >= musicUpButtonX && worldX <= musicUpButtonX + musicUpButtonWidth &&
                 worldY >= musicUpButtonY && worldY <= musicUpButtonY + musicUpButtonHeight) {
             if (game.gameData.getMusicLevel() <= 3){
                 game.gameData.incrementMusicLevel();
+                game.gameData.upSoundActivate();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
             }
         } else if (worldX >= musicDownButtonX && worldX <= musicDownButtonX + musicDownButtonWidth &&
@@ -186,30 +188,35 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
             if (game.gameData.getMusicLevel() >= 1){
                 game.gameData.decrementMusicLevel();
+                game.gameData.downSoundActivate();
                 musicBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getMusicLevel() +".png");
             }
         } else if (worldX >= soundUpButtonX && worldX <= soundUpButtonX + soundUpButtonWidth &&
                 worldY >= soundUpButtonY && worldY <= soundUpButtonY + soundUpButtonHeight) {
 
             if (game.gameData.getSoundLevel() <= 3){
-                //game.gameData.incrementMusicLevel();
+                game.gameData.incrementSoundLevel();
+                game.gameData.upSoundActivate();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 * game.gameData.getSoundLevel() +".png");
             }
         } else if (worldX >= soundDownButtonX && worldX <= soundDownButtonX + soundDownButtonWidth &&
                 worldY >= soundDownButtonY && worldY <= soundDownButtonY + soundDownButtonHeight){
 
             if (game.gameData.getSoundLevel() >= 1){
-                //game.gameData.decrementMusicLevel();
+                game.gameData.decrementSoundLevel();
+                game.gameData.downSoundActivate();
                 soundBar = new Texture("assets/settings_gui/bar_" + 25 *game.gameData.getSoundLevel()+".png");
             }
         } else if (worldX >= boyButtonX && worldX <= boyButtonX + boyButtonWidth &&
                 worldY >= boyButtonY && worldY <= boyButtonY + boyButtonHeight){
             gender = true;
+            game.gameData.buttonClickedSoundActivate();
             boyButton = new Texture("assets/settings_gui/boy_button_indented.png");
             girlButton = new Texture("assets/settings_gui/girl_button.png");
         } else if (worldX >= girlButtonX && worldX <= girlButtonX + girlButtonWidth &&
                 worldY >= girlButtonY && worldY <= girlButtonY + girlButtonHeight){
             gender = false;
+            game.gameData.buttonClickedSoundActivate();
             girlButton = new Texture("assets/settings_gui/girl_button_indented.png");
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
