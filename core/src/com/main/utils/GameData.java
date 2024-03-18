@@ -18,7 +18,6 @@ public class GameData {
      * Constructor initializes the game music settings.
      */
     public GameData(){
-
         this.music = new GameMusic();
         this.sound = new GameSound();
     }
