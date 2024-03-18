@@ -1,6 +1,8 @@
 package com.main.utils;
 
+import com.badlogic.gdx.Game;
 import com.main.sound.GameMusic;
+import com.main.sound.GameSound;
 
 /**
  * Stores game settings and data.
@@ -9,14 +11,16 @@ public class GameData {
     private boolean gender = true;
     private float playerPosX = 300;
     private float playerPosY = 300;
-
     GameMusic music;
+    GameSound sound;
 
     /**
      * Constructor initializes the game music settings.
      */
     public GameData(){
+
         this.music = new GameMusic();
+        this.sound = new GameSound();
     }
 
     /**
@@ -43,7 +47,7 @@ public class GameData {
      * @return The sound level as an integer.
      */
     public int getSoundLevel(){
-        return music.getSoundLevel();
+        return sound.getSoundLevel();
     }
 
     /**
@@ -51,10 +55,9 @@ public class GameData {
      *
      * @return The music level as an integer.
      */
-    public int getMusicLevel(){
+    public int getMusicLevel() {
         return music.getMusicLevel();
     }
-
     /**
      * Increments the music volume level if not at maximum.
      */
@@ -68,6 +71,16 @@ public class GameData {
     public void decrementMusicLevel(){
         music.decrementVolume();
     }
+
+    public void incrementSoundLevel(){ sound.incrementVolume(); }
+
+    public void decrementSoundLevel(){ sound.decrementVolume(); }
+
+    public void upSoundActivate(){ sound.upSoundActivate(); }
+
+    public void downSoundActivate(){ sound.downSoundActivate(); }
+
+    public void buttonClickedSoundActivate(){ sound.buttonClickedSoundActivate(); }
 
     /**
      * Retrieves the player's current X position.
