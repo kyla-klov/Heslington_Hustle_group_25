@@ -54,6 +54,30 @@ public class CollisionHandler {
     }
 
     /**
+     * Detects whether the object is touching a tile of a specific layer.
+     *
+     * @param layerName The name of the layer.
+     * @param obj The rectangle representing the object's position and size.
+     * @return A Boolean indicating whether the object is touching a tile of the layer
+     */
+    public boolean isTouching(String layerName, Rectangle obj){
+        Vector2 bottomLeft = new Vector2 (Math.floorDiv((int) obj.x, tileWidth), Math.floorDiv((int) obj.y, tileHeight));
+        Vector2 topRight = new Vector2 (Math.floorDiv((int) (obj.x + obj.width), tileWidth), Math.floorDiv((int) (obj.y + obj.height), tileHeight));
+        TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get(layerName);
+
+        for (int i = (int) bottomLeft.x; i <= topRight.x; i++) {
+            for (int j = (int) bottomLeft.y; j <= topRight.y; j++) {
+                TiledMapTileLayer.Cell cell = layer.getCell(i, j);
+                if (cell != null){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Determines the first side hit during movement in a specified direction.
      *
      * @param x The X-coordinate of the object's position.

@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ScreenManager {
-    private Main game;
-    private Map<ScreenType, Screen> screensInMemory;
+    private final Main game;
+    private final Map<ScreenType, Screen> screensInMemory;
     private Screen curScreen;
     private ScreenType curScreenType;
 
@@ -42,6 +42,10 @@ public class ScreenManager {
         }
         curScreenType = screenType;
         game.setScreen(curScreen);
+    }
+
+    public void resize(int width, int height){
+        curScreen.resize(width, height);
     }
 
     private Screen createScreen(ScreenType type) {

@@ -60,6 +60,10 @@ public class MainControlScreen implements Screen, InputProcessor {
          */
     }
 
+    private void calculateDimensions(){
+
+    }
+
     @Override
     public void show() {
         //Gdx.input.setInputProcessor(stage);

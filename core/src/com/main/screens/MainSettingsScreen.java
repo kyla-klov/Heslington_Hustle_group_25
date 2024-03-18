@@ -19,15 +19,15 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
     private Texture musicBar, soundBar, boyButton, girlButton;
     // X and Y coordinates for each button and label
-    private final float backButtonX, settingsLabelX, musicUpButtonX, musicDownButtonX, musicLabelX, musicBarX, soundUpButtonX, soundLabelX, soundDownButtonX,
+    private float backButtonX, settingsLabelX, musicUpButtonX, musicDownButtonX, musicLabelX, musicBarX, soundUpButtonX, soundLabelX, soundDownButtonX,
             soundBarX, boyButtonX, girlButtonX;
     // Y coordinates for each button and label
-    private final float backButtonY, settingsLabelY, musicUpButtonY, musicDownButtonY, musicLabelY, musicBarY, soundUpButtonY, soundLabelY, soundDownButtonY,
+    private float backButtonY, settingsLabelY, musicUpButtonY, musicDownButtonY, musicLabelY, musicBarY, soundUpButtonY, soundLabelY, soundDownButtonY,
             soundBarY, boyButtonY, girlButtonY;
     // Button and label dimensions
-    private final float backButtonWidth = 200, settingsLabelWidth = 500, musicUpButtonWidth = 75, musicDownButtonWidth = 75, musicLabelWidth = 200, musicBarWidth = 250,
+    private float backButtonWidth = 200, settingsLabelWidth = 500, musicUpButtonWidth = 75, musicDownButtonWidth = 75, musicLabelWidth = 200, musicBarWidth = 250,
             soundUpButtonWidth = 75, soundLabelWidth = 200, soundDownButtonWidth = 75, soundBarWidth = 250, boyButtonWidth = 150, girlButtonWidth = 150;
-    private final float backButtonHeight = 100, settingsLabelHeight = 130, musicUpButtonHeight = 75, musicDownButtonHeight = 75, musicLabelHeight = 50, musicBarHeight = 50,
+    private float backButtonHeight = 100, settingsLabelHeight = 130, musicUpButtonHeight = 75, musicDownButtonHeight = 75, musicLabelHeight = 50, musicBarHeight = 50,
             soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
     /**
@@ -59,40 +59,75 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             boyButton = new Texture("assets/settings_gui/boy_button.png");
         }
 
-        backButtonX = (game.screenWidth - backButtonWidth) /2;
-        backButtonY = (float) game.screenHeight / 6 - 100;
-        settingsLabelX = (game.screenWidth - settingsLabelWidth) / 2;
-        settingsLabelY =  game.screenHeight - (settingsLabelHeight * 2);
-        musicUpButtonX = (game.screenWidth - musicUpButtonWidth) / 2 + 200;
-        musicUpButtonY = game.screenHeight - musicUpButtonHeight - 350;
-        musicDownButtonX = (game.screenWidth - musicUpButtonWidth) / 2 - 200;
-        musicDownButtonY = game.screenHeight - musicUpButtonHeight - 350;
-        musicLabelX = (game.screenWidth - musicLabelWidth) / 2;
-        musicLabelY = game.screenHeight - musicLabelHeight - 290;
-        musicBarX = (game.screenWidth - musicBarWidth) / 2;
-        musicBarY = game.screenHeight - musicBarHeight - 375;
-        soundUpButtonX = (game.screenWidth - soundUpButtonWidth) / 2 + 200;
-        soundUpButtonY = game.screenHeight - soundUpButtonHeight - 530;
-        soundLabelX = (game.screenWidth - soundLabelWidth) / 2;
-        soundLabelY = game.screenHeight - soundLabelHeight - 470;
-        soundDownButtonX = (game.screenWidth - soundDownButtonWidth) / 2 - 200;
-        soundDownButtonY = game.screenHeight - soundDownButtonHeight - 530;
-        soundBarX = (game.screenWidth - soundBarWidth) / 2;
-        soundBarY = game.screenHeight - soundBarHeight - 555;
-        boyButtonX = (game.screenWidth - boyButtonWidth) / 2 - 100;
-        boyButtonY = game.screenHeight - boyButtonHeight - 650;
-        girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + 100;
-        girlButtonY = game.screenHeight - boyButtonHeight - 650;
+        calculateDimensions();
+
+        calculatePosition();
     }
 
+    private void calculateDimensions(){
+        backButtonWidth = 200 * game.scaleFactorX;
+        settingsLabelWidth = 500 * game.scaleFactorX;
+        musicUpButtonWidth = 75 * game.scaleFactorX;
+        musicDownButtonWidth = 75 * game.scaleFactorX;
+        musicLabelWidth = 200 * game.scaleFactorX;
+        musicBarWidth = 250 * game.scaleFactorX;
+        soundUpButtonWidth = 75 * game.scaleFactorX;
+        soundLabelWidth = 200 * game.scaleFactorX;
+        soundDownButtonWidth = 75 * game.scaleFactorX;
+        soundBarWidth = 250 * game.scaleFactorX;
+        boyButtonWidth = 150 * game.scaleFactorX;
+        girlButtonWidth = 150 * game.scaleFactorX;
+
+        backButtonHeight = 100 * game.scaleFactorY;
+        settingsLabelHeight = 130 * game.scaleFactorY;
+        musicUpButtonHeight = 75 * game.scaleFactorY;
+        musicDownButtonHeight = 75 * game.scaleFactorY;
+        musicLabelHeight = 50 * game.scaleFactorY;
+        musicBarHeight = 50 * game.scaleFactorY;
+        soundUpButtonHeight = 75 * game.scaleFactorY;
+        soundLabelHeight = 50 * game.scaleFactorY;
+        soundDownButtonHeight = 75 * game.scaleFactorY;
+        soundBarHeight = 50 * game.scaleFactorY;
+        boyButtonHeight = 150 * game.scaleFactorY;
+        girlButtonHeight = 150 * game.scaleFactorY;
+    }
+
+    private void calculatePosition(){
+        backButtonX = (game.screenWidth - backButtonWidth) / 2;
+        backButtonY = (float) game.screenHeight / 6 - (100 * game.scaleFactorY);
+        settingsLabelX = (game.screenWidth - settingsLabelWidth) / 2;
+        settingsLabelY =  game.screenHeight - (settingsLabelHeight * 2);
+        musicUpButtonX = (game.screenWidth - musicUpButtonWidth) / 2 + (200 * game.scaleFactorX);
+        musicUpButtonY = game.screenHeight - musicUpButtonHeight - (350 * game.scaleFactorY);
+        musicDownButtonX = (game.screenWidth - musicUpButtonWidth) / 2 - (200 * game.scaleFactorX);
+        musicDownButtonY = game.screenHeight - musicUpButtonHeight - (350 * game.scaleFactorY);
+        musicLabelX = (game.screenWidth - musicLabelWidth) / 2;
+        musicLabelY = game.screenHeight - musicLabelHeight - (290 * game.scaleFactorY);
+        musicBarX = (game.screenWidth - musicBarWidth) / 2;
+        musicBarY = game.screenHeight - musicBarHeight - (375 * game.scaleFactorY);
+        soundUpButtonX = (game.screenWidth - soundUpButtonWidth) / 2 + (200 * game.scaleFactorX);
+        soundUpButtonY = game.screenHeight - soundUpButtonHeight - (530 * game.scaleFactorY);
+        soundLabelX = (game.screenWidth - soundLabelWidth) / 2;
+        soundLabelY = game.screenHeight - soundLabelHeight - (470 * game.scaleFactorY);
+        soundDownButtonX = (game.screenWidth - soundDownButtonWidth) / 2 - (200 * game.scaleFactorX);
+        soundDownButtonY = game.screenHeight - soundDownButtonHeight - (530 * game.scaleFactorY);
+        soundBarX = (game.screenWidth - soundBarWidth) / 2;
+        soundBarY = game.screenHeight - soundBarHeight - (555 * game.scaleFactorY);
+        boyButtonX = (game.screenWidth - boyButtonWidth) / 2 - (100 * game.scaleFactorX);
+        boyButtonY = game.screenHeight - boyButtonHeight - (650 * game.scaleFactorY);
+        girlButtonX = (game.screenWidth - boyButtonWidth) / 2 + (100 * game.scaleFactorX);
+        girlButtonY = game.screenHeight - boyButtonHeight - (650 * game.scaleFactorY);
+    }
     @Override
     public void show() {
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(settingsLabel, settingsLabelX, settingsLabelY, settingsLabelWidth, settingsLabelHeight);
@@ -134,8 +169,8 @@ public class MainSettingsScreen implements Screen, InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.defWidth / (float) game.screenWidth;
-        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
+        float worldX = screenX;
+        float worldY = game.screenHeight - screenY;
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
@@ -211,7 +246,8 @@ public class MainSettingsScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        calculateDimensions();
+        calculatePosition();
     }
 
     @Override

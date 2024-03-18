@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import static com.badlogic.gdx.Gdx.graphics;
 import com.main.utils.GameData;
 import com.main.utils.ScreenManager;
@@ -23,6 +24,9 @@ public class Main extends Game {
 	public int screenWidth, screenHeight; // The current width and height of the screen
 	public int defWidth, defHeight; // Default screen width and height, used for UI scaling
 	public Skin skin; // Used for storing UI elements' styles and skins
+	public OrthographicCamera defaultCamera;
+	public float scaleFactorX;
+	public float scaleFactorY;
 
 	/**
 	 * Called when the game is first created.
@@ -36,7 +40,12 @@ public class Main extends Game {
 		screenHeight = graphics.getHeight();
 		defWidth = graphics.getWidth();
 		defHeight = graphics.getHeight();
+		defaultCamera = new OrthographicCamera();
 		gameData.setPlayerPosY(screenWidth /2 - screenHeight /2);
+
+		defaultCamera.setToOrtho(false, defWidth, defHeight);
+		scaleFactorX = 1;
+		scaleFactorY = 1;
 
 		// Fonts for writing in game
 		skin = new Skin();
@@ -68,8 +77,13 @@ public class Main extends Game {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
+		defaultCamera.setToOrtho(false, width, height);
+		defaultCamera.update();
 		screenWidth = width;
 		screenHeight = height;
+		scaleFactorX = screenWidth / (float) defWidth;
+		scaleFactorY = screenHeight / (float) defHeight;
+		screenManager.resize(width, height);
 	}
 
 	/**

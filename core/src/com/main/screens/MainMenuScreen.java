@@ -56,16 +56,16 @@ public class MainMenuScreen implements Screen, InputProcessor {
      * Calculates the dimensions of buttons based on their textures.
      */
     private void calculateDimensions() {
-        heslingtonHustleLabelHeight = heslingtonHustleLabel.getHeight() * 11;
-        heslingtonHustleLabelWidth = heslingtonHustleLabel.getWidth() * 11;
-        playButtonHeight = playButton.getHeight() * 11;
-        playButtonWidth = playButton.getWidth() * 11;
-        controlsButtonHeight = controlsButton.getHeight() * 11;
-        controlsButtonWidth = controlsButton.getWidth() * 11;
-        settingsButtonHeight = settingsButton.getHeight() * 11;
-        settingsButtonWidth = settingsButton.getWidth() * 11;
-        exitButtonHeight = exitButton.getHeight() * 11;
-        exitButtonWidth = exitButton.getWidth() * 11;
+        heslingtonHustleLabelHeight = (int) (heslingtonHustleLabel.getHeight() * 11 * game.scaleFactorY);
+        heslingtonHustleLabelWidth = (int) (heslingtonHustleLabel.getWidth() * 11 * game.scaleFactorX);
+        playButtonHeight = (int) (playButton.getHeight() * 11 * game.scaleFactorY);
+        playButtonWidth = (int) (playButton.getWidth() * 11 * game.scaleFactorX);
+        controlsButtonHeight = (int) (controlsButton.getHeight() * 11 * game.scaleFactorY);
+        controlsButtonWidth = (int) (controlsButton.getWidth() * 11 * game.scaleFactorX);
+        settingsButtonHeight = (int) (settingsButton.getHeight() * 11 * game.scaleFactorY);
+        settingsButtonWidth = (int) (settingsButton.getWidth() * 11 * game.scaleFactorX);
+        exitButtonHeight = (int) (exitButton.getHeight() * 11 * game.scaleFactorY);
+        exitButtonWidth = (int) (exitButton.getWidth() * 11 * game.scaleFactorX);
     }
 
     /**
@@ -83,13 +83,14 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        game.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(heslingtonHustleLabel, heslingtonHustleLabelX, heslingtonHustleLabelY, heslingtonHustleLabelWidth, heslingtonHustleLabelHeight);
         game.batch.draw(playButton, x, playButtonY, playButtonWidth, playButtonHeight);
@@ -115,8 +116,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float touchX = screenX * game.defWidth / (float) game.screenWidth;
-        float touchY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
+        float touchX = screenX;
+        float touchY = game.screenHeight - screenY;
 
         if (touchX >= x && touchX <= x + playButtonWidth &&
                 touchY >= playButtonY && touchY <= playButtonY + playButtonHeight) {
@@ -165,6 +166,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
+        calculateDimensions();
+        calculatePositions();
     }
 
     @Override

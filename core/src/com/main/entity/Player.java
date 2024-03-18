@@ -36,6 +36,7 @@ public class Player extends Entity {
     Animation<TextureRegion> walkDownAnimation, walkRightAnimation, walkLeftAnimation, walkUpAnimation;
     Animation<TextureRegion> idleDownAnimation, idleRightAnimation, idleLeftAnimation, idleUpAnimation;
 
+
     /**
      * Constructs a new Player instance.
      *
@@ -245,6 +246,13 @@ public class Player extends Entity {
         return currentAnimation.getKeyFrame(stateTime, true);
     }
 
+    public CollisionHandler getCollisionHandler(){
+        return collisionHandler;
+    }
+
+    public Rectangle getHitBox(){
+        return new Rectangle(worldX, worldY, spriteX, spriteY);
+    }
 
     public void dispose(){
         idleSheet.dispose();
