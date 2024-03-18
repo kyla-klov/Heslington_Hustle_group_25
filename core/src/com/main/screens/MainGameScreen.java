@@ -3,6 +3,7 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
@@ -19,6 +20,10 @@ public class MainGameScreen implements Screen, InputProcessor {
     BitmapFont font;
     BitmapFont font2;
     GameMap gameMap;
+<<<<<<< Updated upstream
+=======
+    Music music;
+>>>>>>> Stashed changes
     Texture menuButton;
     float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
     float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
@@ -40,14 +45,20 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     Main game;
 
-    public MainGameScreen(Main game) {
+    public MainGameScreen(Main game, Music music) {
         this.game = game;
+<<<<<<< Updated upstream
         camera = new OrthographicCamera();
         gameMap = new GameMap(camera);
         player = new Player(game, gameMap, camera);
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         font2 = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         popupMenuType = "";
+=======
+        this.music = music;
+
+        font = new BitmapFont();
+>>>>>>> Stashed changes
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
         counterBackground = new Texture("conter_background.png");
@@ -142,7 +153,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         Vector3 gym_menu = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
 
         if (touchX >= menuButtonX && touchX <= menuButtonX + menuButtonWidth && touchY >= menuButtonY && touchY <= menuButtonY + menuButtonHeight) {
-            game.screenManager.setScreen(ScreenType.MAIN_MENU);
+            game.screenManager.setScreen(ScreenType.MAIN_MENU, game.music);
         }
         else if (popupMenuType.equals("gym") && touchX >= gym_menu.x && touchX <= gym_menu.x + popupMenuWidth * zoom && touchY >= gym_menu.y && touchY <= gym_menu.y + popupMenuHeight * zoom) {
             System.out.println("Hello World");
