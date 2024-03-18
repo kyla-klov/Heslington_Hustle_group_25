@@ -2,6 +2,8 @@ package com.main.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapGroupLayer;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -15,6 +17,7 @@ public class GameMap extends TiledMap {
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final OrthographicCamera camera;
     int tileSize = 16;
+    float layerToggleTime;
 
     private Player player;
 
@@ -41,6 +44,19 @@ public class GameMap extends TiledMap {
     }
 
     public void update(float delta) {
+        layerToggleTime += delta;
+        if (layerToggleTime >= 0.75f) {
+            toggleLayerVisibility("Water_2");
+            //toggleLayerVisibility("Trees");
+            layerToggleTime = 0;
+        }
+    }
+
+    public void toggleLayerVisibility(String layerName) {
+        TiledMapTileLayer layer = (TiledMapTileLayer)gameMap.getLayers().get(layerName);
+        if (layer != null) {
+            layer.setVisible(!layer.isVisible());
+        }
     }
 
     public int getTileSize(){

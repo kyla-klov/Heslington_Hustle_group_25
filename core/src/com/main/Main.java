@@ -76,14 +76,16 @@ public class Main extends Game {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
-		defaultCamera.setToOrtho(false, width, height);
-		defaultCamera.update();
-		screenWidth = width;
-		screenHeight = height;
-		scaleFactorX = screenWidth / (float) defWidth;
-		scaleFactorY = screenHeight / (float) defHeight;
-		screenManager.resize(width, height);
+		if (width != 0 || height != 0){
+			super.resize(width, height);
+			defaultCamera.setToOrtho(false, width, height);
+			defaultCamera.update();
+			screenWidth = width;
+			screenHeight = height;
+			scaleFactorX = screenWidth / (float) defWidth;
+			scaleFactorY = screenHeight / (float) defHeight;
+			screenManager.resize(width, height);
+		}
 	}
 
 	/**

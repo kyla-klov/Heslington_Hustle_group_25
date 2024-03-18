@@ -16,39 +16,55 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     Main game;
 
-    private final Texture backButton;
+    private final Texture backButton, controlLabel, wLabel, aLabel, sLabel, dLabel, arrowUpLabel, arrowLeftLabel, arrowDownLabel, arrowRightLabel;
     private final float backButtonX, backButtonY, backButtonWidth = 200, backButtonHeight = 100;
-    //private final Stage stage; // LibGdx container for labels with Peaberry font
-
-    private final Texture controlLabel;
-
-    private final float controlLabelX;
-    private final float controlLabelY;
-    private final float controlLabelWidth = 500;
-    private final float controlLabelHeight = 130;
-
-    private final Texture wLabel;
-    private final float wLabelX;
-    private final float wLabelY;
-    private final float wLabelWidth = 150;
-    private final float wLabelHeight = 150;
+    // X coordinates for each button and label
+    private final float controlLabelX, wLabelX, aLabelX, sLabelX, dLabelX, arrowUpLabelX, arrowLeftLabelX, arrowDownLabelX, arrowRightLabelX;
+    // Y coordinates for each button and label
+    private final float controlLabelY, wLabelY, aLabelY, sLabelY, dLabelY, arrowUpLabelY, arrowLeftLabelY, arrowDownLabelY, arrowRightLabelY;
+    // Button and label dimensions
+    private final float controlLabelWidth = 500, wLabelWidth = 100, aLabelWidth = 100, sLabelWidth = 100, dLabelWidth = 100, arrowUpWidth = 100,
+            arrowLeftLabelWidth = 100, arrowDownLabelWidth = 100, arrowRightLabelWidth = 100;
+    private final float controlLabelHeight = 130, wLabelHeight = 100, aLabelHeight = 100, sLabelHeight = 100, dLabelHeight = 100, arrowUpHeight = 100,
+            arrowLeftLabelHeight = 100, arrowDownLabelHeight = 100, arrowRightLabelHeight = 100;
 
     public MainControlScreen(Main game) {
         this.game = game;
-        Gdx.input.setInputProcessor(this);
-
         backButton = new Texture("assets/settings_gui/back_button.png");
+
+        Gdx.input.setInputProcessor(this);
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
         wLabel = new Texture("assets/controls_gui/w_button.png");
+        aLabel = new Texture("assets/controls_gui/a_button.png");
+        sLabel = new Texture("assets/controls_gui/s_button.png");
+        dLabel = new Texture("assets/controls_gui/d_button.png");
+        arrowUpLabel = new Texture("assets/controls_gui/arrow_up_button.png");
+        arrowLeftLabel = new Texture("assets/controls_gui/arrow_left_button.png");
+        arrowDownLabel = new Texture("assets/controls_gui/arrow_down_button.png");
+        arrowRightLabel = new Texture("assets/controls_gui/arrow_right_button.png");
 
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
         backButtonY = (float) game.screenHeight / 6 - 100;
         controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
         controlLabelY = game.screenHeight - (controlLabelHeight * 2);
-        wLabelX = (game.screenWidth - wLabelWidth) / 2 - 200;
-        wLabelY = game.screenHeight - wLabelHeight - 350;
+        wLabelX = (game.screenWidth - wLabelWidth) / 2 - 100;
+        wLabelY = game.screenHeight - wLabelHeight - 285;
+        aLabelX = (game.screenWidth - aLabelWidth) / 2 - 100;
+        aLabelY = game.screenHeight - aLabelHeight - 435;
+        sLabelX = (game.screenWidth - sLabelWidth) / 2 - 100;
+        sLabelY = game.screenHeight - sLabelHeight - 585;
+        dLabelX = (game.screenWidth - dLabelWidth) / 2 - 100;
+        dLabelY = game.screenHeight - dLabelHeight - 735;
+        arrowUpLabelX = (game.screenWidth - arrowUpWidth) / 2 + 100;
+        arrowUpLabelY = game.screenHeight - arrowUpHeight - 285;
+        arrowLeftLabelX = (game.screenWidth - arrowLeftLabelWidth) / 2 + 100;
+        arrowLeftLabelY = game.screenHeight - arrowLeftLabelHeight - 435;
+        arrowDownLabelX = (game.screenWidth - arrowDownLabelWidth) / 2 + 100;
+        arrowDownLabelY = game.screenHeight - arrowDownLabelHeight - 585;
+        arrowRightLabelX = (game.screenWidth - arrowRightLabelWidth) / 2 + 100;
+        arrowRightLabelY = game.screenHeight - arrowRightLabelHeight - 735;
 
         /*
         stage = new Stage();
@@ -76,6 +92,13 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(wLabel, wLabelX, wLabelY, wLabelWidth, wLabelHeight);
+        game.batch.draw(aLabel, aLabelX, aLabelY, aLabelWidth, aLabelHeight);
+        game.batch.draw(sLabel, sLabelX, sLabelY, sLabelWidth, sLabelHeight);
+        game.batch.draw(dLabel, dLabelX, dLabelY, dLabelWidth, dLabelHeight);
+        game.batch.draw(arrowUpLabel, arrowUpLabelX, arrowUpLabelY, arrowUpWidth, arrowUpHeight);
+        game.batch.draw(arrowLeftLabel, arrowLeftLabelX, arrowLeftLabelY, arrowLeftLabelWidth, arrowLeftLabelHeight);
+        game.batch.draw(arrowDownLabel, arrowDownLabelX, arrowDownLabelY, arrowDownLabelWidth, arrowDownLabelHeight);
+        game.batch.draw(arrowRightLabel, arrowRightLabelX, arrowRightLabelY, arrowRightLabelWidth, arrowRightLabelHeight);
         //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         //stage.draw();
         game.batch.end();
@@ -88,6 +111,7 @@ public class MainControlScreen implements Screen, InputProcessor {
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
+            game.gameData.buttonClickedSoundActivate();
         }
         return true;
     }
@@ -106,7 +130,6 @@ public class MainControlScreen implements Screen, InputProcessor {
     public boolean keyTyped(char c) {
         return false;
     }
-
 
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {

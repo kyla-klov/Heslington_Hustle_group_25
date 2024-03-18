@@ -13,15 +13,16 @@ public class GameMusic {
     Music audio;
     // Music levels is quarters
     private int musicLevel = 4;
-    private int soundLevel = 4;
 
+    private float musicCap = 0.1f;
     /**
      * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
      */
     public GameMusic() {
         audio = Gdx.audio.newMusic(Gdx.files.internal("assets/music_loop/Ludum Dare 30 - 01.ogg"));
         audio.play();
-        audio.setVolume(1); // Set volume to 100%
+        audio.setVolume(musicCap); // Set volume to 100%
+        audio.setLooping(true);
     }
 
     /**
@@ -32,13 +33,6 @@ public class GameMusic {
         return this.musicLevel;
     }
 
-    /**
-     * Returns the current sound effects volume level.
-     * @return The current sound effects volume level.
-     */
-    public int getSoundLevel(){
-        return soundLevel;
-    }
 
     /**
      * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
@@ -47,7 +41,7 @@ public class GameMusic {
         if (musicLevel <= 3){ // Check if volume is not already at maximum
             musicLevel = musicLevel + 1;
             float floatingMusicLevel = (float) musicLevel;
-            audio.setVolume(floatingMusicLevel*25/100);
+            audio.setVolume(floatingMusicLevel*25/100*musicCap);
         }
     }
 
@@ -58,7 +52,7 @@ public class GameMusic {
         if (this.musicLevel >= 1){ // Check if volume is not already at minimum
             musicLevel = musicLevel - 1;
             float floatingMusicLevel = (float) musicLevel;
-            audio.setVolume(floatingMusicLevel*25/100);
+            audio.setVolume(floatingMusicLevel*25/100*musicCap);
         }
     }
 }
