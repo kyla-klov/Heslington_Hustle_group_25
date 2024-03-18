@@ -16,63 +16,17 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     Main game;
 
-    private final Texture backButton;
+    private final Texture backButton, controlLabel, wLabel, aLabel, sLabel, dLabel, arrowUpLabel, arrowLeftLabel, arrowDownLabel, arrowRightLabel;
     private final float backButtonX, backButtonY, backButtonWidth = 200, backButtonHeight = 100;
-
-    private final Texture controlLabel;
-
-    private final float controlLabelX;
-    private final float controlLabelY;
-    private final float controlLabelWidth = 500;
-    private final float controlLabelHeight = 130;
-
-    private final Texture wLabel;
-    private final float wLabelX;
-    private final float wLabelY;
-    private final float wLabelWidth = 100;
-    private final float wLabelHeight = 100;
-    private final Texture aLabel;
-    private final float aLabelX;
-    private final float aLabelY;
-    private final float aLabelWidth = 100;
-    private final float aLabelHeight = 100;
-
-    private final Texture sLabel;
-    private final float sLabelX;
-    private final float sLabelY;
-    private final float sLabelWidth = 100;
-    private final float sLabelHeight = 100;
-
-    private final Texture dLabel;
-    private final float dLabelX;
-    private final float dLabelY;
-    private final float dLabelWidth = 100;
-    private final float dLabelHeight = 100;
-
-    private final Texture arrowUpLabel;
-    private final float arrowUpLabelX;
-    private final float arrowUpLabelY;
-    private final float arrowUpWidth = 100;
-    private final float arrowUpHeight = 100;
-
-    private final Texture arrowLeftLabel;
-    private final float arrowLeftLabelX;
-    private final float arrowLeftLabelY;
-    private final float arrowLeftLabelWidth = 100;
-    private final float arrowLeftLabelHeight = 100;
-
-    private final Texture arrowDownLabel;
-    private final float arrowDownLabelX;
-    private final float arrowDownLabelY;
-    private final float arrowDownLabelWidth = 100;
-    private final float arrowDownLabelHeight = 100;
-
-    private final Texture arrowRightLabel;
-    private final float arrowRightLabelX;
-    private final float arrowRightLabelY;
-    private final float arrowRightLabelWidth = 100;
-    private final float arrowRightLabelHeight = 100;
-
+    // X coordinates for each button and label
+    private final float controlLabelX, wLabelX, aLabelX, sLabelX, dLabelX, arrowUpLabelX, arrowLeftLabelX, arrowDownLabelX, arrowRightLabelX;
+    // Y coordinates for each button and label
+    private final float controlLabelY, wLabelY, aLabelY, sLabelY, dLabelY, arrowUpLabelY, arrowLeftLabelY, arrowDownLabelY, arrowRightLabelY;
+    // Button and label dimensions
+    private final float controlLabelWidth = 500, wLabelWidth = 100, aLabelWidth = 100, sLabelWidth = 100, dLabelWidth = 100, arrowUpWidth = 100,
+            arrowLeftLabelWidth = 100, arrowDownLabelWidth = 100, arrowRightLabelWidth = 100;
+    private final float controlLabelHeight = 130, wLabelHeight = 100, aLabelHeight = 100, sLabelHeight = 100, dLabelHeight = 100, arrowUpHeight = 100,
+            arrowLeftLabelHeight = 100, arrowDownLabelHeight = 100, arrowRightLabelHeight = 100;
 
     public MainControlScreen(Main game) {
         this.game = game;
@@ -111,9 +65,6 @@ public class MainControlScreen implements Screen, InputProcessor {
         arrowDownLabelY = game.screenHeight - arrowDownLabelHeight - 585;
         arrowRightLabelX = (game.screenWidth - arrowRightLabelWidth) / 2 + 100;
         arrowRightLabelY = game.screenHeight - arrowRightLabelHeight - 735;
-
-
-
 
         /*
         stage = new Stage();
@@ -175,7 +126,6 @@ public class MainControlScreen implements Screen, InputProcessor {
     public boolean keyTyped(char c) {
         return false;
     }
-
 
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {

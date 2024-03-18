@@ -18,7 +18,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
     boolean gender;
     private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
     private Texture musicBar, soundBar, boyButton, girlButton;
-    // X and Y coordinates for each button and label
+    // X coordinates for each button and label
     private final float backButtonX, settingsLabelX, musicUpButtonX, musicDownButtonX, musicLabelX, musicBarX, soundUpButtonX, soundLabelX, soundDownButtonX,
             soundBarX, boyButtonX, girlButtonX;
     // Y coordinates for each button and label

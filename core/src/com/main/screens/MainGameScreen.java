@@ -91,8 +91,13 @@ public class MainGameScreen implements Screen, InputProcessor {
             }
         }
 
+        float remainingTime = 60 - time;
+        int minutes = (int) remainingTime / 60;
+        int seconds = (int) remainingTime % 60;
+        String timeString = String.format("Day: %d Time: %02d:%02d", dayNum, minutes, seconds);
+
         String counterString;
-        counterString = "Day: "+ dayNum + "\nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours;
+        counterString = String.format("Day: %d       Time: %02d:%02d \nRecreation Activities done: " + recActivity + "\nStudy hours: " + studyHours, dayNum, minutes, seconds);
 
         /*
         if (player.collidesWith(hit, hitX, hitY)) {
