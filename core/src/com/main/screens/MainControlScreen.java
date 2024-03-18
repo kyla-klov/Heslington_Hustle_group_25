@@ -13,9 +13,7 @@ import com.main.utils.ScreenType;
 import static com.badlogic.gdx.Gdx.input;
 
 public class MainControlScreen implements Screen, InputProcessor {
-
     Main game;
-
     private final Texture backButton, controlLabel, wLabel, aLabel, sLabel, dLabel, arrowUpLabel, arrowLeftLabel, arrowDownLabel, arrowRightLabel;
     private final float backButtonX, backButtonY, backButtonWidth = 200, backButtonHeight = 100;
     // X coordinates for each button and label
