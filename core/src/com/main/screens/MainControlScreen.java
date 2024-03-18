@@ -16,9 +16,8 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     Main game;
 
-    private final Texture backButtonTexture;
-    private final float backButtonX, backButtonY, backButtonWidth = 100, backButtonHeight = 50;
     private final Texture backButton;
+    private final float backButtonX, backButtonY, backButtonWidth = 200, backButtonHeight = 100;
 
     private final Texture controlLabel;
 
@@ -77,11 +76,9 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     public MainControlScreen(Main game) {
         this.game = game;
-        backButtonTexture = new Texture("assets/settings_gui/back_button.png");
+        backButton = new Texture("assets/settings_gui/back_button.png");
 
         Gdx.input.setInputProcessor(this);
-
-        backButton = new Texture("assets/settings_gui/back_button.png");
 
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
         wLabel = new Texture("assets/controls_gui/w_button.png");
