@@ -2,10 +2,7 @@ package com.main.utils;
 
 import com.badlogic.gdx.Screen;
 import com.main.Main;
-import com.main.screens.MainControlScreen;
-import com.main.screens.MainGameScreen;
-import com.main.screens.MainMenuScreen;
-import com.main.screens.MainSettingsScreen;
+import com.main.screens.*;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -58,6 +55,8 @@ public class ScreenManager {
                 return new MainSettingsScreen(game);
             case CONTROLS:
                 return new MainControlScreen(game);
+            case MINI_GAME:
+                return new MiniGameScreen(game);
         }
         return null;
     }
