@@ -30,10 +30,9 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     public MainControlScreen(Main game) {
         this.game = game;
-        backButton = new Texture("assets/settings_gui/back_button.png");
 
         Gdx.input.setInputProcessor(this);
-
+        backButton = new Texture("assets/settings_gui/back_button.png");
         controlLabel = new Texture("assets/controls_gui/controls_label.png");
         wLabel = new Texture("assets/controls_gui/w_button.png");
         aLabel = new Texture("assets/controls_gui/a_button.png");
@@ -179,8 +178,16 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        //backButtonTexture.dispose();
-        //stage.dispose();
+        backButton.dispose();
+        controlLabel.dispose();
+        wLabel.dispose();
+        aLabel.dispose();
+        sLabel.dispose();
+        dLabel.dispose();
+        arrowUpLabel.dispose();
+        arrowLeftLabel.dispose();
+        arrowDownLabel.dispose();
+        arrowRightLabel.dispose();
     }
 
 }
