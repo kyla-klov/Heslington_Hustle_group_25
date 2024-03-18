@@ -2,8 +2,12 @@ package com.main.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,7 +19,9 @@ import static com.badlogic.gdx.Gdx.input;
 public class MainControlScreen implements Screen, InputProcessor {
 
     Main game;
+    BitmapFont font;
 
+    private float fontX, fontY, fontWidth = 500, fontHeight= 100;
     private final Texture backButton, controlLabel, wLabel, aLabel, sLabel, dLabel, arrowUpLabel, arrowLeftLabel, arrowDownLabel, arrowRightLabel;
     private final float backButtonX, backButtonY, backButtonWidth = 200, backButtonHeight = 100;
     // X coordinates for each button and label
@@ -31,6 +37,7 @@ public class MainControlScreen implements Screen, InputProcessor {
     public MainControlScreen(Main game) {
         this.game = game;
         backButton = new Texture("assets/settings_gui/back_button.png");
+        font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
 
         Gdx.input.setInputProcessor(this);
 
@@ -46,7 +53,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
 
         backButtonX = (game.screenWidth - backButtonWidth) /2;
-        backButtonY = (float) game.screenHeight / 6 - 100;
+        backButtonY = (float) game.screenHeight / 6 - 150;
         controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
         controlLabelY = game.screenHeight - (controlLabelHeight * 2);
         wLabelX = (game.screenWidth - wLabelWidth) / 2 - 100;
@@ -65,6 +72,8 @@ public class MainControlScreen implements Screen, InputProcessor {
         arrowDownLabelY = game.screenHeight - arrowDownLabelHeight - 585;
         arrowRightLabelX = (game.screenWidth - arrowRightLabelWidth) / 2 + 100;
         arrowRightLabelY = game.screenHeight - arrowRightLabelHeight - 735;
+        fontX = (game.screenWidth - fontWidth) / 2;
+        fontY = (game.screenHeight - fontHeight) / 2;
 
         /*
         stage = new Stage();
@@ -99,8 +108,16 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.draw(arrowLeftLabel, arrowLeftLabelX, arrowLeftLabelY, arrowLeftLabelWidth, arrowLeftLabelHeight);
         game.batch.draw(arrowDownLabel, arrowDownLabelX, arrowDownLabelY, arrowDownLabelWidth, arrowDownLabelHeight);
         game.batch.draw(arrowRightLabel, arrowRightLabelX, arrowRightLabelY, arrowRightLabelWidth, arrowRightLabelHeight);
-        //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        //stage.draw();
+        String description_one = "Welcome to Heslington Hustle!";
+        String description_two = "You are a second-year Computer Science student with exams in only 7 days.";
+        String description_three = "Explore the map and interact with buildings to eat, study, sleep, and have fun.";
+        String description_four = "To get a good grade, you need to balance studying with self-care and recreation.";
+        String description_five = "Good luck!";
+        font.draw(game.batch, description_five, fontX+475, fontY+10);
+        font.draw(game.batch, description_four, fontX+475, fontY+35);
+        font.draw(game.batch, description_three, fontX+475, fontY+60);
+        font.draw(game.batch, description_two, fontX+475, fontY+85);
+        font.draw(game.batch, description_one, fontX+475, fontY+110);
         game.batch.end();
     }
 
@@ -110,8 +127,9 @@ public class MainControlScreen implements Screen, InputProcessor {
 
         if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
                 worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
-            game.screenManager.setScreen(ScreenType.MAIN_MENU);
             game.gameData.buttonClickedSoundActivate();
+            game.screenManager.setScreen(ScreenType.MAIN_MENU);
+
         }
         return true;
     }
