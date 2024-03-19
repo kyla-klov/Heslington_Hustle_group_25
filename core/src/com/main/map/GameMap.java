@@ -11,6 +11,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.main.entity.Player;
 
+/**
+ * Represents the game map, handling rendering and toggling layer visibility.
+ * It extends TiledMap to use the functionalities provided by libGDX for tile maps.
+ */
 public class GameMap extends TiledMap {
     private final int width, height;
     private final TiledMap gameMap;
@@ -18,9 +22,13 @@ public class GameMap extends TiledMap {
     private final OrthographicCamera camera;
     int tileSize = 16;
     float layerToggleTime;
-
     private Player player;
 
+    /**
+     * Constructs a GameMap with an orthographic camera.
+     *
+     * @param camera The camera used to view the map.
+     */
     public GameMap(OrthographicCamera camera) {
         // Load the .tmx with the MainMap for game
         gameMap = new TmxMapLoader().load("map/MainMap.tmx");
@@ -34,6 +42,9 @@ public class GameMap extends TiledMap {
         this.camera = camera;
     }
 
+    /**
+     * Renders the map by updating the camera and setting the renderer's view accordingly.
+     */
     public void render() {
         // Update the camera and set the tiledMapRenderer's view based on that camera
         camera.update();
@@ -43,6 +54,11 @@ public class GameMap extends TiledMap {
         tiledMapRenderer.render();
     }
 
+    /**
+     * Updates the map, including toggling layer visibility based on a timer.
+     *
+     * @param delta The time in seconds since the last update.
+     */
     public void update(float delta) {
         layerToggleTime += delta;
         if (layerToggleTime >= 0.75f) {
@@ -52,6 +68,11 @@ public class GameMap extends TiledMap {
         }
     }
 
+    /**
+     * Toggles the visibility of a specific layer within the map.
+     *
+     * @param layerName The name of the layer to toggle.
+     */
     public void toggleLayerVisibility(String layerName) {
         TiledMapTileLayer layer = (TiledMapTileLayer)gameMap.getLayers().get(layerName);
         if (layer != null) {
@@ -59,22 +80,43 @@ public class GameMap extends TiledMap {
         }
     }
 
+    /**
+     * Gets the tile size of the map.
+     *
+     * @return The size of the tiles in the map.
+     */
     public int getTileSize(){
         return tileSize;
     }
 
+    /**
+     * Gets the width of the map in tiles.
+     *
+     * @return The width of the map.
+     */
     public int getWidth(){
         return width;
     }
 
+    /**
+     * Gets the height of the map in tiles.
+     *
+     * @return The height of the map.
+     */
     public int getHeight(){
         return height;
     }
 
+    /**
+     * Gets the TiledMap instance representing the game map.
+     *
+     * @return The TiledMap instance.
+     */
     public TiledMap getMap(){
         return gameMap;
     }
 
+    
     public void dispose() {
         gameMap.dispose();
         tiledMapRenderer.dispose();
