@@ -5,9 +5,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 
 public class MiniGameScreen implements Screen {
-    Main game;
-    public MiniGameScreen(Main game){
+    private final Main game;
+    private int studyDuration;
+    public MiniGameScreen(Main game, int studyDuration){
         this.game = game;
+        this.studyDuration = studyDuration;
     }
 
     @Override

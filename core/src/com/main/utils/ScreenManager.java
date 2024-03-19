@@ -46,7 +46,7 @@ public class ScreenManager {
      *
      * @param screenType The type of the screen to display.
      */
-    public void setScreen(ScreenType screenType){
+    public void setScreen(ScreenType screenType, Object... args){
         if (curScreen != null && !screensInMemory.containsKey(curScreenType)){
             curScreen.dispose();
         }
@@ -54,7 +54,7 @@ public class ScreenManager {
             curScreen = screensInMemory.get(screenType);
         }
         else {
-            curScreen = createScreen(screenType);
+            curScreen = createScreen(screenType, args);
         }
         curScreenType = screenType;
         game.setScreen(curScreen);
@@ -81,7 +81,7 @@ public class ScreenManager {
      * @param type The type of the screen to create.
      * @return The created screen, or null if the type is unknown.
      */
-    private Screen createScreen(ScreenType type) {
+    private Screen createScreen(ScreenType type, Object... args) {
         switch (type){
             case MAIN_MENU:
                 return new MainMenuScreen(game);
@@ -92,7 +92,7 @@ public class ScreenManager {
             case CONTROLS:
                 return new MainControlScreen(game);
             case MINI_GAME:
-                return new MiniGameScreen(game);
+                return new MiniGameScreen(game, (int) args[0]);
         }
         return null;
     }
