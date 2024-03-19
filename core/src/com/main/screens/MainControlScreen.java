@@ -5,9 +5,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.main.Main;
 import com.main.utils.ScreenType;
 
@@ -25,7 +24,6 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     public MainControlScreen(Main game) {
         this.game = game;
-        Stage stage;
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         font.getData().setScale(1.5f);
 
@@ -45,17 +43,7 @@ public class MainControlScreen implements Screen, InputProcessor {
                 "and interact with buildings to eat, study, sleep and have fun. To get a good grade, you need to balance hours of studying with \n" +
                 "self-care and recreation. Good luck!";
 
-
-        stage = new Stage();
-        Label.LabelStyle labelStyle = new Label.LabelStyle(game.skin.getFont("default-font"), null);
-        // Label for displaying text
-        Label testLabel = new Label("test", labelStyle);
-        testLabel.setPosition(game.screenWidth / 2f - testLabel.getWidth() / 2, game.screenHeight / 2f - testLabel.getHeight() / 2);
-        stage.addActor(testLabel);
-
-    }
-
-    private void calculateDimensions(){
+        Gdx.input.setInputProcessor(this);
 
     }
 
@@ -68,12 +56,25 @@ public class MainControlScreen implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
-        font.draw(game.batch, objective, game.screenWidth /4  * game.scaleFactorX, game.screenHeight - 280 * game.scaleFactorY);
+        font.draw(game.batch, objective, game.screenWidth / 4f, game.screenHeight - 280, game.screenWidth / 2f, Align.center, false);
+        float instructionY = (((float) game.screenHeight /2) * game.scaleFactorY);
+        String[] instructions = {
+                "Up - Move forward",
+                "Left - Turn left",
+                "Right - Turn right",
+                "Down - Move backward",
+                "Shift - Sprint",
+                "Esc - Pause"
+        };
+
+        for (String instruction : instructions) {
+            font.draw(game.batch, instruction, (game.screenWidth - font.getRegion().getRegionWidth()) / 2f, instructionY);
+            instructionY -= 30; // Spacing between instructions
+        }
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(controls, controlsX, controlsY, controlsWidth, controlsHeight);
-        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
-        //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        //stage.draw();
+        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);;
+
         game.batch.end();
     }
 

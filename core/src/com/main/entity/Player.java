@@ -116,6 +116,7 @@ public class Player extends Entity {
             isMoving = true;
         }
 
+        // player doesn't walk beyond the map
         if (targX + spriteX > gameMap.getWidth()){
             targX = gameMap.getWidth() - spriteX;
         }
