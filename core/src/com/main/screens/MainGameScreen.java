@@ -51,7 +51,6 @@ public class MainGameScreen implements Screen, InputProcessor {
     int recActivity, studyHours;
     private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
     private int currentHour = 10; // Game starts at 10:00 am.
-    private final int hoursInDay = 16; // Player sleeps for 8 hours
     float gameDayLengthInSeconds = 60f;
     float secondsPerGameHour;
 
@@ -75,6 +74,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         shader = new Color(0.5f, 0.5f, 0.5f, 1);
         showPopup = false;
         activity = "";
+        // Player sleeps for 8 hours
+        int hoursInDay = 16;
         secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
 
         shapeRenderer = new ShapeRenderer();
@@ -178,20 +179,25 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.begin();
         GlyphLayout layout = new GlyphLayout();
         float textX;
-        Texture activityButton = null;
-        String title = "";
+        Texture activityButton;
+        String title;
 
-        if (activity.equals("study")){
-            activityButton = menuStudyButton;
-            title = "Study Schedule";
-        }
-        else if (activity.equals("sleep")){
-            activityButton = menuSleepButton;
-            title = "Sleep Duration";
-        }
-        else if (activity.equals("exercise")){
-            activityButton = menuGoButton;
-            title = "Exercise";
+        switch (activity){
+            case "study":
+                activityButton = menuStudyButton;
+                title = "Study Schedule";
+                break;
+            case "sleep":
+                activityButton = menuSleepButton;
+                title = "Sleep Duration";
+                break;
+            case "exercise":
+                activityButton = menuGoButton;
+                title = "Exercise";
+                break;
+            default:
+                activityButton = null;
+                title = "";
         }
 
         game.batch.draw(durationMenuBackground, durationMenuBackgroundX, durationMenuBackgroundY, durationMenuBackgroundWidth, durationMenuBackgroundHeight);
