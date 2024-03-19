@@ -397,6 +397,8 @@ public class MainGameScreen implements Screen, InputProcessor {
                         energyBar.dispose();
                         energyBar = setEnergyBar();
                         timeElapsed += duration * secondsPerGameHour;
+                        fadeOut = true;
+                        lockTime = true;
                         duration = 1;
                     }
                 }
