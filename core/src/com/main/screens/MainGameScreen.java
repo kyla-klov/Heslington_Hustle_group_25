@@ -356,75 +356,80 @@ public class MainGameScreen implements Screen, InputProcessor {
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         else if (showPopup){
-            if (activity.equals("study")) {
-                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration < 4) duration++;
-                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration > 1) duration--;
-                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    showPopup = false;
-                    duration = 1;
-                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    showPopup = false;
-                    studyHours += duration;
-                    if (energyCounter > 0) energyCounter --;
-                    energyBar.dispose();
-                    energyBar = setEnergyBar();
-                    lockTime = true;
-                    timeElapsed += duration * secondsPerGameHour;
-                    game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
-                }
-            }
-            else if (activity.equals("exercise")) {
-                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration < 4) duration++;
-                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration > 1) duration--;
-                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    showPopup = false;
-                    duration = 1;
-                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (energyCounter >= duration) {
+            switch (activity){
+                case "study":
+                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration < 4) duration++;
+                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration > 1) duration--;
+                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
                         showPopup = false;
-                        recActivity++;
-                        energyCounter -= duration;
+                        duration = 1;
+                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showPopup = false;
+                        studyHours += duration;
+                        if (energyCounter > 0) energyCounter --;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
+                        lockTime = true;
                         timeElapsed += duration * secondsPerGameHour;
+                        game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
+                    }
+                    break;
+
+                case "exercise":
+                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration < 4) duration++;
+                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration > 1) duration--;
+                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showPopup = false;
+                        duration = 1;
+                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (energyCounter >= duration) {
+                            showPopup = false;
+                            recActivity++;
+                            energyCounter -= duration;
+                            energyBar.dispose();
+                            energyBar = setEnergyBar();
+                            timeElapsed += duration * secondsPerGameHour;
+                            minShade = timeElapsed/secondsPerGameHour > 11 ? (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour) : 0;
+                            fadeOut = true;
+                            lockTime = true;
+                            duration = 1;
+                        }
+                    }
+                    break;
+
+                case "sleep":
+                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration < 10) duration++;
+                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration > 1) duration--;
+                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showPopup = false;
+                        duration = 1;
+                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
+                        resetDay();
+                        showPopup = false;
                         fadeOut = true;
                         lockTime = true;
                         duration = 1;
                     }
-                }
-            }
-            else if (activity.equals("sleep")){
-                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration < 10) duration++;
-                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    if (duration > 1) duration--;
-                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    showPopup = false;
-                    duration = 1;
-                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
-                    game.gameData.buttonClickedSoundActivate();
-                    minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
-                    resetDay();
-                    showPopup = false;
-                    fadeOut = true;
-                    lockTime = true;
-                    duration = 1;
-                }
+                    break;
             }
         }
         else if (popupMenuType.equals("Comp_sci_door")){
