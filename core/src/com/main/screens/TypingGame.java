@@ -23,17 +23,29 @@ public class TypingGame implements Screen, InputProcessor {
     private String userGuess = "";
     Boolean acceptInput = false, displayCorrect = false, displayWrong = false;
     BitmapFont displayText;
-    private float displayTextX, displayTextY, displayTextWidth = 100, displayTextHeight = 100;
+    private float displayTextX, displayTextY, displayTextWidth = 500, displayTextHeight = 100;
     private float makeGuessX, makeGuessY, makeGuessWidth = 100, makeGuessHeight = 100;
+    private Texture title;
+    private float titleX, titleY, titleWidth = 74, titleHeight = 14;
 
     public TypingGame(Main game, int studyDuration){
         displayText = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         makeGuess = new Texture("assets/mini_games/guess_button.png");
+        title = new Texture("assets/mini_games/number_memoriser_label.png");
+        displayText.getData().setScale(4f);
 
         displayTextX = (game.screenWidth - displayTextWidth)/2;
         displayTextY = (game.screenHeight - displayTextHeight)/2;
         makeGuessX = (game.screenWidth - makeGuessWidth)/2;
         makeGuessY = (game.screenHeight - makeGuessHeight)/2 - 300;
+        displayTextX = displayTextX * game.scaleFactorX;
+        displayTextY = displayTextY * game.scaleFactorY;
+        titleWidth = titleWidth * game.scaleFactorX * 11;
+        titleHeight = titleHeight * game.scaleFactorY * 11;
+        titleX = (game.screenWidth - titleWidth)/2;
+        titleY = (game.screenWidth - titleWidth)/2+200;
+
+
 
 
         Gdx.input.setInputProcessor(this);
@@ -80,14 +92,15 @@ public class TypingGame implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
+        game.batch.draw(title, titleX, titleY, titleWidth, titleHeight);
         
         if (acceptInput){
             displayText.draw(game.batch, userGuess, displayTextX, displayTextY);
             game.batch.draw(makeGuess, makeGuessX, makeGuessY, makeGuessWidth, makeGuessHeight);
         } else if (displayCorrect){
-            displayText.draw(game.batch, "Correct", displayTextX, displayTextY);
+            displayText.draw(game.batch, "Correct well done.", displayTextX, displayTextY);
         } else if (displayWrong) {
-            displayText.draw(game.batch, "Wrong", displayTextX, displayTextY);
+            displayText.draw(game.batch, "Incorrect. Answer: " + Integer.toString(currentNumber), displayTextX, displayTextY);
         } else {
             displayText.draw(game.batch, Integer.toString(currentNumber), displayTextX, displayTextY);
         }
