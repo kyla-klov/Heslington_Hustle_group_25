@@ -28,7 +28,7 @@ public class TypingGame implements Screen, InputProcessor {
 
     public TypingGame(Main game, int studyDuration){
         displayText = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        makeGuess = new Texture("assets/menu_buttons/continue_button.png");
+        makeGuess = new Texture("assets/mini_games/guess_button.png");
 
         displayTextX = (game.screenWidth - displayTextWidth)/2;
         displayTextY = (game.screenHeight - displayTextHeight)/2;
@@ -160,15 +160,17 @@ public class TypingGame implements Screen, InputProcessor {
 
         if (worldX >= makeGuessX && worldX <= makeGuessX + makeGuessWidth &&
                 worldY >= makeGuessY && worldY <= makeGuessY + makeGuessHeight) {
-            acceptInput = false;
 
-            if (Integer.parseInt(userGuess) == currentNumber){
-                correct = correct + 1;
-                displayCorrect = true;
-            } else {
-                displayWrong = true;
+            if (userGuess != ""){
+                acceptInput = false;
+                if (Integer.parseInt(userGuess) == currentNumber){
+                    correct = correct + 1;
+                    displayCorrect = true;
+                } else {
+                    displayWrong = true;
+                }
+                delay(2, this::playGame);
             }
-            delay(2, this::playGame);
             
         }
         return false;
