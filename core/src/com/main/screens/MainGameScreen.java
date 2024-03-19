@@ -28,17 +28,17 @@ public class MainGameScreen implements Screen, InputProcessor {
     float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
     float popupMenuWidth, popupMenuHeight;
 
-    private Color shader;
-    boolean shade;
-    boolean showPopup;
+    private final Color shader;
+    private boolean showPopup;
+    private String activity;
 
     Texture energyBar;
     Texture popupMenu;
-    Texture durationUpButton, durationDownButton, menuBackButton, menuStudyButton, durationMenuBackground;
+    Texture durationUpButton, durationDownButton, menuBackButton, menuStudyButton, menuSleepButton, menuGoButton, durationMenuBackground;
     float durationUpButtonX, durationDownButtonX, durationMenuBackgroundX, durationButtonY, durationMenuBackgroundY;
     float durationUpButtonWidth, durationDownButtonWidth, durationMenuBackgroundWidth, durationUpButtonHeight, durationDownButtonHeight, durationMenuBackgroundHeight;
-    float menuBackButtonWidth, menuBackButtonHeight, menuStudyButtonWidth, menuStudyButtonHeight;
-    float menuBackButtonX, menuStudyButtonX, durationMenuButtonY;
+    float menuBackButtonWidth, menuBackButtonHeight, activityButtonWidth, activityButtonHeight;
+    float menuBackButtonX, activityButtonX, durationMenuButtonY;
     float durationTextY, menuTitleY, hoursLabelY;
     String popupMenuType;
     float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
@@ -71,8 +71,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         durationFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         popupMenuType = "";
         shader = new Color(0.5f, 0.5f, 0.5f, 1);
-        shade = false;
         showPopup = false;
+        activity = "";
 
         shapeRenderer = new ShapeRenderer();
         menuButton = new Texture("menu_buttons/menu_icon.png");
@@ -83,6 +83,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         durationDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
         menuBackButton = new Texture("assets/settings_gui/back_button.png");
         menuStudyButton = new Texture("assets/study_button.png");
+        menuSleepButton = new Texture("assets/sleep_button.png");
+        menuGoButton = new Texture("assets/go_button.png");
 
         calculateDimensions();
         calculatePositions();
@@ -111,9 +113,9 @@ public class MainGameScreen implements Screen, InputProcessor {
         durationMenuBackgroundHeight = 500 * game.scaleFactorY;
         menuBackButtonWidth = 150 * game.scaleFactorX;
         menuBackButtonHeight = 75 * game.scaleFactorY;
-        menuStudyButtonWidth = 150 * game.scaleFactorX;
-        menuStudyButtonHeight = 75 * game.scaleFactorY;
-        popupMenuWidth = 30;
+        activityButtonWidth = 150 * game.scaleFactorX;
+        activityButtonHeight = 75 * game.scaleFactorY;
+        popupMenuWidth = 35;
         popupMenuHeight = 10;
         font.getData().setScale(game.scaleFactorX, game.scaleFactorY);
         durationFont.getData().setScale(3f * game.scaleFactorX, 3f * game.scaleFactorY);
@@ -133,7 +135,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         durationUpButtonX = game.screenWidth/2f - durationUpButtonWidth/2f + 150 * game.scaleFactorX;
         durationButtonY = game.screenHeight/2f - durationUpButtonHeight/2f - 60 * game.scaleFactorY;
         menuBackButtonX = durationDownButtonX;
-        menuStudyButtonX = durationUpButtonX + durationUpButtonWidth - menuStudyButtonWidth;
+        activityButtonX = durationUpButtonX + durationUpButtonWidth - activityButtonWidth;
         durationMenuButtonY = durationButtonY - 125 * game.scaleFactorY;
         menuTitleY = 730 * game.scaleFactorY;
         durationTextY = 503 * game.scaleFactorY;
@@ -160,12 +162,12 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
-    private void drawMenuOption(BitmapFont font, float posX, float posY, float width, float height, String text){
+    private void drawMenuOption(float posX, float posY, String text){
         isHovering(posX, posY);
         GlyphLayout layout = new GlyphLayout();
-        layout.setText(font, text);
-        game.batch.draw(popupMenu, posX, posY, width, height);
-        popupFont.draw(game.batch, text, posX + (width - layout.width)/2, posY + (height + layout.height)/2f - font.getDescent() - layout.height/4f);
+        layout.setText(popupFont, text);
+        game.batch.draw(popupMenu, posX, posY, popupMenuWidth, popupMenuHeight);
+        popupFont.draw(game.batch, text, posX + (popupMenuWidth - layout.width)/2, posY + (popupMenuHeight + layout.height)/2f - popupFont.getDescent() - layout.height/4f);
         game.batch.setColor(Color.WHITE);
     }
 
@@ -173,19 +175,34 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.begin();
         GlyphLayout layout = new GlyphLayout();
         float textX;
+        Texture activityButton = null;
+        String title = "";
+
+        if (activity.equals("study")){
+            activityButton = menuStudyButton;
+            title = "Study Schedule";
+        }
+        else if (activity.equals("sleep")){
+            activityButton = menuSleepButton;
+            title = "Sleep Duration";
+        }
+        else if (activity.equals("exercise")){
+            activityButton = menuGoButton;
+            title = "Exercise";
+        }
 
         game.batch.draw(durationMenuBackground, durationMenuBackgroundX, durationMenuBackgroundY, durationMenuBackgroundWidth, durationMenuBackgroundHeight);
         game.batch.draw(durationDownButton, durationDownButtonX, durationButtonY, durationDownButtonWidth, durationDownButtonHeight);
         game.batch.draw(durationUpButton, durationUpButtonX, durationButtonY, durationUpButtonWidth, durationUpButtonHeight);
         game.batch.draw(menuBackButton, menuBackButtonX, durationMenuButtonY, menuBackButtonWidth, menuBackButtonHeight);
-        game.batch.draw(menuStudyButton, menuStudyButtonX, durationMenuButtonY, menuStudyButtonWidth, menuStudyButtonHeight);
+        game.batch.draw(activityButton, activityButtonX, durationMenuButtonY, activityButtonWidth, activityButtonHeight);
 
         layout.setText(durationFont, Integer.toString(duration));
         textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
         durationFont.draw(game.batch, Integer.toString(duration), textX, durationTextY);
-        layout.setText(durationFont, "Study Schedule");
+        layout.setText(durationFont, title);
         textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
-        durationFont.draw(game.batch, "Study Schedule", textX, menuTitleY);
+        durationFont.draw(game.batch, title, textX, menuTitleY);
         layout.setText(durationFont, "Hours");
         textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
         durationFont.draw(game.batch, "Hours", textX, hoursLabelY);
@@ -212,12 +229,20 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
         if (collisionHandler.isTouching("Comp_sci_door", player.getHitBox())){
             popupMenuType = "Comp_sci_door";
-            drawMenuOption(popupFont, player.worldX + 30, player.worldY + 20, popupMenuWidth, popupMenuHeight, "Study");
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study");
         }
         else if (collisionHandler.isTouching("Piazza_door", player.getHitBox())){
             popupMenuType = "Piazza_door";
-            drawMenuOption(popupFont, player.worldX + 30, player.worldY + 20, popupMenuWidth, popupMenuHeight, "Study");
-            drawMenuOption(popupFont, player.worldX + 30, player.worldY + 35, popupMenuWidth, popupMenuHeight, "Eat");
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study");
+            drawMenuOption(player.worldX + 30, player.worldY + 35, "Eat");
+        }
+        else if (collisionHandler.isTouching("Goodricke_door", player.getHitBox())){
+            popupMenuType = "Goodricke_door";
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep");
+        }
+        else if (collisionHandler.isTouching("Gym_door", player.getHitBox())){
+            popupMenuType = "Gym_door";
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Exercise");
         }
         game.batch.end();
     }
@@ -286,19 +311,51 @@ public class MainGameScreen implements Screen, InputProcessor {
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
         else if (showPopup){
-            if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                if (duration < 4) duration ++;
+            if (activity.equals("study")) {
+                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration < 4) duration++;
+                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration > 1) duration--;
+                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    duration = 1;
+                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
+                }
             }
-            else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                if (duration > 1) duration--;
+            else if (activity.equals("exercise")) {
+                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration < 4) duration++;
+                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration > 1) duration--;
+                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    duration = 1;
+                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                }
             }
-            else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                showPopup = false;
-                duration = 1;
-            }
-            else if (touchX >= menuStudyButtonX && touchX <= menuStudyButtonX + menuStudyButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuStudyButtonHeight) {
-                game.gameData.buttonClickedSoundActivate();
-                game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
+            else if (activity.equals("sleep")){
+                if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration < 10) duration++;
+                } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    if (duration > 1) duration--;
+                } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    duration = 1;
+                } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                    game.gameData.buttonClickedSoundActivate();
+                }
             }
         }
         else if (popupMenuType.equals("Comp_sci_door")){
@@ -306,6 +363,25 @@ public class MainGameScreen implements Screen, InputProcessor {
             if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
                 game.gameData.buttonClickedSoundActivate();
                 showPopup = true;
+                activity = "study";
+                duration = 1;
+            }
+        }
+        else if (popupMenuType.equals("Goodricke_door")){
+            Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
+            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                game.gameData.buttonClickedSoundActivate();
+                showPopup = true;
+                activity = "sleep";
+                duration = 1;
+            }
+        }
+        else if (popupMenuType.equals("Gym_door")){
+            Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
+            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                game.gameData.buttonClickedSoundActivate();
+                showPopup = true;
+                activity = "exercise";
                 duration = 1;
             }
         }
@@ -315,6 +391,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
                 game.gameData.buttonClickedSoundActivate();
                 showPopup = true;
+                activity = "study";
                 duration = 1;
             }
             else if (touchX >= eatOpt.x && touchX <= eatOpt.x + popupMenuWidth * zoom && touchY >= eatOpt.y && touchY <= eatOpt.y + popupMenuHeight * zoom) {
