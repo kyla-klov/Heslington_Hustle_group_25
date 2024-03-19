@@ -39,8 +39,10 @@ public class Main extends Game {
 		gameData = new GameData();
 		screenWidth = graphics.getWidth();
 		screenHeight = graphics.getHeight();
-		defWidth = graphics.getWidth();
-		defHeight = graphics.getHeight();
+
+		defWidth = 1922;
+		defHeight = 995;
+
 		defaultCamera = new OrthographicCamera();
 		gameData.setPlayerPosY(screenWidth /2 - screenHeight /2);
 
