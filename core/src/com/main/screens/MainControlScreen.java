@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,15 +15,19 @@ import static com.badlogic.gdx.Gdx.input;
 
 public class MainControlScreen implements Screen, InputProcessor {
     Main game;
+    BitmapFont font;
+    String objective;
     private final Texture backButton, controlLabel, controls;
     // X and Y coordinates
     private final float  backButtonX, backButtonY, controlLabelX, controlLabelY, controlsX, controlsY;
     // Buttons dimensions
-    private final float backButtonWidth = 200, backButtonHeight = 100, controlLabelWidth = 500, controlLabelHeight = 130, controlsHeight = 1075, controlsWidth = 500;
+    private final float backButtonWidth = 200, backButtonHeight = 100, controlLabelWidth = 500, controlLabelHeight = 130, controlsHeight = 594, controlsWidth = 198;
 
     public MainControlScreen(Main game) {
         this.game = game;
         Stage stage;
+        font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+        font.getData().setScale(1.5f);
 
         Gdx.input.setInputProcessor(this);
         backButton = new Texture("assets/settings_gui/back_button.png");
@@ -33,8 +38,12 @@ public class MainControlScreen implements Screen, InputProcessor {
         backButtonY = (float) game.screenHeight / 6 - 100;
         controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
         controlLabelY = game.screenHeight - (controlLabelHeight * 2);
-        controlsX = game.screenWidth /2;
-        controlsY = (game.screenHeight ) / 2;
+        controlsX = game.screenWidth / 3;
+        controlsY = (game.screenHeight / 3) - (controlsHeight / 5);
+
+        objective = "Welcome to Heslington Hustle! You are a second-year Computer Science student with exams in only 7 days. Explore the map, \n" +
+                "and interact with buildings to eat, study, sleep and have fun. To get a good grade, you need to balance hours of studying with \n" +
+                "self-care and recreation. Good luck!";
 
 
         stage = new Stage();
@@ -59,9 +68,10 @@ public class MainControlScreen implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
-        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+        font.draw(game.batch, objective, game.screenWidth /4  * game.scaleFactorX, game.screenHeight - 280 * game.scaleFactorY);
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(controls, controlsX, controlsY, controlsWidth, controlsHeight);
+        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
         //stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         //stage.draw();
         game.batch.end();
@@ -145,6 +155,7 @@ public class MainControlScreen implements Screen, InputProcessor {
         backButton.dispose();
         controlLabel.dispose();
         controls.dispose();
+        font.dispose();
     }
 
 }
