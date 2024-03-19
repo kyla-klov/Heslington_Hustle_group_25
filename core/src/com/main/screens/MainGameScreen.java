@@ -142,7 +142,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         drawWorldElements();
         drawUIElements();
         drawGameTime(); // Draw current time
-        drawFadeEffect();
+        //drawFadeEffect(delta);
     }
 
     private void updateGameTime(float delta) {
@@ -159,31 +159,8 @@ public class MainGameScreen implements Screen, InputProcessor {
             currentHour = 10 + (currentHour - 26);
             dayNum++;
             timeElapsed -= gameDayLengthInSeconds;
-        }
-        if (currentHour == 24 && !isFading) {
-            isFading = true;
-            fadeTimer = 0f;
-        }
-
-        if (isFading) {
-            fadeTimer += delta;
-            fadeAlpha = Math.min(fadeTimer / fadeDuration, 1f); // Fade in
-
-            if (fadeTimer >= fadeDuration) {
-                // After the fade-in completes, reset for fade-out or end the fade effect
-                if (fadeAlpha == 1f) { // Fully faded in, start fading out
-                    fadeTimer = 0f;
-                    isFading = false; // or keep true to fade out immediately after fade in
-                } else {
-                    fadeAlpha = 1f - Math.min((fadeTimer - fadeDuration) / fadeDuration, 1f); // Fade out
-                    if (fadeTimer >= fadeDuration * 2) { // Fade-out complete
-                        isFading = false;
-                        fadeTimer = 0f;
-                        fadeAlpha = 0f;
-                        // Here, you can also increment dayNum or perform other actions
-                    }
-                }
-            }
+            isFading = true; // Trigger fading effect at the end of the day
+            fadeTimer = 0; // Reset fade timer
         }
     }
 
@@ -195,18 +172,39 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
-    private void drawFadeEffect() {
+    private void drawFadeEffect(float delta) {
         if (isFading) {
+            fadeTimer += delta;
+
+            if (fadeTimer <= fadeDuration) {
+                fadeAlpha = fadeTimer / fadeDuration; // Fade in
+            } else if (fadeTimer <= fadeDuration * 2) {
+                fadeAlpha = 1 - (fadeTimer - fadeDuration) / fadeDuration; // Fade out
+            } else {
+                isFading = false; // Stop fading after completion
+                fadeAlpha = 0;
+            }
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0, 0, 0, fadeAlpha); // Black with varying alpha
+            shapeRenderer.setColor(0, 0, 0, fadeAlpha); // Apply alpha for fade effect
             shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             shapeRenderer.end();
-
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+
+//        if (isFading) {
+//            Gdx.gl.glEnable(GL20.GL_BLEND);
+//            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//            shapeRenderer.setColor(0, 0, 0, fadeAlpha); // Black with varying alpha
+//            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//            shapeRenderer.end();
+//
+//            Gdx.gl.glDisable(GL20.GL_BLEND);
+//        }
+
     }
 
     public Texture setEnergyBar() {
