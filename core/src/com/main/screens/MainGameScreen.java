@@ -101,6 +101,8 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         energyBar = setEnergyBar();
 
+        player.setPos( 1385, 658);
+
         camera.setToOrtho(false, game.screenWidth/zoom, game.screenHeight/zoom);
         camera.update();
 
@@ -156,7 +158,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         lockTime = false;
         player.updateGender();
         // setting play position to liking
-        player.setPos( 1385, 658);
+        //player.setPos( 1385, 658);
     }
 
     private void isHovering(float posX, float posY){
