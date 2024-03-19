@@ -52,6 +52,8 @@ public class MainGameScreen implements Screen, InputProcessor {
     private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
     private int currentHour = 10; // Game starts at 10:00 am.
     private final int hoursInDay = 16; // Player sleeps for 8 hours
+    float gameDayLengthInSeconds = 60f;
+    float secondsPerGameHour;
 
     final float zoom = 3f;
 
@@ -73,6 +75,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         shader = new Color(0.5f, 0.5f, 0.5f, 1);
         showPopup = false;
         activity = "";
+        secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
 
         shapeRenderer = new ShapeRenderer();
         menuButton = new Texture("menu_buttons/menu_icon.png");
@@ -270,8 +273,6 @@ public class MainGameScreen implements Screen, InputProcessor {
     }
 
     private void updateGameTime(float delta) {
-        float gameDayLengthInSeconds = 60f;
-        float secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
         timeElapsed += delta;
 
         // Calculate the current hour in game time
@@ -340,6 +341,10 @@ public class MainGameScreen implements Screen, InputProcessor {
                     duration = 1;
                 } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                     game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    recActivity++;
+                    timeElapsed += duration * secondsPerGameHour;
+                    duration = 1;
                 }
             }
             else if (activity.equals("sleep")){
@@ -355,6 +360,8 @@ public class MainGameScreen implements Screen, InputProcessor {
                     duration = 1;
                 } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                     game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    duration = 1;
                 }
             }
         }
