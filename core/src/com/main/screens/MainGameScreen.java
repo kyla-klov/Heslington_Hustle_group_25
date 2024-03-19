@@ -22,7 +22,6 @@ public class MainGameScreen implements Screen, InputProcessor {
     Player player;
     BitmapFont font, popupFont, durationFont;
     GameMap gameMap;
-
     Texture menuButton;
     float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
     float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
