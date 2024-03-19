@@ -2,6 +2,7 @@ package com.main;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,7 +29,7 @@ public class Main extends Game {
 	public float scaleFactorX;
 	public float scaleFactorY;
 
-	/**
+    /**
 	 * Called when the game is first created.
 	 * Initializes the game's main components and sets the main menu as the initial screen.
 	 */

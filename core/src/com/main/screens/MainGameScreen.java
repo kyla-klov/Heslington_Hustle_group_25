@@ -3,8 +3,10 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
@@ -19,6 +21,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     BitmapFont font;
     BitmapFont font2;
     GameMap gameMap;
+    ShapeRenderer shapeRenderer;
 
     Texture menuButton;
     float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
@@ -31,12 +34,19 @@ public class MainGameScreen implements Screen, InputProcessor {
     float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
     int energyCounter = 10;
 
+    // counters, time and day
     Texture counterBackground;
     int dayNum = 1;
     int recActivity, studyHours;
     private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
     private int currentHour = 10; // Game starts at 10:00 am.
     private final int hoursInDay = 16; // Player sleeps for 8 hours
+
+    // fading black
+    private boolean isFading = false;
+    private float fadeAlpha = 0f;
+    private final float fadeDuration = 2f; // Duration of the fade effect in seconds
+    private float fadeTimer = 0f;
 
     final float zoom = 3f;
 
@@ -52,9 +62,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         font2 = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         popupMenuType = "";
+        shapeRenderer = new ShapeRenderer();
 
         menuButton = new Texture("menu_buttons/menu_icon.png");
-        counterBackground = new Texture("conter_background.png");
+        counterBackground = new Texture("counter_background.png");
         popupMenu = new Texture("popup_menu.png");
 
         calculateDimensions();
@@ -131,6 +142,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         drawWorldElements();
         drawUIElements();
         drawGameTime(); // Draw current time
+        drawFadeEffect();
     }
 
     private void updateGameTime(float delta) {
@@ -140,13 +152,38 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         // Calculate the current hour in game time
         int hoursPassed = (int)(timeElapsed / secondsPerGameHour);
-        currentHour = 10 + hoursPassed; // Starts at 10:00 AM
+        currentHour = 8 + hoursPassed;
 
-        // Ensure the hour cycles through the active hours correctly (10 AM to 2 AM)
-        if (currentHour >= 26) { // If it reaches 2 AM, reset to 10 AM the next day
+        // Ensures active hours (8:00AM to 12:00AM)
+        if (currentHour >= 24) {
             currentHour = 10 + (currentHour - 26);
             dayNum++;
             timeElapsed -= gameDayLengthInSeconds;
+        }
+        if (currentHour == 24 && !isFading) {
+            isFading = true;
+            fadeTimer = 0f;
+        }
+
+        if (isFading) {
+            fadeTimer += delta;
+            fadeAlpha = Math.min(fadeTimer / fadeDuration, 1f); // Fade in
+
+            if (fadeTimer >= fadeDuration) {
+                // After the fade-in completes, reset for fade-out or end the fade effect
+                if (fadeAlpha == 1f) { // Fully faded in, start fading out
+                    fadeTimer = 0f;
+                    isFading = false; // or keep true to fade out immediately after fade in
+                } else {
+                    fadeAlpha = 1f - Math.min((fadeTimer - fadeDuration) / fadeDuration, 1f); // Fade out
+                    if (fadeTimer >= fadeDuration * 2) { // Fade-out complete
+                        isFading = false;
+                        fadeTimer = 0f;
+                        fadeAlpha = 0f;
+                        // Here, you can also increment dayNum or perform other actions
+                    }
+                }
+            }
         }
     }
 
@@ -156,6 +193,20 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.begin();
         font.draw(game.batch, timeString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
         game.batch.end();
+    }
+
+    private void drawFadeEffect() {
+        if (isFading) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, fadeAlpha); // Black with varying alpha
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 
     public Texture setEnergyBar() {
@@ -205,7 +256,7 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        shapeRenderer.dispose();
     }
 
     @Override
