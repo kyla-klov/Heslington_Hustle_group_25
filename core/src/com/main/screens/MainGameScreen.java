@@ -52,6 +52,11 @@ public class MainGameScreen implements Screen, InputProcessor {
     private int currentHour = 10; // Game starts at 10:00 am.
     float gameDayLengthInSeconds = 60f;
     float secondsPerGameHour;
+    boolean lockTime = false;
+
+    boolean fadeOut = false;
+    float fadeTime = 0;
+    float minShade = 0;
 
     final float zoom = 3f;
 
@@ -148,9 +153,10 @@ public class MainGameScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+        lockTime = false;
         player.updateGender();
         // setting play position to liking
-        player.setPos( gameMap.getTileSize() * 68, gameMap.getTileSize() * 62);
+        player.setPos( 1385, 658);
     }
 
     private void isHovering(float posX, float posY){
@@ -165,8 +171,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
-    private void drawMenuOption(float posX, float posY, String text){
-        isHovering(posX, posY);
+    private void drawMenuOption(float posX, float posY, String text, int shadeOption){
+        if (shadeOption == 0) isHovering(posX, posY);
+        else if (shadeOption == 1) game.batch.setColor(Color.WHITE);
+        else if (shadeOption == 2) game.batch.setColor(shader);
         GlyphLayout layout = new GlyphLayout();
         layout.setText(popupFont, text);
         game.batch.draw(popupMenu, posX, posY, popupMenuWidth, popupMenuHeight);
@@ -188,7 +196,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                 break;
             case "sleep":
                 activityButton = menuSleepButton;
-                title = "Sleep Duration";
+                title = "Sleep Early";
                 break;
             case "exercise":
                 activityButton = menuGoButton;
@@ -200,20 +208,22 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
 
         game.batch.draw(durationMenuBackground, durationMenuBackgroundX, durationMenuBackgroundY, durationMenuBackgroundWidth, durationMenuBackgroundHeight);
-        game.batch.draw(durationDownButton, durationDownButtonX, durationButtonY, durationDownButtonWidth, durationDownButtonHeight);
-        game.batch.draw(durationUpButton, durationUpButtonX, durationButtonY, durationUpButtonWidth, durationUpButtonHeight);
         game.batch.draw(menuBackButton, menuBackButtonX, durationMenuButtonY, menuBackButtonWidth, menuBackButtonHeight);
         game.batch.draw(activityButton, activityButtonX, durationMenuButtonY, activityButtonWidth, activityButtonHeight);
-
-        layout.setText(durationFont, Integer.toString(duration));
-        textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
-        durationFont.draw(game.batch, Integer.toString(duration), textX, durationTextY);
         layout.setText(durationFont, title);
         textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
         durationFont.draw(game.batch, title, textX, menuTitleY);
-        layout.setText(durationFont, "Hours");
-        textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
-        durationFont.draw(game.batch, "Hours", textX, hoursLabelY);
+
+        if (!activity.equals("sleep")) {
+            game.batch.draw(durationDownButton, durationDownButtonX, durationButtonY, durationDownButtonWidth, durationDownButtonHeight);
+            game.batch.draw(durationUpButton, durationUpButtonX, durationButtonY, durationUpButtonWidth, durationUpButtonHeight);
+            layout.setText(durationFont, Integer.toString(duration));
+            textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width) / 2f;
+            durationFont.draw(game.batch, Integer.toString(duration), textX, durationTextY);
+            layout.setText(durationFont, "Hours");
+            textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width) / 2f;
+            durationFont.draw(game.batch, "Hours", textX, hoursLabelY);
+        }
 
         game.batch.end();
     }
@@ -228,7 +238,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    private void drawWorldElements(){
+    private void drawWorldElements(float delta){
         CollisionHandler collisionHandler = player.getCollisionHandler();
         popupMenuType = "";
         gameMap.render();
@@ -237,22 +247,37 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
         if (collisionHandler.isTouching("Comp_sci_door", player.getHitBox())){
             popupMenuType = "Comp_sci_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study");
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
         }
         else if (collisionHandler.isTouching("Piazza_door", player.getHitBox())){
             popupMenuType = "Piazza_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study");
-            drawMenuOption(player.worldX + 30, player.worldY + 35, "Eat");
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
+            drawMenuOption(player.worldX + 30, player.worldY + 35, "Eat", 0);
         }
         else if (collisionHandler.isTouching("Goodricke_door", player.getHitBox())){
-            popupMenuType = "Goodricke_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep");
+            int shadeOption = 0;
+            if (currentHour >= 20) popupMenuType = "Goodricke_door";
+            else shadeOption = 2;
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep", shadeOption);
         }
         else if (collisionHandler.isTouching("Gym_door", player.getHitBox())){
             popupMenuType = "Gym_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Exercise");
+            drawMenuOption(player.worldX + 30, player.worldY + 20, "Exercise", 0);
         }
         game.batch.end();
+        if (!fadeOut && timeElapsed/secondsPerGameHour > 11) drawShadeOverlay((timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour));
+        if (fadeOut){
+            if (fadeTime == 0) fadeTime = minShade;
+            if (fadeTime <= 1) {
+                fadeTime += delta;
+                drawShadeOverlay(fadeTime);
+            }
+            else{
+                fadeTime = 0;
+                fadeOut = false;
+                lockTime = false;
+            }
+        }
     }
 
     private void drawUIElements(){
@@ -270,9 +295,9 @@ public class MainGameScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         player.update(delta); // This line updates player position and animation state.
-        updateGameTime(delta); // Update the game clock
+        if (!lockTime) updateGameTime(delta); // Update the game clock
         ScreenUtils.clear(0, 0, 1, 1);
-        drawWorldElements();
+        drawWorldElements(delta);
         drawUIElements();
         drawGameTime(); // Draw current time
     }
@@ -282,19 +307,31 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         // Calculate the current hour in game time
         int hoursPassed = (int)(timeElapsed / secondsPerGameHour);
-        currentHour = 10 + hoursPassed; // Starts at 10:00 AM
+        currentHour = 8 + hoursPassed; // Starts at 10:00 AM
 
         // Ensure the hour cycles through the active hours correctly (10 AM to 2 AM)
-        if (currentHour >= 26) { // If it reaches 2 AM, reset to 10 AM the next day
-            currentHour = 10 + (currentHour - 26);
-            dayNum++;
-            timeElapsed -= gameDayLengthInSeconds;
+        if (currentHour >= 24) { // If it reaches 2 AM, reset to 10 AM the next day
+            minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
+            resetDay();
+            fadeOut = true;
+            lockTime = true;
         }
+    }
+
+    private void resetDay(){
+        currentHour = 8;
+        dayNum++;
+        timeElapsed = 0;
+        player.setPos( 1385, 658);
+        energyCounter += 4;
+        if (energyCounter > 10) energyCounter = 10;
+        energyBar.dispose();
+        energyBar = setEnergyBar();
     }
 
     private void drawGameTime() {
         // Adjust the format if you want to display minutes or seconds
-        String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour);
+        String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour%24);
         game.batch.begin();
         font.draw(game.batch, timeString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
         game.batch.end();
@@ -330,6 +367,13 @@ public class MainGameScreen implements Screen, InputProcessor {
                     duration = 1;
                 } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                     game.gameData.buttonClickedSoundActivate();
+                    showPopup = false;
+                    studyHours += duration;
+                    if (energyCounter > 0) energyCounter --;
+                    energyBar.dispose();
+                    energyBar = setEnergyBar();
+                    lockTime = true;
+                    timeElapsed += duration * secondsPerGameHour;
                     game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
                 }
             }
@@ -346,10 +390,15 @@ public class MainGameScreen implements Screen, InputProcessor {
                     duration = 1;
                 } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                     game.gameData.buttonClickedSoundActivate();
-                    showPopup = false;
-                    recActivity++;
-                    timeElapsed += duration * secondsPerGameHour;
-                    duration = 1;
+                    if (energyCounter >= duration) {
+                        showPopup = false;
+                        recActivity++;
+                        energyCounter -= duration;
+                        energyBar.dispose();
+                        energyBar = setEnergyBar();
+                        timeElapsed += duration * secondsPerGameHour;
+                        duration = 1;
+                    }
                 }
             }
             else if (activity.equals("sleep")){
@@ -365,7 +414,11 @@ public class MainGameScreen implements Screen, InputProcessor {
                     duration = 1;
                 } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                     game.gameData.buttonClickedSoundActivate();
+                    minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
+                    resetDay();
                     showPopup = false;
+                    fadeOut = true;
+                    lockTime = true;
                     duration = 1;
                 }
             }
