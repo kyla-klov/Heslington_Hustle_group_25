@@ -26,6 +26,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
     float heslingtonHustleLabelX;
     float heslingtonHustleLabelY, playButtonY, controlsButtonY, settingsButtonY, exitButtonY;
 
+    boolean exitFlag;
+
     /**
      * Constructs a MainMenuScreen with the specified game instance.
      * Initializes UI elements and calculates their positions.
@@ -88,7 +90,9 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        if (exitFlag) return;
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(heslingtonHustleLabel, heslingtonHustleLabelX, heslingtonHustleLabelY, heslingtonHustleLabelWidth, heslingtonHustleLabelHeight);
@@ -138,6 +142,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
                 touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.clearMemory();
+            exitFlag = true;
+            dispose();
             Gdx.app.exit();
 
         }

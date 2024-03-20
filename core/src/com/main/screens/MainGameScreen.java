@@ -46,7 +46,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     int duration = 1;
 
     Texture counterBackground;
-    int dayNum = 1;
+    int dayNum;
     int recActivity, studyHours;
     private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
     private int currentHour = 10; // Game starts at 10:00 am.
@@ -79,6 +79,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         shader = new Color(0.5f, 0.5f, 0.5f, 1);
         showPopup = false;
         activity = "";
+        dayNum = 1;
         // Player sleeps for 8 hours
         int hoursInDay = 16;
         secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
@@ -316,10 +317,11 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         // Calculate the current hour in game time
         int hoursPassed = (int)(timeElapsed / secondsPerGameHour);
-        currentHour = 8 + hoursPassed; // Starts at 10:00 AM
+        currentHour = 8 + hoursPassed; // Starts at 08:00 AM
 
-        // Ensure the hour cycles through the active hours correctly (10 AM to 2 AM)
-        if (currentHour >= 24) { // If it reaches 2 AM, reset to 10 AM the next day
+        // Ensure the hour cycles through the active hours correctly (8 AM to 12 AM)
+        if (currentHour >= 24) { // If it reaches 12 AM, reset to 8 AM the next day
+            if (dayNum == 7) game.screenManager.setScreen(ScreenType.END_SCREEN);
             minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
             resetDay();
             fadeOut = true;

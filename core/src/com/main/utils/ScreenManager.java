@@ -102,6 +102,8 @@ public class ScreenManager {
                 return new MainControlScreen(game);
             case MINI_GAME:
                 return new TypingGame(game, (int) args[0]);
+            case END_SCREEN:
+                return new EndScreen(game);
         }
         return null;
     }

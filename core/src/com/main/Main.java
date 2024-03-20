@@ -61,6 +61,12 @@ public class Main extends Game {
 		screenManager.setScreen(ScreenType.MAIN_MENU);
 	}
 
+	public void setup(){
+		screenManager.clearMemory();
+		screenManager.keepInMemory(ScreenType.GAME_SCREEN);
+		screenManager.setScreen(ScreenType.MAIN_MENU);
+	}
+
 	/**
 	 * Called each frame, responsible for rendering the game.
 	 */
