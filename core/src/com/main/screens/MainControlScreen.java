@@ -59,13 +59,11 @@ public class MainControlScreen implements Screen, InputProcessor {
                 "and interact with buildings to eat, study, sleep and have fun. To get a good grade, you need to balance hours of studying with \n" +
                 "self-care and recreation. Good luck!";
 
-        Gdx.input.setInputProcessor(this);
-
     }
 
     @Override
     public void show() {
-        //Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(this);
     }
 
     /**
@@ -160,8 +158,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        // Implement scrolling behavior if needed
-        return false; // Return false if the event was not handled
+        return false;
     }
 
     @Override
