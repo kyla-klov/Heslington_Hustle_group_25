@@ -1,6 +1,5 @@
 package com.main.sound;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
@@ -14,12 +13,12 @@ public class GameMusic {
     // Music levels is quarters
     private int musicLevel = 4;
 
-    private float musicCap = 0.1f;
+    private final float musicCap = 0.1f;
     /**
      * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
      */
     public GameMusic() {
-        audio = Gdx.audio.newMusic(Gdx.files.internal("assets/music_loop/Ludum Dare 30 - 01.ogg"));
+        audio = Gdx.audio.newMusic(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg"));
         audio.play();
         audio.setVolume(musicCap); // Set volume to 100%
         audio.setLooping(true);

@@ -1,6 +1,5 @@
 package com.main.utils;
 
-import com.badlogic.gdx.Game;
 import com.main.sound.GameMusic;
 import com.main.sound.GameSound;
 
@@ -9,8 +8,6 @@ import com.main.sound.GameSound;
  */
 public class GameData {
     private boolean gender = true;
-    private float playerPosX = 300;
-    private float playerPosY = 300;
     GameMusic music;
     GameSound sound;
 
@@ -79,41 +76,7 @@ public class GameData {
 
     public void downSoundActivate(){ sound.downSoundActivate(); }
 
+    public void eatingSoundActivate(){ sound.eatingSoundActivate(); }
+
     public void buttonClickedSoundActivate(){ sound.buttonClickedSoundActivate(); }
-
-    /**
-     * Retrieves the player's current X position.
-     *
-     * @return The X-coordinate of the player.
-     */
-    public float getPlayerPosX(){
-        return playerPosX;
-    }
-
-    /**
-     * Sets the player's X position to a specified value.
-     *
-     * @param x The X-coordinate to set for the player.
-     */
-    public void setPlayerPosX(float x){
-        playerPosX = x;
-    }
-
-    /**
-     * Retrieves the player's current Y position.
-     *
-     * @return The Y-coordinate of the player.
-     */
-    public float getPlayerPosY(){
-        return playerPosY;
-    }
-
-    /**
-     * Sets the player's Y position to a specified value.
-     *
-     * @param y The Y-coordinate to set for the player.
-     */
-    public void setPlayerPosY(float y){
-        playerPosY = y;
-    }
 }

@@ -55,6 +55,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     boolean lockTime = false;
 
     boolean fadeOut = false;
+    boolean resetPos = false;
     float fadeTime = 0;
     float minShade = 0;
 
@@ -86,13 +87,14 @@ public class MainGameScreen implements Screen, InputProcessor {
         menuButton = new Texture("menu_buttons/menu_icon.png");
         counterBackground = new Texture("counter_background.png");
         popupMenu = new Texture("popup_menu.png");
-        durationMenuBackground = new Texture("assets/duration_menu_background.png");
-        durationUpButton = new Texture("assets/settings_gui/arrow_right_button.png");
-        durationDownButton = new Texture("assets/settings_gui/arrow_left_button.png");
-        menuBackButton = new Texture("assets/settings_gui/back_button.png");
-        menuStudyButton = new Texture("assets/study_button.png");
-        menuSleepButton = new Texture("assets/sleep_button.png");
-        menuGoButton = new Texture("assets/go_button.png");
+        durationMenuBackground = new Texture("duration_menu_background.png");
+        durationUpButton = new Texture("settings_gui/arrow_right_button.png");
+        durationDownButton = new Texture("settings_gui/arrow_left_button.png");
+        menuBackButton = new Texture("settings_gui/back_button.png");
+        menuStudyButton = new Texture("study_button.png");
+        menuSleepButton = new Texture("sleep_button.png");
+        menuGoButton = new Texture("go_button.png");
+
 
         calculateDimensions();
         calculatePositions();
@@ -101,7 +103,7 @@ public class MainGameScreen implements Screen, InputProcessor {
 
         energyBar = setEnergyBar();
 
-        player.setPos( 1385, 658);
+        player.setPos( 1389, 635);
 
         camera.setToOrtho(false, game.screenWidth/zoom, game.screenHeight/zoom);
         camera.update();
@@ -153,12 +155,21 @@ public class MainGameScreen implements Screen, InputProcessor {
     }
 
     @Override
+    public void render(float delta) {
+        player.update(delta); // This line updates player position and animation state.
+        if (!lockTime) updateGameTime(delta); // Update the game clock
+        ScreenUtils.clear(0, 0, 1, 1);
+        drawWorldElements(delta);
+        drawUIElements();
+        drawGameTime(); // Draw current time
+    }
+
+
+    @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
         lockTime = false;
         player.updateGender();
-        // setting play position to liking
-        //player.setPos( 1385, 658);
     }
 
     private void isHovering(float posX, float posY){
@@ -243,6 +254,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     private void drawWorldElements(float delta){
         CollisionHandler collisionHandler = player.getCollisionHandler();
         popupMenuType = "";
+        gameMap.update(delta);
         gameMap.render();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
@@ -275,9 +287,14 @@ public class MainGameScreen implements Screen, InputProcessor {
                 drawShadeOverlay(fadeTime);
             }
             else{
+                if (resetPos) {
+                    player.setPos( 1389, 635);
+                    player.setDirection('D');
+                }
                 fadeTime = 0;
                 fadeOut = false;
                 lockTime = false;
+                resetPos = false;
             }
         }
     }
@@ -294,16 +311,6 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
-    @Override
-    public void render(float delta) {
-        player.update(delta); // This line updates player position and animation state.
-        if (!lockTime) updateGameTime(delta); // Update the game clock
-        ScreenUtils.clear(0, 0, 1, 1);
-        drawWorldElements(delta);
-        drawUIElements();
-        drawGameTime(); // Draw current time
-    }
-
     private void updateGameTime(float delta) {
         timeElapsed += delta;
 
@@ -317,6 +324,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             resetDay();
             fadeOut = true;
             lockTime = true;
+            resetPos = true;
         }
     }
 
@@ -324,7 +332,6 @@ public class MainGameScreen implements Screen, InputProcessor {
         currentHour = 8;
         dayNum++;
         timeElapsed = 0;
-        player.setPos( 1385, 658);
         energyCounter += 4;
         if (energyCounter > 10) energyCounter = 10;
         energyBar.dispose();
@@ -372,7 +379,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                         game.gameData.buttonClickedSoundActivate();
                         showPopup = false;
                         studyHours += duration;
-                        if (energyCounter > 0) energyCounter --;
+                        if (energyCounter > (duration+1)/2) energyCounter -= (duration+1)/2;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
                         lockTime = true;
@@ -427,6 +434,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                         showPopup = false;
                         fadeOut = true;
                         lockTime = true;
+                        resetPos = true;
                         duration = 1;
                     }
                     break;
@@ -470,11 +478,11 @@ public class MainGameScreen implements Screen, InputProcessor {
             }
             else if (touchX >= eatOpt.x && touchX <= eatOpt.x + popupMenuWidth * zoom && touchY >= eatOpt.y && touchY <= eatOpt.y + popupMenuHeight * zoom) {
                 game.gameData.buttonClickedSoundActivate();
+                game.gameData.eatingSoundActivate();
                 energyCounter += 3;
                 if (energyCounter > 10) energyCounter = 10;
                 energyBar.dispose();
                 energyBar = setEnergyBar();
-                System.out.println("NOM NOM NOM");
             }
         }
 
@@ -504,7 +512,22 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        shapeRenderer.dispose();
+        menuButton.dispose();
+        counterBackground.dispose();
+        popupMenu.dispose();
+        durationMenuBackground.dispose();
+        durationUpButton.dispose();
+        durationDownButton.dispose();
+        menuBackButton.dispose();
+        menuStudyButton.dispose();
+        menuSleepButton.dispose();
+        menuGoButton.dispose();
+        energyBar.dispose();
+        player.dispose();
+        font.dispose();
+        popupFont.dispose();
+        durationFont.dispose();
     }
 
     @Override

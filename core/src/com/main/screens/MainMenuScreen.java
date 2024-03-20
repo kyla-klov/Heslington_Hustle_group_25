@@ -3,7 +3,6 @@ package com.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.badlogic.gdx.InputProcessor;
@@ -95,7 +94,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
         game.batch.draw(heslingtonHustleLabel, heslingtonHustleLabelX, heslingtonHustleLabelY, heslingtonHustleLabelWidth, heslingtonHustleLabelHeight);
         game.batch.draw(playButton, x, playButtonY, playButtonWidth, playButtonHeight);
         game.batch.draw(controlsButton, x, controlsButtonY, controlsButtonWidth, controlsButtonHeight);
-        game.batch.draw(settingsButton, x, (float) settingsButtonY, settingsButtonWidth, settingsButtonHeight);
+        game.batch.draw(settingsButton, x, settingsButtonY, settingsButtonWidth, settingsButtonHeight);
         game.batch.draw(exitButton, x, exitButtonY, exitButtonWidth, exitButtonHeight);
         game.batch.end();
     }
@@ -138,6 +137,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
         else if (touchX >= x && touchX <= x + exitButtonWidth &&
                 touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {
             game.gameData.buttonClickedSoundActivate();
+            game.screenManager.clearMemory();
             Gdx.app.exit();
 
         }

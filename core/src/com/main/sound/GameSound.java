@@ -11,15 +11,17 @@ public class GameSound {
     Music upSound;
     Music downSound;
     Music buttonClickedSound;
+    Music eatingSound;
     private int soundLevel = 4;
 
     /**
      * Initializes sound effects by loading the audio files.
      */
     public GameSound(){
-        upSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/high_note.mp3"));
-        downSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/low_note.mp3"));
-        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/button_press.mp3"));
+        upSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/high_note.mp3"));
+        downSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/low_note.mp3"));
+        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/button_press.mp3"));
+        eatingSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/eating_sound.wav"));
     }
 
     /**
@@ -63,6 +65,16 @@ public class GameSound {
     }
 
     /**
+     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
+     */
+    public void eatingSoundActivate(){
+        if (eatingSound.isPlaying()){
+            eatingSound.stop();
+        }
+        eatingSound.play();
+    }
+
+    /**
      * Increments the sound volume level by one step if not already at the maximum. Also adjusts the volume of all sound effects accordingly.
      */
     public void incrementVolume() {
@@ -72,6 +84,7 @@ public class GameSound {
             upSound.setVolume(floatingMusicLevel*25/100);
             downSound.setVolume(floatingMusicLevel*25/100);
             buttonClickedSound.setVolume(floatingMusicLevel*25/100);
+            eatingSound.setVolume(floatingMusicLevel*25/100);
         }
     }
 

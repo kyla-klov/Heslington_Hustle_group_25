@@ -1,15 +1,11 @@
 package com.main.map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapGroupLayer;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.main.entity.Player;
 
 /**
  * Represents the game map, handling rendering and toggling layer visibility.
@@ -22,7 +18,6 @@ public class GameMap extends TiledMap {
     private final OrthographicCamera camera;
     int tileSize = 16;
     float layerToggleTime;
-    private Player player;
 
     /**
      * Constructs a GameMap with an orthographic camera.
