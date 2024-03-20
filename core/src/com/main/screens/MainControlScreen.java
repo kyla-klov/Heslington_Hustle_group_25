@@ -95,12 +95,11 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.defWidth / (float) game.screenWidth;
-        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
+    public boolean touchDown(int touchX, int touchY, int pointer, int button) {
+        touchY = (game.screenHeight - touchY);
 
-        if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
-                worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
+        if (touchX >= backButtonX && touchX <= backButtonX + backButtonWidth &&
+                touchY >= backButtonY && touchY <= backButtonY + backButtonHeight) {
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
             game.gameData.buttonClickedSoundActivate();
         }
