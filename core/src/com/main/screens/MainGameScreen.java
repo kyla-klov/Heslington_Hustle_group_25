@@ -48,9 +48,8 @@ public class MainGameScreen implements Screen, InputProcessor {
     private float durationTextY, menuTitleY, hoursLabelY;
     private float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
     private String activity, popupMenuType;
-    private int energyCounter, duration, dayNum, recActivity, studyHours;
+    private int energyCounter, duration, dayNum, recActivity, studyHours, mealCount, currentHour;
     private float timeElapsed, fadeTime, minShade;
-    private int currentHour;
     private boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
 
     public MainGameScreen(Main game) {
@@ -108,7 +107,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         energyBarWidth = 200 * game.scaleFactorX;
         energyBarHeight = 64 * game.scaleFactorY;
         counterBackgroundWidth = 370 * game.scaleFactorX;
-        counterBackgroundHeight = 120 * game.scaleFactorY;
+        counterBackgroundHeight = 150 * game.scaleFactorY;
         durationUpButtonWidth = 50 * game.scaleFactorX;
         durationUpButtonHeight = 50 * game.scaleFactorY;
         durationDownButtonWidth = 50 * game.scaleFactorX;
@@ -334,7 +333,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     }
 
     private void drawUIElements(){
-        String counterString = String.format("Recreation Activities done: " + recActivity + "\nStudy hours: " + studyHours, dayNum, timeElapsed );
+        String counterString = String.format("Recreation Activities done: " + recActivity + "\nStudy hours: " + studyHours + "\nMeals Eaten: " + mealCount, dayNum, timeElapsed );
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
         if (showMenu) drawDurationMenu();
         game.batch.begin();
@@ -497,6 +496,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                         game.gameData.buttonClickedSoundActivate();
                         game.gameData.eatingSoundActivate();
                         energyCounter += 3;
+                        mealCount++;
                         if (energyCounter > 10) energyCounter = 10;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
