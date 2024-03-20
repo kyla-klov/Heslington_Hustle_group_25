@@ -1,5 +1,6 @@
 package com.main.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.main.Main;
 import com.main.screens.*;
@@ -41,12 +42,20 @@ public class ScreenManager {
         }
     }
 
+    public void clearMemory(){
+        for (Screen screen : screensInMemory.values()){
+            screen.dispose();
+        }
+        screensInMemory.clear();
+    }
+
     /**
      * Sets the current screen of the game. If the screen is stored in memory, it uses it; otherwise, it creates a new screen.
      *
      * @param screenType The type of the screen to display.
      */
     public void setScreen(ScreenType screenType, Object... args) {
+        Gdx.input.setInputProcessor(null);
         if (curScreen != null && !screensInMemory.containsKey(curScreenType)){
             curScreen.dispose();
         }

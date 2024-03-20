@@ -1,7 +1,6 @@
 package com.main.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,41 +15,54 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TypingGame implements Screen, InputProcessor {
     private final Main game;
-    private int studyDuration, attempts = 0, currentNumber = 0, correct = 0, startingNumLength = 5;
-    private Texture guessButton;
+    private final int studyDuration;
+    private int attempts = 0;
+    private int currentNumber = 0;
+    private int correct = 0;
+    private final Texture guessButton;
     private String userGuess = "";
     Boolean acceptInput = false, displayCorrect = false, displayWrong = false;
     BitmapFont displayText;
-    private float displayTextX, displayTextY, displayTextWidth = 500, displayTextHeight = 100;
-    private final float guessButtonX, guessButtonY, guessButtonWidth = 156, guessButtonHeight = 84;
-    private Texture title;
-    private float titleX, titleY, titleWidth = 74, titleHeight = 14;
+    private float displayTextY, displayTextHeight;
+    private float gameObjectiveY;
+    private float guessButtonX, guessButtonY, guessButtonWidth, guessButtonHeight;
+    private final Texture title;
+    private float titleX, titleY, titleWidth, titleHeight;
     String gameObjective;
 
     public TypingGame(Main game, int studyDuration){
+        this.game = game;
         displayText = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        guessButton = new Texture("assets/mini_games/guess_button.png");
-        title = new Texture("assets/mini_games/number_memoriser_label.png");
-        displayText.getData().setScale(4f);
+        guessButton = new Texture("mini_games/guess_button.png");
+        title = new Texture("mini_games/number_memoriser_label.png");
 
-        displayTextX = (game.screenWidth - displayTextWidth)/2;
-        displayTextY = (game.screenHeight - displayTextHeight)/2;
-        guessButtonX = (game.screenWidth - guessButtonWidth)/2;
-        guessButtonY = (game.screenHeight - guessButtonHeight)/2 - 300;
-        displayTextX = displayTextX * game.scaleFactorX;
-        displayTextY = displayTextY * game.scaleFactorY;
-        titleWidth = title.getWidth() * game.scaleFactorX * 11;
-        titleHeight = title.getHeight() * game.scaleFactorY * 11;
-        titleX = (game.screenWidth - titleWidth)/2;
-        titleY = (game.screenHeight - titleHeight)/2+500;
+        calculateDimensions();
+        calculatePositions();
 
         Gdx.input.setInputProcessor(this);
-        this.game = game;
         this.studyDuration = studyDuration;
 
         gameObjective = "Remember the number given and try to input the number from memory";
 
         playGame();
+    }
+
+    private void calculateDimensions(){
+        displayText.getData().setScale(3f * game.scaleFactorX, 3f * game.scaleFactorY);
+        displayTextHeight = 100 * game.scaleFactorY;
+        gameObjectiveY = game.screenHeight - 280 * game.scaleFactorY;
+        guessButtonWidth = 156 * game.scaleFactorX;
+        guessButtonHeight = 84 * game.scaleFactorY;
+        titleWidth = title.getWidth() * game.scaleFactorX * 11;
+        titleHeight = title.getHeight() * game.scaleFactorY * 11;
+    }
+
+    private void calculatePositions(){
+        displayTextY = game.screenHeight/2f - displayTextHeight;
+        guessButtonX = (game.screenWidth - guessButtonWidth)/2f;
+        guessButtonY = (game.screenHeight - guessButtonHeight)/2f - 300 * game.scaleFactorY;
+        titleX = (game.screenWidth - titleWidth)/2f;
+        titleY = (game.screenHeight - titleHeight)/2f + 400 * game.scaleFactorY;
     }
 
     public void playGame(){
@@ -82,31 +94,32 @@ public class TypingGame implements Screen, InputProcessor {
 
     @Override
     public void show() {
-
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
         game.batch.draw(title, titleX, titleY, titleWidth, titleHeight);
-        displayText.draw(game.batch, gameObjective, game.screenWidth / 4f, game.screenHeight - 280, game.screenWidth / 2f, Align.center, false);
-        
+        displayText.draw(game.batch, gameObjective, 0, gameObjectiveY, game.screenWidth, Align.center, false);
         if (acceptInput){
-            displayText.draw(game.batch, userGuess, 0, displayTextY + displayTextHeight / 2, game.screenWidth, Align.center, false);
+            displayText.draw(game.batch, userGuess, 0, displayTextY, game.screenWidth, Align.center, false);
             game.batch.draw(guessButton, guessButtonX, guessButtonY, guessButtonWidth, guessButtonHeight);
         } else if (displayCorrect){
-            displayText.draw(game.batch, "Correct well done.", 0, displayTextY + displayTextHeight / 2, game.screenWidth, Align.center, false);
+            displayText.draw(game.batch, "Correct well done.", 0, displayTextY, game.screenWidth, Align.center, false);
         } else if (displayWrong) {
-            displayText.draw(game.batch, "Incorrect. Answer: " + currentNumber, 0, displayTextY + displayTextHeight / 2, game.screenWidth, Align.center, false);
+            displayText.draw(game.batch, "Incorrect. Answer: " + currentNumber, 0, displayTextY, game.screenWidth, Align.center, false);
         } else {
-            displayText.draw(game.batch, String.valueOf(currentNumber), 0, displayTextY + displayTextHeight / 2, game.screenWidth, Align.center, false);
+            displayText.draw(game.batch, String.valueOf(currentNumber), 0, displayTextY, game.screenWidth, Align.center, false);
         }
         game.batch.end();
     }
 
     public int generateNumber(){
-        int startingNum = (int) (10*Math.pow(10, startingNumLength-1));
+        int startingNumLength = 5;
+        int startingNum = (int) (10*Math.pow(10, startingNumLength -1));
         int lowerLimit = (int) (startingNum*Math.pow(10, attempts-1));
         int num = ThreadLocalRandom.current().nextInt(lowerLimit, lowerLimit*10-1);
         attempts++;
@@ -115,7 +128,8 @@ public class TypingGame implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        calculateDimensions();
+        calculatePositions();
     }
 
     @Override
@@ -151,7 +165,7 @@ public class TypingGame implements Screen, InputProcessor {
     @Override
     public boolean keyTyped(char character) {
         if (acceptInput) {
-            if (character == '\b' && userGuess.length() > 0) { // Handles backspace
+            if (character == '\b' && !userGuess.isEmpty()) { // Handles backspace
                 userGuess = userGuess.substring(0, userGuess.length() - 1);
             } else if (Character.isDigit(character) && userGuess.length() < String.valueOf(currentNumber).length()) {
                 userGuess += character;
@@ -161,14 +175,13 @@ public class TypingGame implements Screen, InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX;
-        float worldY = game.screenHeight - screenY;
+    public boolean touchDown(int worldX, int worldY, int pointer, int button) {
+        worldY = game.screenHeight - worldY;
 
         if (worldX >= guessButtonX && worldX <= guessButtonX + guessButtonWidth &&
                 worldY >= guessButtonY && worldY <= guessButtonY + guessButtonHeight) {
 
-            if (userGuess != ""){
+            if (!userGuess.isEmpty()){
                 acceptInput = false;
                 if (Integer.parseInt(userGuess) == currentNumber){
                     correct = correct + 1;

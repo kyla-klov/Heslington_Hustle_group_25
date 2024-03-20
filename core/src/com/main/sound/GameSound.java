@@ -17,9 +17,9 @@ public class GameSound {
      * Initializes sound effects by loading the audio files.
      */
     public GameSound(){
-        upSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/high_note.mp3"));
-        downSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/low_note.mp3"));
-        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal("assets/sfx/button_press.mp3"));
+        upSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/high_note.mp3"));
+        downSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/low_note.mp3"));
+        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/button_press.mp3"));
     }
 
     /**

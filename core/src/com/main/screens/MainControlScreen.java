@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.utils.ScreenType;
 
-import static com.badlogic.gdx.Gdx.input;
 
 public class MainControlScreen implements Screen, InputProcessor {
     Main game;
@@ -18,46 +17,63 @@ public class MainControlScreen implements Screen, InputProcessor {
     String objective;
     private final Texture backButton, controlLabel, controls;
     // X and Y coordinates
-    private final float  backButtonX, backButtonY, controlLabelX, controlLabelY, controlsX, controlsY;
+    private float backButtonX, backButtonY, controlLabelX, controlLabelY, controlsX, controlsY, objectiveY, instructionY;
     // Buttons dimensions
-    private final float backButtonWidth = 200, backButtonHeight = 100, controlLabelWidth = 500, controlLabelHeight = 130, controlsHeight = 594, controlsWidth = 198;
+    private float backButtonWidth, backButtonHeight, controlLabelWidth, controlLabelHeight, controlsHeight, controlsWidth, instructionGap;
 
     public MainControlScreen(Main game) {
         this.game = game;
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        font.getData().setScale(1.5f);
 
-        Gdx.input.setInputProcessor(this);
-        backButton = new Texture("assets/settings_gui/back_button.png");
-        controlLabel = new Texture("assets/controls_gui/controls_label.png");
-        controls = new Texture("assets/controls_gui/controls.png");
+        backButton = new Texture("settings_gui/back_button.png");
+        controlLabel = new Texture("controls_gui/controls_label.png");
+        controls = new Texture("controls_gui/controls.png");
 
-        backButtonX = (game.screenWidth - backButtonWidth) /2;
-        backButtonY = (float) game.screenHeight / 6 - 100;
-        controlLabelX = (game.screenWidth - controlLabelWidth) / 2;
-        controlLabelY = game.screenHeight - (controlLabelHeight * 2);
-        controlsX = game.screenWidth / 3;
-        controlsY = (game.screenHeight / 3) - (controlsHeight / 5);
+        calculateDimensions();
+        calculatePositions();
 
         objective = "Welcome to Heslington Hustle! You are a second-year Computer Science student with exams in only 7 days. Explore the map, \n" +
                 "and interact with buildings to eat, study, sleep and have fun. To get a good grade, you need to balance hours of studying with \n" +
                 "self-care and recreation. Good luck!";
 
-        Gdx.input.setInputProcessor(this);
 
+    }
+
+    private void calculateDimensions(){
+        font.getData().setScale(1.5f * game.scaleFactorX, 1.5f * game.scaleFactorY);
+        backButtonWidth = 200 * game.scaleFactorX;
+        backButtonHeight = 100 * game.scaleFactorY;
+        controlLabelWidth = 500 * game.scaleFactorX;
+        controlLabelHeight = 130 * game.scaleFactorY;
+        controlsWidth = 198 * game.scaleFactorX;
+        controlsHeight = 594 * game.scaleFactorY;
+        instructionGap = 30 * game.scaleFactorY;
+    }
+
+    private void calculatePositions(){
+        backButtonX = (game.screenWidth - backButtonWidth) / 2f;
+        backButtonY = game.screenHeight / 6f - 100 * game.scaleFactorY;
+        controlLabelX = (game.screenWidth - controlLabelWidth) / 2f;
+        controlLabelY = game.screenHeight - (controlLabelHeight * 2f);
+        controlsX = game.screenWidth / 3f;
+        controlsY = (game.screenHeight / 3f) - (controlsHeight / 5f);
+        objectiveY = game.screenHeight - 280 * game.scaleFactorY;
+        instructionY = game.screenHeight / 2f;
     }
 
     @Override
     public void show() {
-        //Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        game.batch.setProjectionMatrix(game.defaultCamera.combined);
         game.batch.begin();
-        font.draw(game.batch, objective, game.screenWidth / 4f, game.screenHeight - 280, game.screenWidth / 2f, Align.center, false);
-        float instructionY = (((float) game.screenHeight /2) * game.scaleFactorY);
+        font.draw(game.batch, objective, 0, objectiveY, game.screenWidth, Align.center, false);
+        float instructionY = this.instructionY;
         String[] instructions = {
                 "Up - Move forward",
                 "Left - Turn left",
@@ -68,12 +84,12 @@ public class MainControlScreen implements Screen, InputProcessor {
         };
 
         for (String instruction : instructions) {
-            font.draw(game.batch, instruction, (game.screenWidth - font.getRegion().getRegionWidth()) / 2f, instructionY);
-            instructionY -= 30; // Spacing between instructions
+            font.draw(game.batch, instruction, 0, instructionY, game.screenWidth, Align.center, false);
+            instructionY -= instructionGap; // Spacing between instructions
         }
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(controls, controlsX, controlsY, controlsWidth, controlsHeight);
-        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);;
+        game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
 
         game.batch.end();
     }
@@ -133,7 +149,8 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        calculateDimensions();
+        calculatePositions();
     }
 
     @Override

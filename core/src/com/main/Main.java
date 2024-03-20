@@ -2,7 +2,6 @@ package com.main;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,7 +11,6 @@ import static com.badlogic.gdx.Gdx.graphics;
 import com.main.utils.GameData;
 import com.main.utils.ScreenManager;
 import com.main.utils.ScreenType;
-import com.main.sound.GameMusic;
 
 /**
  * The main class for the game, extending the LibGDX Game class.
@@ -44,7 +42,6 @@ public class Main extends Game {
 		defHeight = 995;
 
 		defaultCamera = new OrthographicCamera();
-		gameData.setPlayerPosY(screenWidth /2 - screenHeight /2);
 
 		defaultCamera.setToOrtho(false, defWidth, defHeight);
 		scaleFactorX = 1;

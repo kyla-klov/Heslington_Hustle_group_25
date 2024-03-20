@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.main.map.GameMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.main.Main;
 import com.main.utils.CollisionHandler;
 
@@ -17,7 +17,7 @@ import com.main.utils.CollisionHandler;
  * The Player class represents the character in the game, handling movement, collision,
  * and animations.
  */
-public class Player extends Entity {
+public class Player extends Entity implements Disposable {
     Main game;
     GameMap gameMap;
     OrthographicCamera camera;
@@ -179,16 +179,6 @@ public class Player extends Entity {
     }
 
     /**
-     * Returns the player's starting position as a Vector2.
-     *
-     * @return The starting position of the player.
-     */
-    public Vector2 getStartPos(){
-        return new Vector2(startX, startY);
-    }
-
-
-    /**
      * Updates the player's gender by changing the TextureRegions' internal path using
      * the player's choice in the settings menu.
      * Then updates corresponding textures and animations.
@@ -207,16 +197,21 @@ public class Player extends Entity {
         TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
         TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
 
-        walkDownAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[0]); // First row for down
-        walkLeftAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[1]); // Second row for left
-        walkRightAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[2]); // Third row for right
-        walkUpAnimation = new Animation<TextureRegion>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
+        walkDownAnimation = new Animation<>(animation_speed, walkSpriteSheet[0]); // First row for down
+        walkLeftAnimation = new Animation<>(animation_speed, walkSpriteSheet[1]); // Second row for left
+        walkRightAnimation = new Animation<>(animation_speed, walkSpriteSheet[2]); // Third row for right
+        walkUpAnimation = new Animation<>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
 
         idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
         idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
         idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
         idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
 
+        setDirection(dir);
+    }
+
+    public void setDirection(char dir){
+        this.dir = dir;
         switch (dir){
             case 'D':
                 currentAnimation = idleDownAnimation;
