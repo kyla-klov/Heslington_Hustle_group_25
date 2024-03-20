@@ -10,7 +10,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.utils.ScreenType;
 
-
+/**
+ * The MainControlScreen class provides a visual representation of control instructions
+ * for the game, alongside a back button to navigate back to the main menu.
+ * It implements both the Screen and InputProcessor interfaces from libGDX,
+ * handling rendering and input events within the control screen context.
+ */
 public class MainControlScreen implements Screen, InputProcessor {
     Main game;
     BitmapFont font;
@@ -21,6 +26,13 @@ public class MainControlScreen implements Screen, InputProcessor {
     // Buttons dimensions
     private float backButtonWidth, backButtonHeight, controlLabelWidth, controlLabelHeight, controlsHeight, controlsWidth, instructionGap;
 
+    /**
+     * Constructor for MainControlScreen.
+     * Initializes the screen with game controls instructions, sets up textures for display elements,
+     * and configures input processing.
+     *
+     * @param game The main game object that this screen is a part of.
+     */
     public MainControlScreen(Main game) {
         this.game = game;
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
@@ -38,6 +50,7 @@ public class MainControlScreen implements Screen, InputProcessor {
 
 
     }
+
 
     private void calculateDimensions(){
         font.getData().setScale(1.5f * game.scaleFactorX, 1.5f * game.scaleFactorY);
@@ -68,6 +81,12 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
     }
 
+    /**
+     * The main render method for the screen. Called every frame and responsible for
+     * drawing the screen's contents.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
@@ -95,6 +114,16 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Handles touch down input events. Specifically, checks if the back button is pressed
+     * and navigates back to the main menu screen.
+     *
+     * @param screenX The x-coordinate of the touch, in screen coordinates.
+     * @param screenY The y-coordinate of the touch, in screen coordinates.
+     * @param pointer The pointer for the event.
+     * @param button The button pressed.
+     * @return true if the event was handled, false otherwise.
+     */
     public boolean touchDown(int touchX, int touchY, int pointer, int button) {
         touchY = (game.screenHeight - touchY);
 
