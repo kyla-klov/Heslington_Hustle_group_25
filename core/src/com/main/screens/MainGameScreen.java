@@ -379,7 +379,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                         game.gameData.buttonClickedSoundActivate();
                         showPopup = false;
                         studyHours += duration;
-                        if (energyCounter > 0) energyCounter --;
+                        if (energyCounter > (duration+1)/2) energyCounter -= (duration+1)/2;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
                         lockTime = true;
