@@ -28,7 +28,6 @@ public class MainGameScreen implements Screen, InputProcessor {
     float popupMenuWidth, popupMenuHeight;
 
     private final Color shader;
-    private boolean showPopup;
     private String activity;
 
     Texture energyBar;
@@ -52,10 +51,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     private int currentHour = 10; // Game starts at 10:00 am.
     float gameDayLengthInSeconds = 60f;
     float secondsPerGameHour;
-    boolean lockTime = false;
-
-    boolean fadeOut = false;
-    boolean resetPos = false;
+    boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
     float fadeTime = 0;
     float minShade = 0;
 
@@ -77,7 +73,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         durationFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         popupMenuType = "";
         shader = new Color(0.5f, 0.5f, 0.5f, 1);
-        showPopup = false;
+        showMenu = false;
         activity = "";
         dayNum = 1;
         // Player sleeps for 8 hours
@@ -157,8 +153,9 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        player.update(delta); // This line updates player position and animation state.
+        if (!lockMovement) player.update(delta);
         if (!lockTime) updateGameTime(delta); // Update the game clock
+
         ScreenUtils.clear(0, 0, 1, 1);
         drawWorldElements(delta);
         drawUIElements();
@@ -171,6 +168,15 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         lockTime = false;
         player.updateGender();
+    }
+
+    private String getDoorTouching(){
+        CollisionHandler collisionHandler = player.getCollisionHandler();
+        if (collisionHandler.isTouching("Comp_sci_door", player.getHitBox())) return "Comp_sci_door";
+        if (collisionHandler.isTouching("Piazza_door", player.getHitBox())) return "Piazza_door";
+        if (collisionHandler.isTouching("Gym_door", player.getHitBox())) return "Gym_door";
+        if (collisionHandler.isTouching("Goodricke_door", player.getHitBox())) return "Goodricke_door";
+        return "";
     }
 
     private void isHovering(float posX, float posY){
@@ -242,6 +248,39 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    private void drawPopUpMenu(){
+        popupMenuType = getDoorTouching();
+        switch (popupMenuType) {
+            case "Comp_sci_door":
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
+                popupVisible = true;
+                break;
+            case "Piazza_door":
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
+                drawMenuOption(player.worldX + 30, player.worldY + 35, "Eat", 0);
+                popupVisible = true;
+                break;
+            case "Gym_door":
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Exercise", 0);
+                popupVisible = true;
+                break;
+            case "Goodricke_door":
+                int shadeOption;
+                if (currentHour >= 20) {
+                    popupVisible = true;
+                    shadeOption = 0;
+                } else {
+                    popupVisible = false;
+                    shadeOption = 2;
+                }
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep", shadeOption);
+                break;
+            default:
+                popupVisible = false;
+                break;
+        }
+    }
+
     private void drawShadeOverlay(float alpha){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -252,35 +291,18 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    private void drawWorldElements(float delta){
-        CollisionHandler collisionHandler = player.getCollisionHandler();
-        popupMenuType = "";
-        gameMap.update(delta);
-        gameMap.render();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
-        if (collisionHandler.isTouching("Comp_sci_door", player.getHitBox())){
-            popupMenuType = "Comp_sci_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
-        }
-        else if (collisionHandler.isTouching("Piazza_door", player.getHitBox())){
-            popupMenuType = "Piazza_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Study", 0);
-            drawMenuOption(player.worldX + 30, player.worldY + 35, "Eat", 0);
-        }
-        else if (collisionHandler.isTouching("Goodricke_door", player.getHitBox())){
-            int shadeOption = 0;
-            if (currentHour >= 20) popupMenuType = "Goodricke_door";
-            else shadeOption = 2;
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep", shadeOption);
-        }
-        else if (collisionHandler.isTouching("Gym_door", player.getHitBox())){
-            popupMenuType = "Gym_door";
-            drawMenuOption(player.worldX + 30, player.worldY + 20, "Exercise", 0);
-        }
-        game.batch.end();
-        if (!fadeOut && timeElapsed/secondsPerGameHour > 11) drawShadeOverlay((timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour));
+    private void executeFadeOut(boolean resetPos){
+        if (fadeOut) return;
+        fadeOut = true;
+        lockMovement = true;
+        lockTime = true;
+        lockPopup = true;
+        showMenu = false;
+        this.resetPos = resetPos;
+        minShade = timeElapsed/secondsPerGameHour > 11 ? (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour) : 0;
+    }
+
+    private void fadeOutStep(float delta){
         if (fadeOut){
             if (fadeTime == 0) fadeTime = minShade;
             if (fadeTime <= 1) {
@@ -295,15 +317,29 @@ public class MainGameScreen implements Screen, InputProcessor {
                 fadeTime = 0;
                 fadeOut = false;
                 lockTime = false;
+                lockMovement = false;
+                lockPopup = false;
                 resetPos = false;
             }
         }
     }
 
+    private void drawWorldElements(float delta){
+        gameMap.update(delta);
+        gameMap.render();
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
+        if (!lockPopup) drawPopUpMenu();
+        game.batch.end();
+        if (!fadeOut && timeElapsed/secondsPerGameHour > 11) drawShadeOverlay((timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour));
+        fadeOutStep(delta);
+    }
+
     private void drawUIElements(){
         String counterString = String.format("Recreation Activities done: " + recActivity + "\nStudy hours: " + studyHours, dayNum, timeElapsed );
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
-        if (showPopup) drawDurationMenu();
+        if (showMenu) drawDurationMenu();
         game.batch.begin();
         game.batch.draw(menuButton, menuButtonX, menuButtonY, menuButtonWidth, menuButtonHeight);
         game.batch.draw(energyBar, energyBarX, energyBarY, energyBarWidth, energyBarHeight);
@@ -322,15 +358,12 @@ public class MainGameScreen implements Screen, InputProcessor {
         // Ensure the hour cycles through the active hours correctly (8 AM to 12 AM)
         if (currentHour >= 24) { // If it reaches 12 AM, reset to 8 AM the next day
             if (dayNum == 7) game.screenManager.setScreen(ScreenType.END_SCREEN);
-            minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
             resetDay();
-            fadeOut = true;
-            lockTime = true;
-            resetPos = true;
         }
     }
 
     private void resetDay(){
+        executeFadeOut(true);
         currentHour = 8;
         dayNum++;
         timeElapsed = 0;
@@ -364,7 +397,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
         }
-        else if (showPopup){
+        else if (showMenu){
             switch (activity){
                 case "study":
                     if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
@@ -375,16 +408,17 @@ public class MainGameScreen implements Screen, InputProcessor {
                         if (duration > 1) duration--;
                     } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
-                        showPopup = false;
+                        showMenu = false;
+                        lockMovement = fadeOut;
                         duration = 1;
                     } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
-                        showPopup = false;
+                        showMenu = false;
+                        lockMovement = fadeOut;
                         studyHours += duration;
                         if (energyCounter > (duration+1)/2) energyCounter -= (duration+1)/2;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
-                        lockTime = true;
                         timeElapsed += duration * secondsPerGameHour;
                         game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
                     }
@@ -399,20 +433,20 @@ public class MainGameScreen implements Screen, InputProcessor {
                         if (duration > 1) duration--;
                     } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
-                        showPopup = false;
+                        showMenu = false;
+                        lockMovement = fadeOut;
                         duration = 1;
                     } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
                         if (energyCounter >= duration) {
-                            showPopup = false;
+                            executeFadeOut(false);
+                            showMenu = false;
+                            lockMovement = fadeOut;
                             recActivity++;
                             energyCounter -= duration;
                             energyBar.dispose();
                             energyBar = setEnergyBar();
                             timeElapsed += duration * secondsPerGameHour;
-                            minShade = timeElapsed/secondsPerGameHour > 11 ? (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour) : 0;
-                            fadeOut = true;
-                            lockTime = true;
                             duration = 1;
                         }
                     }
@@ -427,64 +461,70 @@ public class MainGameScreen implements Screen, InputProcessor {
                         if (duration > 1) duration--;
                     } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
-                        showPopup = false;
+                        showMenu = false;
+                        lockMovement = fadeOut;
                         duration = 1;
                     } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
-                        minShade = (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour);
+                        showMenu = false;
+                        lockMovement = fadeOut;
                         resetDay();
-                        showPopup = false;
-                        fadeOut = true;
-                        lockTime = true;
-                        resetPos = true;
                         duration = 1;
                     }
                     break;
             }
         }
-        else if (popupMenuType.equals("Comp_sci_door")){
-            Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
-            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
-                game.gameData.buttonClickedSoundActivate();
-                showPopup = true;
-                activity = "study";
-                duration = 1;
-            }
-        }
-        else if (popupMenuType.equals("Goodricke_door")){
-            Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
-            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
-                game.gameData.buttonClickedSoundActivate();
-                showPopup = true;
-                activity = "sleep";
-                duration = 1;
-            }
-        }
-        else if (popupMenuType.equals("Gym_door")){
-            Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
-            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
-                game.gameData.buttonClickedSoundActivate();
-                showPopup = true;
-                activity = "exercise";
-                duration = 1;
-            }
-        }
-        else if (popupMenuType.equals("Piazza_door")){
+        else if (popupVisible){
             Vector3 studyOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 20, 0));
             Vector3 eatOpt = camera.project(new Vector3(player.worldX + 30, player.worldY + 35, 0));
-            if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
-                game.gameData.buttonClickedSoundActivate();
-                showPopup = true;
-                activity = "study";
-                duration = 1;
-            }
-            else if (touchX >= eatOpt.x && touchX <= eatOpt.x + popupMenuWidth * zoom && touchY >= eatOpt.y && touchY <= eatOpt.y + popupMenuHeight * zoom) {
-                game.gameData.buttonClickedSoundActivate();
-                game.gameData.eatingSoundActivate();
-                energyCounter += 3;
-                if (energyCounter > 10) energyCounter = 10;
-                energyBar.dispose();
-                energyBar = setEnergyBar();
+            switch (popupMenuType) {
+                case "Comp_sci_door":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "study";
+                        duration = 1;
+                    }
+                    break;
+
+                case "Piazza_door":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "study";
+                        duration = 1;
+                    }
+                    else if (touchX >= eatOpt.x && touchX <= eatOpt.x + popupMenuWidth * zoom && touchY >= eatOpt.y && touchY <= eatOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        game.gameData.eatingSoundActivate();
+                        energyCounter += 3;
+                        if (energyCounter > 10) energyCounter = 10;
+                        energyBar.dispose();
+                        energyBar = setEnergyBar();
+                    }
+                    break;
+
+                case "Gym_door":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "exercise";
+                        duration = 1;
+                    }
+                    break;
+
+                case "Goodricke_door":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "sleep";
+                        duration = 1;
+                    }
+                    break;
             }
         }
 

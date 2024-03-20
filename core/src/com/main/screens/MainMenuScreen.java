@@ -130,13 +130,11 @@ public class MainMenuScreen implements Screen, InputProcessor {
                 touchY >= controlsButtonY && touchY <= controlsButtonY + controlsButtonHeight) {
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.CONTROLS);
-
         }
         else if (touchX >= x && touchX <= x + settingsButtonWidth &&
                 touchY >= settingsButtonY && touchY <= settingsButtonY + settingsButtonHeight) {
             game.gameData.buttonClickedSoundActivate();
             game.screenManager.setScreen(ScreenType.SETTINGS);
-
         }
         else if (touchX >= x && touchX <= x + exitButtonWidth &&
                 touchY >= exitButtonY && touchY <= exitButtonY + exitButtonHeight) {
@@ -145,9 +143,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
             exitFlag = true;
             dispose();
             Gdx.app.exit();
-
         }
-
         return true;
     }
 
