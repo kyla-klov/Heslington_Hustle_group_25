@@ -478,11 +478,11 @@ public class MainGameScreen implements Screen, InputProcessor {
             }
             else if (touchX >= eatOpt.x && touchX <= eatOpt.x + popupMenuWidth * zoom && touchY >= eatOpt.y && touchY <= eatOpt.y + popupMenuHeight * zoom) {
                 game.gameData.buttonClickedSoundActivate();
+                game.gameData.eatingSoundActivate();
                 energyCounter += 3;
                 if (energyCounter > 10) energyCounter = 10;
                 energyBar.dispose();
                 energyBar = setEnergyBar();
-                System.out.println("NOM NOM NOM");
             }
         }
 

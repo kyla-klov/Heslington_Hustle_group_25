@@ -76,5 +76,7 @@ public class GameData {
 
     public void downSoundActivate(){ sound.downSoundActivate(); }
 
+    public void eatingSoundActivate(){ sound.eatingSoundActivate(); }
+
     public void buttonClickedSoundActivate(){ sound.buttonClickedSoundActivate(); }
 }
