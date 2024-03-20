@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 import com.main.entity.Player;
@@ -19,93 +20,87 @@ import com.main.utils.CollisionHandler;
 import com.main.utils.ScreenType;
 
 public class MainGameScreen implements Screen, InputProcessor {
-    Player player;
-    BitmapFont font, popupFont, durationFont;
-    GameMap gameMap;
-    Texture menuButton;
-    float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
-    float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
-    float popupMenuWidth, popupMenuHeight;
 
+    // Final attributes
     private final Color shader;
-    private String activity;
+    private final float zoom = 3f;
+    private final Player player;
+    private final BitmapFont font, popupFont, durationFont;
+    private final GameMap gameMap;
+    private final OrthographicCamera camera;
+    private final ShapeRenderer shapeRenderer;
+    private final Main game;
+    private final Texture menuButton, popupMenu, durationUpButton, durationDownButton,
+            menuBackButton, menuStudyButton, menuSleepButton, menuGoButton,
+            durationMenuBackground, counterBackground;
+    private final float gameDayLengthInSeconds;
+    private final float secondsPerGameHour;
 
-    Texture energyBar;
-    Texture popupMenu;
-    Texture durationUpButton, durationDownButton, menuBackButton, menuStudyButton, menuSleepButton, menuGoButton, durationMenuBackground;
-    float durationUpButtonX, durationDownButtonX, durationMenuBackgroundX, durationButtonY, durationMenuBackgroundY;
-    float durationUpButtonWidth, durationDownButtonWidth, durationMenuBackgroundWidth, durationUpButtonHeight, durationDownButtonHeight, durationMenuBackgroundHeight;
-    float menuBackButtonWidth, menuBackButtonHeight, activityButtonWidth, activityButtonHeight;
-    float menuBackButtonX, activityButtonX, durationMenuButtonY;
-    float durationTextY, menuTitleY, hoursLabelY;
-    String popupMenuType;
-    float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
-    int energyCounter = 10;
-
-    int duration = 1;
-
-    Texture counterBackground;
-    int dayNum;
-    int recActivity, studyHours;
-    private float timeElapsed = 0f; // Time elapsed in the game, in seconds.
-    private int currentHour = 10; // Game starts at 10:00 am.
-    float gameDayLengthInSeconds = 60f;
-    float secondsPerGameHour;
-    boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
-    float fadeTime = 0;
-    float minShade = 0;
-
-    final float zoom = 3f;
-
-    OrthographicCamera camera;
-
-    ShapeRenderer shapeRenderer;
-
-    Main game;
+    // Non-final attributes
+    private Texture energyBar;
+    private float menuButtonY, menuButtonX, menuButtonWidth, menuButtonHeight;
+    private float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
+    private float popupMenuWidth, popupMenuHeight;
+    private float durationUpButtonX, durationDownButtonX, durationMenuBackgroundX, durationButtonY, durationMenuBackgroundY;
+    private float durationUpButtonWidth, durationDownButtonWidth, durationMenuBackgroundWidth, durationUpButtonHeight, durationDownButtonHeight, durationMenuBackgroundHeight;
+    private float menuBackButtonWidth, menuBackButtonHeight, activityButtonWidth, activityButtonHeight;
+    private float menuBackButtonX, activityButtonX, durationMenuButtonY;
+    private float durationTextY, menuTitleY, hoursLabelY;
+    private float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
+    private String activity, popupMenuType;
+    private int energyCounter, duration, dayNum, recActivity, studyHours;
+    private float timeElapsed, fadeTime, minShade;
+    private int currentHour;
+    private boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
 
     public MainGameScreen(Main game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        gameMap = new GameMap(camera);
-        player = new Player(game, gameMap, camera);
-        font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        popupFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        durationFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
-        popupMenuType = "";
-        shader = new Color(0.5f, 0.5f, 0.5f, 1);
-        showMenu = false;
-        activity = "";
-        dayNum = 1;
-        // Player sleeps for 8 hours
-        int hoursInDay = 16;
-        secondsPerGameHour = gameDayLengthInSeconds / hoursInDay;
+        this.shader = new Color(0.5f, 0.5f, 0.5f, 1);
+        this.gameDayLengthInSeconds = 60f;
+        this.secondsPerGameHour = this.gameDayLengthInSeconds / 16; // Assuming 16 hours in a day
 
-        shapeRenderer = new ShapeRenderer();
-        menuButton = new Texture("menu_buttons/menu_icon.png");
-        counterBackground = new Texture("counter_background.png");
-        popupMenu = new Texture("popup_menu.png");
-        durationMenuBackground = new Texture("duration_menu_background.png");
-        durationUpButton = new Texture("settings_gui/arrow_right_button.png");
-        durationDownButton = new Texture("settings_gui/arrow_left_button.png");
-        menuBackButton = new Texture("settings_gui/back_button.png");
-        menuStudyButton = new Texture("study_button.png");
-        menuSleepButton = new Texture("sleep_button.png");
-        menuGoButton = new Texture("go_button.png");
+        // Initialize final Texture objects
+        this.menuButton = new Texture("menu_buttons/menu_icon.png");
+        this.counterBackground = new Texture("counter_background.png");
+        this.popupMenu = new Texture("popup_menu.png");
+        this.durationMenuBackground = new Texture("duration_menu_background.png");
+        this.durationUpButton = new Texture("settings_gui/arrow_right_button.png");
+        this.durationDownButton = new Texture("settings_gui/arrow_left_button.png");
+        this.menuBackButton = new Texture("settings_gui/back_button.png");
+        this.menuStudyButton = new Texture("study_button.png");
+        this.menuSleepButton = new Texture("sleep_button.png");
+        this.menuGoButton = new Texture("go_button.png");
 
+        // Initialize non-final attributes
+        this.activity = "";
+        this.popupMenuType = "";
+        this.energyCounter = 10;
+        this.duration = 1;
+        this.dayNum = 1;
+        this.timeElapsed = 0f;
+        this.currentHour = 10;
+        this.fadeTime = 0;
+        this.minShade = 0;
+        this.fadeOut = this.lockTime = this.lockMovement = this.lockPopup = this.resetPos = this.popupVisible = this.showMenu = false;
 
-        calculateDimensions();
-        calculatePositions();
+        // Setting up the game
+        this.camera = new OrthographicCamera();
+        this.gameMap = new GameMap(this.camera);
+        this.player = new Player(this.game, this.gameMap, this.camera);
+        this.font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+        this.popupFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+        this.durationFont = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+        this.shapeRenderer = new ShapeRenderer();
+        this.energyBar = setEnergyBar();
 
-        popupFont.getData().setScale(0.4f, 0.4f);
-
-        energyBar = setEnergyBar();
-
-        player.setPos( 1389, 635);
-
-        camera.setToOrtho(false, game.screenWidth/zoom, game.screenHeight/zoom);
-        camera.update();
-
+        this.calculateDimensions();
+        this.calculatePositions();
+        this.popupFont.getData().setScale(0.4f, 0.4f);
+        this.player.setPos(1389, 635);
+        this.camera.setToOrtho(false, this.game.screenWidth / this.zoom, this.game.screenHeight / this.zoom);
+        this.camera.update();
     }
+
 
     private void calculateDimensions(){
         menuButtonWidth = 64 * game.scaleFactorX;
@@ -179,6 +174,32 @@ public class MainGameScreen implements Screen, InputProcessor {
         return "";
     }
 
+    private String getMenuTitle() {
+        switch (activity) {
+            case "study":
+                return "Study Schedule";
+            case "sleep":
+                return "Sleep Early";
+            case "exercise":
+                return "Exercise";
+            default:
+                return "";
+        }
+    }
+
+    private Texture getActivityButton() {
+        switch (activity) {
+            case "study":
+                return menuStudyButton;
+            case "sleep":
+                return menuSleepButton;
+            case "exercise":
+                return menuGoButton;
+            default:
+                return null;
+        }
+    }
+
     private void isHovering(float posX, float posY){
         int mouseX = Gdx.input.getX();
         int mouseY = game.screenHeight - Gdx.input.getY();
@@ -204,45 +225,21 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     private void drawDurationMenu(){
         game.batch.begin();
-        GlyphLayout layout = new GlyphLayout();
-        float textX;
         Texture activityButton;
         String title;
-
-        switch (activity){
-            case "study":
-                activityButton = menuStudyButton;
-                title = "Study Schedule";
-                break;
-            case "sleep":
-                activityButton = menuSleepButton;
-                title = "Sleep Early";
-                break;
-            case "exercise":
-                activityButton = menuGoButton;
-                title = "Exercise";
-                break;
-            default:
-                activityButton = null;
-                title = "";
-        }
+        activityButton = getActivityButton();
+        title = getMenuTitle();
 
         game.batch.draw(durationMenuBackground, durationMenuBackgroundX, durationMenuBackgroundY, durationMenuBackgroundWidth, durationMenuBackgroundHeight);
         game.batch.draw(menuBackButton, menuBackButtonX, durationMenuButtonY, menuBackButtonWidth, menuBackButtonHeight);
         game.batch.draw(activityButton, activityButtonX, durationMenuButtonY, activityButtonWidth, activityButtonHeight);
-        layout.setText(durationFont, title);
-        textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width)/2f;
-        durationFont.draw(game.batch, title, textX, menuTitleY);
+        durationFont.draw(game.batch, title, 0, menuTitleY, game.screenWidth, Align.center, false);
 
         if (!activity.equals("sleep")) {
             game.batch.draw(durationDownButton, durationDownButtonX, durationButtonY, durationDownButtonWidth, durationDownButtonHeight);
             game.batch.draw(durationUpButton, durationUpButtonX, durationButtonY, durationUpButtonWidth, durationUpButtonHeight);
-            layout.setText(durationFont, Integer.toString(duration));
-            textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width) / 2f;
-            durationFont.draw(game.batch, Integer.toString(duration), textX, durationTextY);
-            layout.setText(durationFont, "Hours");
-            textX = durationMenuBackgroundX + (durationMenuBackgroundWidth - layout.width) / 2f;
-            durationFont.draw(game.batch, "Hours", textX, hoursLabelY);
+            durationFont.draw(game.batch, Integer.toString(duration), 0, durationTextY, game.screenWidth, Align.center, false);
+            durationFont.draw(game.batch, "Hours", 0, hoursLabelY, game.screenWidth, Align.center, false);
         }
 
         game.batch.end();
