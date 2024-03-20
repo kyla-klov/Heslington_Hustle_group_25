@@ -56,7 +56,7 @@ public class TypingGame implements Screen, InputProcessor {
 
         playGame();
     }
-    
+
     /**
      * Begins a new challenge by generating a number for the player to memorize.
      * Handles the logic for correct and incorrect guesses and progresses the game.
