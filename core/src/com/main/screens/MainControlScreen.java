@@ -12,9 +12,16 @@ import com.main.utils.ScreenType;
 
 import static com.badlogic.gdx.Gdx.input;
 
+/**
+ * The MainControlScreen class provides a visual representation of control instructions
+ * for the game, alongside a back button to navigate back to the main menu.
+ * It implements both the Screen and InputProcessor interfaces from libGDX,
+ * handling rendering and input events within the control screen context.
+ */
 public class MainControlScreen implements Screen, InputProcessor {
     Main game;
     BitmapFont font;
+    BitmapFont font2;
     String objective;
     private final Texture backButton, controlLabel, controls;
     // X and Y coordinates
@@ -22,10 +29,19 @@ public class MainControlScreen implements Screen, InputProcessor {
     // Buttons dimensions
     private final float backButtonWidth = 200, backButtonHeight = 100, controlLabelWidth = 500, controlLabelHeight = 130, controlsHeight = 594, controlsWidth = 198;
 
+    /**
+     * Constructor for MainControlScreen.
+     * Initializes the screen with game controls instructions, sets up textures for display elements,
+     * and configures input processing.
+     *
+     * @param game The main game object that this screen is a part of.
+     */
     public MainControlScreen(Main game) {
         this.game = game;
         font = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
+        font2 = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         font.getData().setScale(1.5f);
+        font2.getData().setScale(2f);
 
         Gdx.input.setInputProcessor(this);
         backButton = new Texture("assets/settings_gui/back_button.png");
@@ -49,28 +65,35 @@ public class MainControlScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        //Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * The main render method for the screen. Called every frame and responsible for
+     * drawing the screen's contents.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         game.batch.begin();
         font.draw(game.batch, objective, game.screenWidth / 4f, game.screenHeight - 280, game.screenWidth / 2f, Align.center, false);
-        float instructionY = (((float) game.screenHeight /2) * game.scaleFactorY);
-        String[] instructions = {
-                "Up - Move forward",
-                "Left - Turn left",
-                "Right - Turn right",
-                "Down - Move backward",
-                "Shift - Sprint",
-                "Esc - Pause"
-        };
+        float instructionX = (game.screenHeight / 1.5f) * game.scaleFactorX;
+        String instructionUp = "Up - Move forward";
+        String instructionLeft = "Left - Turn left";
+        String instructionRight = "Right - Turn right";
+        String instructionDown = "Down - Move backward";
+        String instructionShift = "Shift - Sprint";
+        String instructionEsc = "Esc - Pause";
 
-        for (String instruction : instructions) {
-            font.draw(game.batch, instruction, (game.screenWidth - font.getRegion().getRegionWidth()) / 2f, instructionY);
-            instructionY -= 30; // Spacing between instructions
-        }
+        font2.draw(game.batch, instructionUp, instructionX, game.screenHeight /2f * game.scaleFactorY);
+        font2.draw(game.batch, instructionLeft, instructionX, game.screenHeight /2.23f * game.scaleFactorY);
+        font2.draw(game.batch, instructionRight, instructionX, game.screenHeight /2.55f * game.scaleFactorY);
+        font2.draw(game.batch, instructionDown, instructionX, game.screenHeight /3f * game.scaleFactorY);
+        font2.draw(game.batch, instructionShift, instructionX, game.screenHeight /3.65f * game.scaleFactorY);
+        font2.draw(game.batch, instructionEsc, instructionX, game.screenHeight /4.45f * game.scaleFactorY);
+
         game.batch.draw(controlLabel, controlLabelX, controlLabelY, controlLabelWidth, controlLabelHeight);
         game.batch.draw(controls, controlsX, controlsY, controlsWidth, controlsHeight);
         game.batch.draw(backButton, backButtonX, backButtonY, backButtonWidth, backButtonHeight);;
@@ -78,16 +101,26 @@ public class MainControlScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Handles touch down input events. Specifically, checks if the back button is pressed
+     * and navigates back to the main menu screen.
+     *
+     * @param screenX The x-coordinate of the touch, in screen coordinates.
+     * @param screenY The y-coordinate of the touch, in screen coordinates.
+     * @param pointer The pointer for the event.
+     * @param button The button pressed.
+     * @return true if the event was handled, false otherwise.
+     */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float worldX = screenX * game.defWidth / (float) game.screenWidth;
-        float worldY = (game.screenHeight - screenY) * game.defHeight / (float) game.screenHeight;
+        float touchY = game.screenHeight - screenY;
 
-        if (worldX >= backButtonX && worldX <= backButtonX + backButtonWidth &&
-                worldY >= backButtonY && worldY <= backButtonY + backButtonHeight) {
+        if (screenX >= backButtonX && screenX <= backButtonX + backButtonWidth &&
+                touchY >= backButtonY && touchY <= backButtonY + backButtonHeight) {
             game.screenManager.setScreen(ScreenType.MAIN_MENU);
             game.gameData.buttonClickedSoundActivate();
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

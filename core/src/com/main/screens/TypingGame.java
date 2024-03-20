@@ -14,6 +14,10 @@ import com.main.utils.ScreenType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The TypingGame class implements a mini-game for the player to increase their study hours.
+ * Players are shown a number that they need to memorize and then type it correctly to succeed.
+ */
 public class TypingGame implements Screen, InputProcessor {
     private final Main game;
     private int studyDuration, attempts = 0, currentNumber = 0, correct = 0, startingNumLength = 5;
@@ -27,6 +31,12 @@ public class TypingGame implements Screen, InputProcessor {
     private float titleX, titleY, titleWidth = 74, titleHeight = 14;
     String gameObjective;
 
+    /**
+     * Constructs a TypingGame screen with the game instance and study duration.
+     *
+     * @param game The main game instance.
+     * @param studyDuration The duration of the study session in attempts.
+     */
     public TypingGame(Main game, int studyDuration){
         displayText = new BitmapFont(Gdx.files.internal("font/WhitePeaberry.fnt"));
         guessButton = new Texture("assets/mini_games/guess_button.png");
@@ -53,6 +63,10 @@ public class TypingGame implements Screen, InputProcessor {
         playGame();
     }
 
+    /**
+     * Begins a new challenge by generating a number for the player to memorize.
+     * Handles the logic for correct and incorrect guesses and progresses the game.
+     */
     public void playGame(){
         userGuess = "";
         displayWrong = false;
@@ -65,11 +79,19 @@ public class TypingGame implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Allows the player to input their guess after a short delay.
+     */
     public void makeUserGuess(){
         acceptInput = true;
     }
 
-
+    /**
+     * Implements a delay before executing a given runnable task.
+     *
+     * @param seconds The delay in seconds before running the task.
+     * @param runnable The task to execute after the delay.
+     */
     public void delay(int seconds, Runnable runnable){
         Timer.schedule(new Timer.Task() {
             @Override
@@ -105,6 +127,11 @@ public class TypingGame implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Generates a random number for the player to memorize.
+     *
+     * @return The generated number.
+     */
     public int generateNumber(){
         int startingNum = (int) (10*Math.pow(10, startingNumLength-1));
         int lowerLimit = (int) (startingNum*Math.pow(10, attempts-1));
@@ -135,7 +162,9 @@ public class TypingGame implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        guessButton.dispose();
+        title.dispose();
+        displayText.dispose();
     }
 
     @Override
