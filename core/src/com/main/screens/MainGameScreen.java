@@ -19,6 +19,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.main.utils.CollisionHandler;
 import com.main.utils.ScreenType;
 
+/**
+ * The MainGameScreen class is responsible for rendering and updating all the game elements
+ * including the player, game world, UI, and handling user input during the main gameplay phase.
+ */
 public class MainGameScreen implements Screen, InputProcessor {
 
     // Final attributes
@@ -52,6 +56,12 @@ public class MainGameScreen implements Screen, InputProcessor {
     private float timeElapsed, fadeTime, minShade;
     private boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
 
+    /**
+     * Constructs the main game screen with necessary game components.
+     * Initializes game map, player, camera, UI elements, and sets the initial game state.
+     *
+     * @param game The main game application instance.
+     */
     public MainGameScreen(Main game) {
         this.game = game;
         this.shader = new Color(0.5f, 0.5f, 0.5f, 1);
@@ -164,6 +174,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         player.updateGender();
     }
 
+    /**
+     * Identifies which door, if any, the player is currently touching.
+     * @return The name of the door the player is touching or an empty string if none.
+     */
     private String getDoorTouching(){
         CollisionHandler collisionHandler = player.getCollisionHandler();
         if (collisionHandler.isTouching("Comp_sci_door", player.getHitBox())) return "Comp_sci_door";
@@ -173,6 +187,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         return "";
     }
 
+    /**
+     * Determines the menu title based on the current activity selected by the player.
+     * @return The title for the menu based on the current activity.
+     */
     private String getMenuTitle() {
         switch (activity) {
             case "study":
@@ -186,6 +204,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Retrieves the appropriate button texture based on the current activity.
+     * @return The texture for the activity button.
+     */
     private Texture getActivityButton() {
         switch (activity) {
             case "study":
@@ -199,6 +221,11 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Checks if the cursor is hovering over a menu option and changes its color accordingly.
+     * @param posX The X position of the menu option.
+     * @param posY The Y position of the menu option.
+     */
     private void isHovering(float posX, float posY){
         int mouseX = Gdx.input.getX();
         int mouseY = game.screenHeight - Gdx.input.getY();
@@ -211,6 +238,13 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Draws a menu option at the specified position with a specified text and shade option.
+     * @param posX The X position of the menu option.
+     * @param posY The Y position of the menu option.
+     * @param text The text to display on the menu option.
+     * @param shadeOption Determines the shade of the menu option.
+     */
     private void drawMenuOption(float posX, float posY, String text, int shadeOption){
         if (shadeOption == 0) isHovering(posX, posY);
         else if (shadeOption == 1) game.batch.setColor(Color.WHITE);
@@ -222,6 +256,12 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.setColor(Color.WHITE);
     }
 
+    /**
+     * Renders the menu for setting the duration of an activity.
+     *
+     * This functionality of the popup menu (along with all the other methods that relate to this functionality)
+     * should be segregated into its own class to reduce overheads and processing delay.
+     */
     private void drawDurationMenu(){
         game.batch.begin();
         Texture activityButton;
@@ -244,6 +284,9 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Draws the popup menu for interaction with various doors.
+     */
     private void drawPopUpMenu(){
         popupMenuType = getDoorTouching();
         switch (popupMenuType) {
@@ -277,6 +320,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Draws a shade overlay on the screen with a specified alpha transparency.
+     * @param alpha The transparency level of the overlay.
+     */
     private void drawShadeOverlay(float alpha){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -287,6 +334,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
+    /**
+     * Initiates the fade out process and optionally resets the player's position.
+     * @param resetPos A boolean indicating whether to reset the player's position.
+     */
     private void executeFadeOut(boolean resetPos){
         if (fadeOut) return;
         fadeOut = true;
@@ -298,6 +349,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         minShade = timeElapsed/secondsPerGameHour > 11 ? (timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour) : 0;
     }
 
+    /**
+     * Manages the stepwise execution of the fade-out effect.
+     * @param delta The time elapsed since the last frame.
+     */
     private void fadeOutStep(float delta){
         if (fadeOut){
             if (fadeTime == 0) fadeTime = minShade;
@@ -320,6 +375,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Renders the game world elements including the map and player.
+     * @param delta The time elapsed since the last frame.
+     */
     private void drawWorldElements(float delta){
         gameMap.update(delta);
         gameMap.render();
@@ -332,6 +391,9 @@ public class MainGameScreen implements Screen, InputProcessor {
         fadeOutStep(delta);
     }
 
+    /**
+     * Renders the UI elements of the game.
+     */
     private void drawUIElements(){
         String counterString = String.format("Recreation Activities done: " + recActivity + "\nStudy hours: " + studyHours + "\nMeals Eaten: " + mealCount, dayNum, timeElapsed );
         game.batch.setProjectionMatrix(game.defaultCamera.combined);
@@ -344,6 +406,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Updates the game time and handles the transition from day to night.
+     * @param delta The time elapsed since the last frame.
+     */
     private void updateGameTime(float delta) {
         timeElapsed += delta;
 
@@ -358,6 +424,9 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Resets the game day, including resetting time and increasing the day counter.
+     */
     private void resetDay(){
         executeFadeOut(true);
         currentHour = 8;
@@ -369,6 +438,9 @@ public class MainGameScreen implements Screen, InputProcessor {
         energyBar = setEnergyBar();
     }
 
+    /**
+     * Draws the game time display.
+     */
     private void drawGameTime() {
         // Adjust the format if you want to display minutes or seconds
         String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour%24);
@@ -377,6 +449,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         game.batch.end();
     }
 
+    /**
+     * Sets the texture for the energy bar based on the current energy level.
+     * @return The texture of the current energy bar.
+     */
     public Texture setEnergyBar() {
         if (energyCounter > 0) {
             return new Texture("energy/energy_" + energyCounter + ".png");
@@ -385,6 +461,15 @@ public class MainGameScreen implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * Handles touch input from the user, managing interactions with UI elements and game objects.
+     *
+     * @param touchX The x-coordinate of the touch.
+     * @param touchY The y-coordinate of the touch.
+     * @param pointer The pointer for the event.
+     * @param button The button that was pressed.
+     * @return true if the input was processed, false otherwise.
+     */
     @Override
     public boolean touchDown(int touchX, int touchY, int pointer, int button){
         touchY = game.screenHeight - touchY;

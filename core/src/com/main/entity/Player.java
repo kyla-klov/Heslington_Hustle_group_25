@@ -182,6 +182,9 @@ public class Player extends Entity implements Disposable {
      * Updates the player's gender by changing the TextureRegions' internal path using
      * the player's choice in the settings menu.
      * Then updates corresponding textures and animations.
+     *
+     * This functionality should be segregated into its own class to reduce overheads and
+     * processing delay.
      */
     public void updateGender(){
         if (idleSheet != null) {idleSheet.dispose();}

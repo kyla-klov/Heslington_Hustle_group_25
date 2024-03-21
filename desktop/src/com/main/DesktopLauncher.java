@@ -7,7 +7,6 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 
-
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
 	public static void main (String[] arg) {
