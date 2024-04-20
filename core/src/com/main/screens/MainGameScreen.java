@@ -260,7 +260,7 @@ public class MainGameScreen implements Screen, InputProcessor {
 
     /**
      * Renders the menu for setting the duration of an activity.
-     *
+     * <p>
      * This functionality of the popup menu (along with all the other methods that relate to this functionality)
      * should be segregated into its own class to reduce overheads and processing delay.
      */
