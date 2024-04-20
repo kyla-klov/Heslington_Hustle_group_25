@@ -17,6 +17,7 @@ import com.main.entity.Player;
 import com.main.map.GameMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.main.utils.CollisionHandler;
+import com.main.utils.Directions;
 import com.main.utils.ScreenType;
 
 /**
@@ -172,6 +173,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         lockTime = false;
         player.updateGender();
+        player.setDirection(Directions.Down);
     }
 
     /**
@@ -363,7 +365,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             else{
                 if (resetPos) {
                     player.setPos( 1389, 635);
-                    player.setDirection('D');
+                    player.setDirection(Directions.Down);
                 }
                 fadeTime = 0;
                 fadeOut = false;
@@ -384,7 +386,7 @@ public class MainGameScreen implements Screen, InputProcessor {
         gameMap.render();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.spriteX, Player.spriteY);
+        game.batch.draw(player.getCurrentFrame(), player.worldX, player.worldY, Player.SPRITE_X, Player.SPRITE_Y);
         if (!lockPopup) drawPopUpMenu();
         game.batch.end();
         if (!fadeOut && timeElapsed/secondsPerGameHour > 11) drawShadeOverlay((timeElapsed - 11 * secondsPerGameHour)/(gameDayLengthInSeconds - 11 * secondsPerGameHour));

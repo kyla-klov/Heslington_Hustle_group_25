@@ -12,21 +12,22 @@ import com.badlogic.gdx.utils.Disposable;
 import com.main.map.GameMap;
 import com.main.Main;
 import com.main.utils.CollisionHandler;
+import com.main.utils.Directions;
 
 /**
  * The Player class represents the character in the game, handling movement, collision,
  * and animations.
  */
 public class Player extends Entity implements Disposable {
+    public static final float ANIMATION_SPEED = 0.2f; // speed that sprite will animate or frame duration
+    public static final int SPRITE_X = 24;// this is in reference to the sprite sheet
+    public static final int SPRITE_Y = 38;
     Main game;
     GameMap gameMap;
     OrthographicCamera camera;
     CollisionHandler collisionHandler;
 
-    char dir; // Current direction of the player
-    public static final float animation_speed = 0.5f; // speed that sprite will animate or frame duration
-    public static final int spriteX = 24;// this is in reference to the sprite sheet
-    public static final int spriteY = 38;
+    Directions dir; // Current direction of the player
     int tileSize;
 
     public float startX, startY;
@@ -50,7 +51,7 @@ public class Player extends Entity implements Disposable {
         this.camera = camera;
 
         tileSize = gameMap.getTileSize();
-        this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, spriteX, spriteY * 0.5f, 0.7f, 0.7f);
+        this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, SPRITE_X, SPRITE_Y * 0.5f, 0.7f, 0.7f);
         this.collisionHandler.addCollisionLayers("Trees", "wall_1", "wall_2", "wall_3", "roof_1", "roof_2", "roof_3", "other", "lilipads");
         //this.settingsScreen = settingsScreen;
 
@@ -60,8 +61,8 @@ public class Player extends Entity implements Disposable {
         worldX = startX;
         worldY = startY;
 
-        dir = 'D';
         updateGender();
+        setDirection(Directions.Down);
     }
 
     /**
@@ -94,37 +95,37 @@ public class Player extends Entity implements Disposable {
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             targY = worldY + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkUpAnimation;
-            dir = 'U';
+            dir = Directions.Up;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             targY = worldY - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkDownAnimation;
-            dir = 'D';
+            dir = Directions.Down;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             targX = worldX - (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkLeftAnimation;
-            dir = 'L';
+            dir = Directions.Left;
             isMoving = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             targX = worldX + (float) (normalizedSpeed * Gdx.graphics.getDeltaTime());
             currentAnimation = walkRightAnimation;
-            dir = 'R';
+            dir = Directions.Right;
             isMoving = true;
         }
 
         // player doesn't walk beyond the map
-        if (targX + spriteX > gameMap.getWidth()){
-            targX = gameMap.getWidth() - spriteX;
+        if (targX + SPRITE_X > gameMap.getWidth()){
+            targX = gameMap.getWidth() - SPRITE_X;
         }
         else if (targX < 0){
             targX = 0;
         }
-        if (targY + spriteY > gameMap.getHeight()){
-            targY = gameMap.getHeight() - spriteY;
+        if (targY + SPRITE_Y > gameMap.getHeight()){
+            targY = gameMap.getHeight() - SPRITE_Y;
         }
         else if (targY < 0){
             targY = 0;
@@ -145,8 +146,8 @@ public class Player extends Entity implements Disposable {
 
         stateTime += delta;
 
-        float camX = worldX + spriteY /2f;
-        float camY = worldY + spriteY /2f;
+        float camX = worldX + SPRITE_Y /2f;
+        float camY = worldY + SPRITE_Y /2f;
 
         camera.position.set(camX, camY, 0);
         // this will make sure the camera follows the player
@@ -164,7 +165,6 @@ public class Player extends Entity implements Disposable {
         }
 
         camera.update();
-
     }
 
     /**
@@ -182,7 +182,7 @@ public class Player extends Entity implements Disposable {
      * Updates the player's gender by changing the TextureRegions' internal path using
      * the player's choice in the settings menu.
      * Then updates corresponding textures and animations.
-     *
+     * <p>
      * This functionality should be segregated into its own class to reduce overheads and
      * processing delay.
      */
@@ -197,35 +197,33 @@ public class Player extends Entity implements Disposable {
             walkSheet = new Texture("character/girl_walk.png");
         }
 
-        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
-        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, spriteX, spriteY); // Splits the sprite sheet up by its frames
+        TextureRegion[][] idleSpriteSheet = TextureRegion.split(idleSheet, SPRITE_X, SPRITE_Y); // Splits the sprite sheet up by its frames
+        TextureRegion[][] walkSpriteSheet = TextureRegion.split(walkSheet, SPRITE_X, SPRITE_Y); // Splits the sprite sheet up by its frames
 
-        walkDownAnimation = new Animation<>(animation_speed, walkSpriteSheet[0]); // First row for down
-        walkLeftAnimation = new Animation<>(animation_speed, walkSpriteSheet[1]); // Second row for left
-        walkRightAnimation = new Animation<>(animation_speed, walkSpriteSheet[2]); // Third row for right
-        walkUpAnimation = new Animation<>(animation_speed, walkSpriteSheet[3]); // Fourth row for up
+        walkDownAnimation = new Animation<>(ANIMATION_SPEED, walkSpriteSheet[0]); // First row for down
+        walkLeftAnimation = new Animation<>(ANIMATION_SPEED, walkSpriteSheet[1]); // Second row for left
+        walkRightAnimation = new Animation<>(ANIMATION_SPEED, walkSpriteSheet[2]); // Third row for right
+        walkUpAnimation = new Animation<>(ANIMATION_SPEED, walkSpriteSheet[3]); // Fourth row for up
 
-        idleDownAnimation = new Animation<>(animation_speed, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
-        idleLeftAnimation = new Animation<>(animation_speed, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
-        idleRightAnimation = new Animation<>(animation_speed, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
-        idleUpAnimation = new Animation<>(animation_speed, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
-
-        setDirection(dir);
+        idleDownAnimation = new Animation<>(ANIMATION_SPEED, idleSpriteSheet[0][0], idleSpriteSheet[0][1]);
+        idleLeftAnimation = new Animation<>(ANIMATION_SPEED, idleSpriteSheet[1][0], idleSpriteSheet[1][1]);
+        idleRightAnimation = new Animation<>(ANIMATION_SPEED, idleSpriteSheet[2][0], idleSpriteSheet[2][1]);
+        idleUpAnimation = new Animation<>(ANIMATION_SPEED, idleSpriteSheet[3][0], idleSpriteSheet[3][1]);
     }
 
-    public void setDirection(char dir){
+    public void setDirection(Directions dir){
         this.dir = dir;
         switch (dir){
-            case 'D':
+            case Down:
                 currentAnimation = idleDownAnimation;
                 break;
-            case 'L':
+            case Left:
                 currentAnimation = idleLeftAnimation;
                 break;
-            case 'R':
+            case Right:
                 currentAnimation = idleRightAnimation;
                 break;
-            case 'U':
+            case Up:
                 currentAnimation = idleUpAnimation;
                 break;
         }
@@ -245,7 +243,7 @@ public class Player extends Entity implements Disposable {
     }
 
     public Rectangle getHitBox(){
-        return new Rectangle(worldX, worldY, spriteX, spriteY);
+        return new Rectangle(worldX, worldY, SPRITE_X, SPRITE_Y);
     }
 
     public void dispose(){
