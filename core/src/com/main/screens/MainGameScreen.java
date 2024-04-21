@@ -186,6 +186,8 @@ public class MainGameScreen implements Screen, InputProcessor {
         if (collisionHandler.isTouching("Piazza_door", player.getHitBox())) return "Piazza_door";
         if (collisionHandler.isTouching("Gym_door", player.getHitBox())) return "Gym_door";
         if (collisionHandler.isTouching("Goodricke_door", player.getHitBox())) return "Goodricke_door";
+        if (collisionHandler.isTouching("Feed_ducks", player.getHitBox())) return "Feed_ducks";
+        if (collisionHandler.isTouching("Visit_city", player.getHitBox())) return "Visit_city";
         return "";
     }
 
@@ -201,6 +203,10 @@ public class MainGameScreen implements Screen, InputProcessor {
                 return "Sleep Early";
             case "exercise":
                 return "Exercise";
+            case "feed_ducks":
+                return "Feed the Ducks";
+            case "visit_city":
+                return "Visit City";
             default:
                 return "";
         }
@@ -217,6 +223,10 @@ public class MainGameScreen implements Screen, InputProcessor {
             case "sleep":
                 return menuSleepButton;
             case "exercise":
+                return menuGoButton;
+            case "feed_ducks":
+                return menuGoButton;
+            case "visit_city":
                 return menuGoButton;
             default:
                 return null;
@@ -316,11 +326,20 @@ public class MainGameScreen implements Screen, InputProcessor {
                 }
                 drawMenuOption(player.worldX + 30, player.worldY + 20, "Sleep", shadeOption);
                 break;
+            case "Feed_ducks":
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Feed", 0);
+                popupVisible = true;
+                break;
+            case "Visit_city":
+                drawMenuOption(player.worldX + 30, player.worldY + 20, "Visit City", 0);
+                popupVisible = true;
+                break;
             default:
                 popupVisible = false;
                 break;
         }
     }
+
 
     /**
      * Draws a shade overlay on the screen with a specified alpha transparency.
@@ -534,7 +553,60 @@ public class MainGameScreen implements Screen, InputProcessor {
                         }
                     }
                     break;
-
+                case "feed_ducks":
+                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration < 4) duration++;
+                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration > 1) duration--;
+                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = false;
+                        lockMovement = fadeOut;
+                        duration = 1;
+                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (energyCounter >= duration) {
+                            executeFadeOut(false);
+                            showMenu = false;
+                            lockMovement = fadeOut;
+                            recActivity++;
+                            energyCounter -= duration;
+                            energyBar.dispose();
+                            energyBar = setEnergyBar();
+                            timeElapsed += duration * secondsPerGameHour;
+                            duration = 1;
+                        }
+                    }
+                    break;
+                case "visit_city":
+                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration < 4) duration++;
+                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (duration > 1) duration--;
+                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = false;
+                        lockMovement = fadeOut;
+                        duration = 1;
+                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
+                        game.gameData.buttonClickedSoundActivate();
+                        if (energyCounter >= duration) {
+                            executeFadeOut(false);
+                            showMenu = false;
+                            lockMovement = fadeOut;
+                            recActivity++;
+                            energyCounter -= duration;
+                            energyBar.dispose();
+                            energyBar = setEnergyBar();
+                            timeElapsed += duration * secondsPerGameHour;
+                            duration = 1;
+                        }
+                    }
+                    break;
                 case "sleep":
                     if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();
@@ -606,6 +678,24 @@ public class MainGameScreen implements Screen, InputProcessor {
                         showMenu = true;
                         lockMovement = true;
                         activity = "sleep";
+                        duration = 1;
+                    }
+                    break;
+                case "Feed_ducks":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "feed_ducks";
+                        duration = 1;
+                    }
+                    break;
+                case "Visit_city":
+                    if (touchX >= studyOpt.x && touchX <= studyOpt.x + popupMenuWidth * zoom && touchY >= studyOpt.y && touchY <= studyOpt.y + popupMenuHeight * zoom) {
+                        game.gameData.buttonClickedSoundActivate();
+                        showMenu = true;
+                        lockMovement = true;
+                        activity = "visit_city";
                         duration = 1;
                     }
                     break;
