@@ -22,15 +22,16 @@ public class Player extends Entity implements Disposable {
     public static final float ANIMATION_SPEED = 0.2f; // speed that sprite will animate or frame duration
     public static final int SPRITE_X = 24;// this is in reference to the sprite sheet
     public static final int SPRITE_Y = 38;
-    Main game;
-    GameMap gameMap;
-    OrthographicCamera camera;
-    CollisionHandler collisionHandler;
+    final Main game;
+    final GameMap gameMap;
+    final OrthographicCamera camera;
+    final CollisionHandler collisionHandler;
 
     Directions dir; // Current direction of the player
-    int tileSize;
+    final int tileSize;
 
-    public float startX, startY;
+    public final float startX;
+    public final float startY;
 
     Texture idleSheet, walkSheet;
 

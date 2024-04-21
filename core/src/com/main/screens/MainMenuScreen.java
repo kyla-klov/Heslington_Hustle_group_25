@@ -15,7 +15,7 @@ import com.main.utils.ScreenType;
  */
 public class MainMenuScreen implements Screen, InputProcessor {
 
-    Main game;
+    final Main game;
 
     Texture heslingtonHustleLabel, playButton, controlsButton, settingsButton, exitButton;
 

@@ -8,8 +8,8 @@ import com.main.sound.GameSound;
  */
 public class GameData {
     private boolean gender = true;
-    GameMusic music;
-    GameSound sound;
+    final GameMusic music;
+    final GameSound sound;
 
     /**
      * Constructor initializes the game music settings.

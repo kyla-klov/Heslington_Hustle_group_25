@@ -445,7 +445,7 @@ public class MainGameScreen implements Screen, InputProcessor {
      */
     private void drawGameTime() {
         // Adjust the format if you want to display minutes or seconds
-        String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour%24);
+        String timeString = String.format("Day: %d       Time: %02d:00", dayNum, currentHour % 24);
         game.batch.begin();
         font.draw(game.batch, timeString, game.screenWidth - 320 * game.scaleFactorX, game.screenHeight - 15 * game.scaleFactorY);
         game.batch.end();
