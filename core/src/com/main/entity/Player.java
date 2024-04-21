@@ -53,7 +53,7 @@ public class Player extends Entity implements Disposable {
 
         tileSize = gameMap.getTileSize();
         this.collisionHandler = new CollisionHandler(gameMap.getMap(), tileSize, tileSize, SPRITE_X, SPRITE_Y * 0.5f, 0.7f, 0.7f);
-        this.collisionHandler.addCollisionLayers("Trees", "wall_1", "wall_2", "wall_3", "roof_1", "roof_2", "roof_3", "other", "lilipads");
+        this.collisionHandler.addCollisionLayers("Water", "Trees", "wall_1", "wall_2", "wall_3", "roof_1", "roof_2", "roof_3", "other");
         //this.settingsScreen = settingsScreen;
 
         this.speed = 200;
