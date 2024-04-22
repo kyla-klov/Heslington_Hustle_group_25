@@ -223,9 +223,7 @@ public class MainGameScreen implements Screen, InputProcessor {
             case "sleep":
                 return menuSleepButton;
             case "exercise":
-                return menuGoButton;
             case "feed_ducks":
-                return menuGoButton;
             case "visit_city":
                 return menuGoButton;
             default:
@@ -527,59 +525,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                     break;
 
                 case "exercise":
-                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (duration < 4) duration++;
-                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (duration > 1) duration--;
-                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        showMenu = false;
-                        lockMovement = fadeOut;
-                        duration = 1;
-                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (energyCounter >= duration) {
-                            executeFadeOut(false);
-                            showMenu = false;
-                            lockMovement = fadeOut;
-                            recActivity++;
-                            energyCounter -= duration;
-                            energyBar.dispose();
-                            energyBar = setEnergyBar();
-                            timeElapsed += duration * secondsPerGameHour;
-                            duration = 1;
-                        }
-                    }
-                    break;
                 case "feed_ducks":
-                    if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (duration < 4) duration++;
-                    } else if (touchX >= durationDownButtonX && touchX <= durationDownButtonX + durationDownButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationDownButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (duration > 1) duration--;
-                    } else if (touchX >= menuBackButtonX && touchX <= menuBackButtonX + menuBackButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + menuBackButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        showMenu = false;
-                        lockMovement = fadeOut;
-                        duration = 1;
-                    } else if (touchX >= activityButtonX && touchX <= activityButtonX + activityButtonWidth && touchY >= durationMenuButtonY && touchY <= durationMenuButtonY + activityButtonHeight) {
-                        game.gameData.buttonClickedSoundActivate();
-                        if (energyCounter >= duration) {
-                            executeFadeOut(false);
-                            showMenu = false;
-                            lockMovement = fadeOut;
-                            recActivity++;
-                            energyCounter -= duration;
-                            energyBar.dispose();
-                            energyBar = setEnergyBar();
-                            timeElapsed += duration * secondsPerGameHour;
-                            duration = 1;
-                        }
-                    }
-                    break;
                 case "visit_city":
                     if (touchX >= durationUpButtonX && touchX <= durationUpButtonX + durationUpButtonWidth && touchY >= durationButtonY && touchY <= durationButtonY + durationUpButtonHeight) {
                         game.gameData.buttonClickedSoundActivate();

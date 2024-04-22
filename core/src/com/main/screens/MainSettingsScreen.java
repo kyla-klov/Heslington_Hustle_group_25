@@ -30,7 +30,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
     /**
-     * Constructs the settings screen with references to main game object and initializes UI components.
+     * Constructs the settings screen with references to main game object and initialises UI components.
      * @param game The main game object for accessing global properties and methods.
      */
     public MainSettingsScreen(Main game) {

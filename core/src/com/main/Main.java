@@ -14,7 +14,7 @@ import com.main.utils.ScreenType;
 
 /**
  * The main class for the game, extending the LibGDX Game class.
- * It initializes and manages the game's resources, screens, and settings.
+ * It initialises and manages the game's resources, screens, and settings.
  */
 public class Main extends Game {
 	public SpriteBatch batch; // Used for drawing textures and sprites in batches

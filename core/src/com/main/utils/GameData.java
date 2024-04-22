@@ -12,7 +12,7 @@ public class GameData {
     final GameSound sound;
 
     /**
-     * Constructor initializes the game music settings.
+     * Constructor initialises the game music settings.
      */
     public GameData(){
         this.music = new GameMusic();
