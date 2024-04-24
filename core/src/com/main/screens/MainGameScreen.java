@@ -450,7 +450,8 @@ public class MainGameScreen implements Screen, InputProcessor {
      * @param delta The time elapsed since the last frame.
      */
     private void updateGameTime(float delta) {
-        currentHour = this.getTime(delta);
+        timeElapsed += delta;
+        currentHour = this.getTime();
 
         // Ensure the hour cycles through the active hours correctly (08:00 to 00:00)
         if (currentHour >= 24) { // If it reaches 00:00, reset to 08:00 the next day
@@ -479,11 +480,9 @@ public class MainGameScreen implements Screen, InputProcessor {
     // Added Code //
     /**
      * Calculates the in game time
-     * @param delta The time elapsed since the last frame.
      */
-    private int getTime(float delta) {
+    private int getTime() {
         // Calculate the current hour in game time
-        timeElapsed += delta;
         int hoursPassed = (int)(timeElapsed / SECONDS_PER_GAME_HOUR);
         return 8 + hoursPassed; // Starts at 08:00
     }
@@ -670,7 +669,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                         mealCount++;
 
                         // Added Code //
-                        dailyScore.eat(getTime(timeElapsed));
+                        dailyScore.eat(getTime());
                         // Added Code //
 
                         if (energyCounter > 10) energyCounter = 10;
