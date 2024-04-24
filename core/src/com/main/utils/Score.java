@@ -74,7 +74,7 @@ public class Score {
      * Calculates and updates the player's score based on their actions and sets the score variable.
      * Should be called at the end of each day.
      */
-    public void calculateScore() {
+    public int calculateScore() {
         score = 0;
 
         // Add to score based on study sessions
@@ -95,6 +95,8 @@ public class Score {
 
         // Calculate score addition for meals
         score += calculateMealIntervalBonus();
+
+        return score;
     }
 
     /**
@@ -143,6 +145,10 @@ public class Score {
         studyLocations.clear();
         recreationLocations.clear();
         mealTimes.clear();
+        this.studyCount = 0;
+        this.mealCount = 0;
+        this.recreationCount = 0;
+        this.score = 0;
     }
 
     /**
@@ -176,4 +182,8 @@ public class Score {
     public int getRecreationCount() {
         return recreationCount;
     }
+
+    public List<Integer> getMealIntervals() {return mealTimes; }
+    public Set<String> getStudyLocations() {return studyLocations ;}
+    public Set<String> getRecreationLocations() {return recreationLocations;}
 }

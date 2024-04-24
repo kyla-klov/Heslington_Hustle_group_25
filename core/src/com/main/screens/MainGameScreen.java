@@ -16,10 +16,7 @@ import com.main.Main;
 import com.main.entity.Player;
 import com.main.map.GameMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.main.utils.Button;
-import com.main.utils.CollisionHandler;
-import com.main.utils.Directions;
-import com.main.utils.ScreenType;
+import com.main.utils.*;
 
 /**
  * The MainGameScreen class is responsible for rendering and updating all the game elements
@@ -43,9 +40,13 @@ public class MainGameScreen implements Screen, InputProcessor {
     menuBackButton, menuStudyButton, menuSleepButton, menuGoButton,
     durationMenuBackground, counterBackground;
     private final Button _menu, _durationUp, _durationDown, _menuBack, _activity;
+
+    // Added Code //
+    private final Score dailyScore = new Score();
+    // Added Code //
+
     // Non-final attributes
     private Texture energyBar;
-
     private float counterBackgroundY, counterBackgroundX, counterBackgroundWidth, counterBackgroundHeight;
     private float popupMenuWidth, popupMenuHeight;
     private float durationMenuBackgroundX, durationMenuBackgroundY;
@@ -53,7 +54,7 @@ public class MainGameScreen implements Screen, InputProcessor {
     private float durationTextY, menuTitleY, hoursLabelY;
     private float energyBarY, energyBarX, energyBarWidth, energyBarHeight;
     private String activity, popupMenuType;
-    private int energyCounter, duration, dayNum, recActivity, studyHours, mealCount, currentHour;
+    private int energyCounter, duration, dayNum, recActivity, studyHours, mealCount, currentHour, totalScore;
     private float timeElapsed, fadeTime, minShade;
     private boolean fadeOut, lockTime, lockMovement, lockPopup, resetPos, popupVisible, showMenu;
 
@@ -96,6 +97,10 @@ public class MainGameScreen implements Screen, InputProcessor {
         this.fadeTime = 0;
         this.minShade = 0;
         this.fadeOut = this.lockTime = this.lockMovement = this.lockPopup = this.resetPos = this.popupVisible = this.showMenu = false;
+
+        // Added Code //
+        this.totalScore = 0;
+        // Added Code //
 
         // Setting up the game
         this.camera = new OrthographicCamera();
@@ -445,18 +450,44 @@ public class MainGameScreen implements Screen, InputProcessor {
      * @param delta The time elapsed since the last frame.
      */
     private void updateGameTime(float delta) {
-        timeElapsed += delta;
-//        System.out.printf("Elasped: %.2f, Delta: %.2f\n", timeElapsed, delta);
-        // Calculate the current hour in game time
-        int hoursPassed = (int)(timeElapsed / SECONDS_PER_GAME_HOUR);
-        currentHour = 8 + hoursPassed; // Starts at 08:00
+        currentHour = this.getTime(delta);
 
         // Ensure the hour cycles through the active hours correctly (08:00 to 00:00)
         if (currentHour >= 24) { // If it reaches 00:00, reset to 08:00 the next day
             if (dayNum == 7) game.screenManager.setScreen(ScreenType.END_SCREEN);
+
+            // Added Code //
+            totalScore += dailyScore.calculateScore();
+
+            System.out.println("Study: " + dailyScore.getStudyCount());
+            System.out.println("Study Locations: " + dailyScore.getStudyLocations());
+            System.out.println("Rec: " + dailyScore.getRecreationCount());
+            System.out.println("Rec Locations: " + dailyScore.getRecreationLocations());
+            System.out.println("Eat: " + dailyScore.getMealCount());
+            System.out.println("Eat Times: " + dailyScore.getMealIntervals());
+            System.out.println("Daily Score: " + dailyScore.getScore());
+            System.out.println("Total Score: " + totalScore + "\n");
+
+            dailyScore.resetDailyCounters();
+            // Added Code //
+
+
             resetDay();
         }
     }
+
+    // Added Code //
+    /**
+     * Calculates the in game time
+     * @param delta The time elapsed since the last frame.
+     */
+    private int getTime(float delta) {
+        // Calculate the current hour in game time
+        timeElapsed += delta;
+        int hoursPassed = (int)(timeElapsed / SECONDS_PER_GAME_HOUR);
+        return 8 + hoursPassed; // Starts at 08:00
+    }
+    // Added Code //
 
     /**
      * Resets the game day, including resetting time and increasing the day counter.
@@ -537,7 +568,13 @@ public class MainGameScreen implements Screen, InputProcessor {
                         if (energyCounter > (duration+1)/2) energyCounter -= (duration+1)/2;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
+
                         timeElapsed += duration * SECONDS_PER_GAME_HOUR;
+
+                        // Added Code //
+                        dailyScore.study(duration, getDoorTouching());
+                        // Added Code //
+
                         game.screenManager.setScreen(ScreenType.MINI_GAME, duration);
                     }
                     break;
@@ -570,6 +607,11 @@ public class MainGameScreen implements Screen, InputProcessor {
                             energyBar.dispose();
                             energyBar = setEnergyBar();
                             timeElapsed += duration * SECONDS_PER_GAME_HOUR;
+
+                            // Added Code //
+                            dailyScore.doRecActivity(getDoorTouching());
+                            // Added Code //
+
                             duration = 1;
                         }
                     }
@@ -626,6 +668,11 @@ public class MainGameScreen implements Screen, InputProcessor {
                         game.gameData.eatingSoundActivate();
                         energyCounter += 3;
                         mealCount++;
+
+                        // Added Code //
+                        dailyScore.eat(getTime(timeElapsed));
+                        // Added Code //
+
                         if (energyCounter > 10) energyCounter = 10;
                         energyBar.dispose();
                         energyBar = setEnergyBar();
