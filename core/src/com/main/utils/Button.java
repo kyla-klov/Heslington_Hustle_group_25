@@ -26,7 +26,7 @@ public class Button
         return  x >= this.xCoord &&
                 y >= this.yCoord &&
                 x <= this.xCoord + this.width &&
-                y <= this.yCoord + this.width;
+                y <= this.yCoord + this.height;
     }
 
     public float x() {
