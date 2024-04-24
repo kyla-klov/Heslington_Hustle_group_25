@@ -145,7 +145,7 @@ public class MainGameScreen implements Screen, InputProcessor {
                 75 * scaleY
         );
         this._activity.init(
-                repeatedValue1 + (50 * scaleX) - (500 * scaleX),
+                repeatedValue1 + (50 * scaleX) - (150 * scaleX),
                 repeatedValue2 - 125 * scaleY,
                 150 * scaleX,
                 75 * scaleY
@@ -288,25 +288,25 @@ public class MainGameScreen implements Screen, InputProcessor {
      * should be segregated into its own class to reduce overheads and processing delay.
      */
     private void drawDurationMenu(){
-        game.batch.begin();
         Texture activityButton;
         String title;
         activityButton = getActivityButton();
         title = getMenuTitle();
 
+        game.batch.begin();
         game.batch.draw(durationMenuBackground, durationMenuBackgroundX, durationMenuBackgroundY, durationMenuBackgroundWidth, durationMenuBackgroundHeight);
-        game.batch.draw(menuBackButton, _menuBack.x(), _menuBack.y(), _menuBack.width(), _menuBack.height());
         game.batch.draw(activityButton, _activity.x(), _activity.y(), _activity.width(), _activity.height());
+        game.batch.draw(menuBackButton, _menuBack.x(), _menuBack.y(), _menuBack.width(), _menuBack.height());
         durationFont.draw(game.batch, title, 0, menuTitleY, game.screenWidth, Align.center, false);
 
         if (!activity.equals("sleep")) {
-            game.batch.draw(durationDownButton, _durationDown.x(), _durationDown.y(), _durationDown.width(), _durationDown.height());
-            game.batch.draw(durationUpButton, _durationUp.x(), _durationUp.y(), _durationUp.width(), _durationUp.height());
+            game.batch.draw(durationDownButton, _durationDown.x(),  _durationDown.y(),  _durationDown.width(),  _durationDown.height());
+            game.batch.draw(durationUpButton,   _durationUp.x(),    _durationUp.y(),    _durationUp.width(),    _durationUp.height());
             durationFont.draw(game.batch, Integer.toString(duration), 0, durationTextY, game.screenWidth, Align.center, false);
             durationFont.draw(game.batch, "Hours", 0, hoursLabelY, game.screenWidth, Align.center, false);
         }
-
         game.batch.end();
+
     }
 
     /**
