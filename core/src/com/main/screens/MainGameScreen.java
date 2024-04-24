@@ -452,25 +452,33 @@ public class MainGameScreen implements Screen, InputProcessor {
     private void updateGameTime(float delta) {
         timeElapsed += delta;
         currentHour = this.getTime();
+        boolean hasFailed = false;
 
         // Ensure the hour cycles through the active hours correctly (08:00 to 00:00)
         if (currentHour >= 24) { // If it reaches 00:00, reset to 08:00 the next day
             if (dayNum == 7) game.screenManager.setScreen(ScreenType.END_SCREEN);
 
             // Added Code //
-            totalScore += dailyScore.calculateScore();
+            if (dailyScore.hasMissedStudy()) { //check if player has already missed study for a day
+                if (dailyScore.getStudyCount() == 0) { //check if the player hasn't studied today
+                    hasFailed = true;
+                };
+            }
+            if (!hasFailed) {
+                totalScore += dailyScore.calculateScore();
 
-            System.out.println("Study: " + dailyScore.getStudyCount());
-            System.out.println("Study Locations: " + dailyScore.getStudyLocations());
-            System.out.println("Rec: " + dailyScore.getRecreationCount());
-            System.out.println("Rec Locations: " + dailyScore.getRecreationLocations());
-            System.out.println("Eat: " + dailyScore.getMealCount());
-            System.out.println("Eat Times: " + dailyScore.getMealIntervals());
-            System.out.println("Daily Score: " + dailyScore.getScore());
-            System.out.println("Total Score: " + totalScore + "\n");
+                System.out.println("Study: " + dailyScore.getStudyCount());
+                System.out.println("Study Locations: " + dailyScore.getStudyLocations());
+                System.out.println("Rec: " + dailyScore.getRecreationCount());
+                System.out.println("Rec Locations: " + dailyScore.getRecreationLocations());
+                System.out.println("Eat: " + dailyScore.getMealCount());
+                System.out.println("Eat Times: " + dailyScore.getMealIntervals());
+                System.out.println("Daily Score: " + dailyScore.getScore());
+                System.out.println("Total Score: " + totalScore + "\n");
 
-            dailyScore.resetDailyCounters();
-            // Added Code //
+                dailyScore.resetDailyCounters();
+            }
+                // Added Code //
 
 
             resetDay();
