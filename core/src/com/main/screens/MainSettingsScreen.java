@@ -13,7 +13,7 @@ import com.main.utils.ScreenType;
  * and the character's gender.
  */
 public class MainSettingsScreen implements Screen, InputProcessor {
-    Main game;
+    final Main game;
     boolean gender;
     private final Texture backButton, settingsLabel, musicUpButton, musicDownButton, musicLabel, soundUpButton, soundLabel, soundDownButton;
     private Texture musicBar, soundBar, boyButton, girlButton;
@@ -30,7 +30,7 @@ public class MainSettingsScreen implements Screen, InputProcessor {
             soundUpButtonHeight = 75, soundLabelHeight = 50, soundDownButtonHeight = 75, soundBarHeight = 50, boyButtonHeight = 150, girlButtonHeight = 150;
 
     /**
-     * Constructs the settings screen with references to main game object and initializes UI components.
+     * Constructs the settings screen with references to main game object and initialises UI components.
      * @param game The main game object for accessing global properties and methods.
      */
     public MainSettingsScreen(Main game) {

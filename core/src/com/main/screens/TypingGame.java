@@ -26,13 +26,13 @@ public class TypingGame implements Screen, InputProcessor {
     private final Texture guessButton;
     private String userGuess = "";
     Boolean acceptInput = false, displayCorrect = false, displayWrong = false;
-    BitmapFont displayText;
+    final BitmapFont displayText;
     private float displayTextY, displayTextHeight;
     private float gameObjectiveY;
     private float guessButtonX, guessButtonY, guessButtonWidth, guessButtonHeight;
     private final Texture title;
     private float titleX, titleY, titleWidth, titleHeight;
-    String gameObjective;
+    final String gameObjective;
 
     /**
      * Constructs a TypingGame screen with the game instance and study duration.

@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.main.Main;
 
 public class EndScreen implements Screen, InputProcessor {
-    Main game;
+    final Main game;
     Texture playAgainButton, exitButton;
     BitmapFont font;
-    String titleText;
+    final String titleText;
     float playAgainButtonY, exitButtonY;
     float buttonX, buttonWidth, buttonHeight;
     float titleY;
